@@ -1,0 +1,221 @@
+
+<html>
+<head>
+<title>
+Adapter-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="adapter-suunnittelumalli-pythonissa">Adapter-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-adapter">Mikä on Adapter?</h3>
+<p><strong>Adapter</strong> (tai <strong>Sovitin</strong>) on rakenteellinen suunnittelumalli, joka mahdollistaa <strong>yhteensopimattomien rajapintojen</strong> yhteistyön. Adapteri kääntää yhden luokan rajapinnan toiseksi, jota asiakas odottaa. Se toimii kuin &ldquo;tulkki&rdquo; kahden osapuolen välillä.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Mahdollistaa vanhan tai ulkoisen koodin (jota ei voi muuttaa) käyttämisen uuden rajapinnan kautta.</p>
+</blockquote>
+<h3 id="milloin-kayttaa-adapteria">Milloin käyttää Adapteria?</h3>
+<ul>
+<li>Kun haluat käyttää olemassa olevaa luokkaa, mutta sen rajapinta ei ole yhteensopiva nykyisen järjestelmän kanssa.</li>
+<li>Kun käytät kolmannen osapuolen kirjastoja, joiden metodeja ei voi muokata.</li>
+<li>Kun haluat eristää riippuvuuksia helposti testattavaksi ja vaihdettavaksi.</li>
+</ul>
+<h3 id="esimerkki-ilman-adapteria">Esimerkki ilman Adapteria</h3>
+<p>Kuvitellaan, että sinulla on uusi maksujärjestelmä, joka odottaa rajapintaa <code>PaymentProcessor</code>, mutta käytössä oleva kirjasto tarjoaa vain <code>LegacyPayment</code>-luokan:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">LegacyPayment</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">make_payment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maksu suoritettu vanhalla järjestelmällä.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Nykyinen sovelluksesi odottaa kuitenkin:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">PaymentProcessor</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">pay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<p>Et voi suoraan käyttää <code>LegacyPayment</code>-luokkaa, koska sillä on väärä metodi (<code>make_payment</code> vs <code>pay</code>).</p>
+<h3 id="ratkaisu-adapter-luokan-kaytto">Ratkaisu: Adapter-luokan käyttö</h3>
+<p>Toteutetaan adapteri, joka sovittaa <code>LegacyPayment</code>-luokan uuden järjestelmän vaatimaan muotoon:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">LegacyPayment</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">make_payment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maksu suoritettu vanhalla järjestelmällä.&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Adapteri</span>
+<span class="k">class</span> <span class="nc">PaymentAdapter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">legacy_payment</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">legacy_payment</span> <span class="o">=</span> <span class="n">legacy_payment</span>
+
+    <span class="k">def</span> <span class="nf">pay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">legacy_payment</span><span class="o">.</span><span class="n">make_payment</span><span class="p">()</span>
+
+
+<span class="c1"># Asiakaskoodi</span>
+<span class="k">def</span> <span class="nf">process_payment</span><span class="p">(</span><span class="n">processor</span><span class="p">):</span>
+    <span class="n">processor</span><span class="o">.</span><span class="n">pay</span><span class="p">()</span>
+
+
+<span class="c1"># Käyttö</span>
+<span class="n">legacy</span> <span class="o">=</span> <span class="n">LegacyPayment</span><span class="p">()</span>
+<span class="n">adapter</span> <span class="o">=</span> <span class="n">PaymentAdapter</span><span class="p">(</span><span class="n">legacy</span><span class="p">)</span>
+
+<span class="n">process_payment</span><span class="p">(</span><span class="n">adapter</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Maksu suoritettu vanhalla järjestelmällä.
+</code></pre></div>
+
+<h3 id="adapter-pythonin-duck-typing-tyylilla">Adapter Pythonin duck typing -tyylillä</h3>
+<p>Python ei vaadi eksplisiittisiä rajapintoja, joten adapterin voi usein toteuttaa yksinkertaisemmin:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">StripeAPI</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">charge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maksu suoritettu Stripe-rajapinnalla.&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">StripeAdapter</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stripe_api</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stripe_api</span> <span class="o">=</span> <span class="n">stripe_api</span>
+
+    <span class="k">def</span> <span class="nf">pay</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stripe_api</span><span class="o">.</span><span class="n">charge</span><span class="p">()</span>
+
+
+<span class="c1"># Asiakaskoodi</span>
+<span class="k">def</span> <span class="nf">checkout</span><span class="p">(</span><span class="n">processor</span><span class="p">):</span>
+    <span class="n">processor</span><span class="o">.</span><span class="n">pay</span><span class="p">()</span>
+
+<span class="n">stripe</span> <span class="o">=</span> <span class="n">StripeAPI</span><span class="p">()</span>
+<span class="n">adapter</span> <span class="o">=</span> <span class="n">StripeAdapter</span><span class="p">(</span><span class="n">stripe</span><span class="p">)</span>
+
+<span class="n">checkout</span><span class="p">(</span><span class="n">adapter</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Tässäkin adapteri toimii sillanrakentajana Stripe-kirjaston ja oman järjestelmäsi välillä.</p>
+<h3 id="adapter-vs-wrapper">Adapter vs Wrapper</h3>
+<p><strong>Adapter</strong> voi muistuttaa <strong>wrapperia (kuoriluokkaa)</strong>, mutta niillä on eri tarkoitus:</p>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Adapter</th>
+<th>Wrapper</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Sovittaa yhteensopimattomat rajapinnat</td>
+<td>Piilottaa tai yksinkertaistaa olemassa olevaa rajapintaa</td>
+</tr>
+<tr>
+<td>Käyttö</td>
+<td>Integraatioihin, yhteensopivuuteen</td>
+<td>Abstraktioon, testaukseen</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Sovittaa olemassa olevan luokan rajapinta halutuksi</td>
+</tr>
+<tr>
+<td>Käyttökohteet</td>
+<td>Legacy-koodi, kolmannen osapuolen kirjastot, rajapintaerojen korjaus</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Irrottaa riippuvuudet, parantaa yhteensopivuutta, helpottaa uudelleenkäyttöä</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Lisää hieman koodikompleksisuutta, jos adaptereita kertyy paljon</td>
+</tr>
+</tbody>
+</table>
+<p>Adapter on yksinkertainen mutta tehokas työkalu ohjelmistojen <strong>integroitavuuden ja joustavuuden</strong> parantamiseen. Pythonin joustava luonne tekee siitä erityisen helpon toteuttaa ilman monimutkaisia perintäketjuja.</p>
+</div>
+</body>
+</html>

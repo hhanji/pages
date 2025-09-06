@@ -1,0 +1,264 @@
+
+<html>
+<head>
+<title>
+Composite-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="composite-suunnittelumalli-pythonissa">Composite-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-composite">Mikä on Composite?</h3>
+<p><strong>Composite</strong> (kooste) on suunnittelumalli, jossa yksittäisiä olioita ja niiden <strong>koosteita käsitellään yhtenäisesti</strong>. Mallin avulla voidaan rakentaa <strong>puumaisia rakenteita</strong>, joissa asiakas ei tarvitse tietoa siitä, käsitteleekö se yksittäistä vai koostettua oliota.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Yhtenäistää yksittäisten ja koostettujen olioiden käsittely — asiakas voi käsitellä kaikkia samalla tavalla.</p>
+</blockquote>
+<h3 id="milloin-kayttaa">Milloin käyttää?</h3>
+<p>Composite sopii tilanteisiin, joissa:</p>
+<ul>
+<li>Sinulla on <strong>hierarkkinen rakenne</strong> (esim. puu).</li>
+<li>Haluat käsitellä <strong>yksittäisiä ja ryhmitettyjä olioita samalla tavalla</strong>.</li>
+<li>Tarvitset <strong>rekursiivista rakennetta</strong>, kuten kansiotiedostojärjestelmä tai UI-komponenttipuu.</li>
+</ul>
+<h2 id="rakenne">Rakenne</h2>
+<ul>
+<li><strong>Component:</strong> määrittelee yhteisen rajapinnan.</li>
+<li><strong>Leaf:</strong> yksittäinen alkio (ei sisällä muita).</li>
+<li><strong>Composite:</strong> koostaa muita komponentteja (voi sisältää Leaf- ja Composite-olioita).</li>
+<li><strong>Client:</strong> käsittelee komponentteja yhtenäisesti.</li>
+</ul>
+<h2 id="esimerkki-tiedostojarjestelma">Esimerkki: Tiedostojärjestelmä</h2>
+<p>Luodaan yksinkertainen tiedostojärjestelmän malli, jossa kansiot voivat sisältää tiedostoja ja alikansioita.</p>
+<h3 id="1-yhteinen-rajapinta">1. Yhteinen rajapinta</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">FileSystemItem</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h3 id="2-lehdet-leaf-tiedostot">2. Lehdet (Leaf): Tiedostot</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">File</span><span class="p">(</span><span class="n">FileSystemItem</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="n">indent</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;Tiedosto: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-koosteet-composite-kansiot">3. Koosteet (Composite): Kansiot</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Folder</span><span class="p">(</span><span class="n">FileSystemItem</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">FileSystemItem</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="n">indent</span> <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;Kansio: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="n">child</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="4-kayttoesimerkki">4. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Rakennetaan hakemistorakenne</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">Folder</span><span class="p">(</span><span class="s2">&quot;root&quot;</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">File</span><span class="p">(</span><span class="s2">&quot;README.md&quot;</span><span class="p">))</span>
+
+<span class="n">src</span> <span class="o">=</span> <span class="n">Folder</span><span class="p">(</span><span class="s2">&quot;src&quot;</span><span class="p">)</span>
+<span class="n">src</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">File</span><span class="p">(</span><span class="s2">&quot;main.py&quot;</span><span class="p">))</span>
+<span class="n">src</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">File</span><span class="p">(</span><span class="s2">&quot;utils.py&quot;</span><span class="p">))</span>
+
+<span class="n">assets</span> <span class="o">=</span> <span class="n">Folder</span><span class="p">(</span><span class="s2">&quot;assets&quot;</span><span class="p">)</span>
+<span class="n">assets</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">File</span><span class="p">(</span><span class="s2">&quot;logo.png&quot;</span><span class="p">))</span>
+
+<span class="n">root</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">assets</span><span class="p">)</span>
+
+<span class="c1"># Näytetään rakenne</span>
+<span class="n">root</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">Kansio</span><span class="o">:</span><span class="w"> </span><span class="n">root</span>
+<span class="w">  </span><span class="n">Tiedosto</span><span class="o">:</span><span class="w"> </span><span class="n">README</span><span class="o">.</span><span class="na">md</span>
+<span class="w">  </span><span class="n">Kansio</span><span class="o">:</span><span class="w"> </span><span class="n">src</span>
+<span class="w">    </span><span class="n">Tiedosto</span><span class="o">:</span><span class="w"> </span><span class="n">main</span><span class="o">.</span><span class="na">py</span>
+<span class="w">    </span><span class="n">Tiedosto</span><span class="o">:</span><span class="w"> </span><span class="n">utils</span><span class="o">.</span><span class="na">py</span>
+<span class="w">  </span><span class="n">Kansio</span><span class="o">:</span><span class="w"> </span><span class="n">assets</span>
+<span class="w">    </span><span class="n">Tiedosto</span><span class="o">:</span><span class="w"> </span><span class="n">logo</span><span class="o">.</span><span class="na">png</span>
+</code></pre></div>
+
+<h2 id="edut-ja-haitat">Edut ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Yksinkertaistaa asiakaskoodia</td>
+<td>Koko rakenne voi kasvaa monimutkaiseksi</td>
+</tr>
+<tr>
+<td>Tukee <strong>rekursiivisia rakenteita</strong></td>
+<td>Vaatii huolellisen rakenteenhallinnan</td>
+</tr>
+<tr>
+<td>Uusien komponenttien lisäys helposti</td>
+<td>Saattaa ylisuunnitella yksinkertaisia ongelmia</td>
+</tr>
+<tr>
+<td>Yhteinen rajapinta helpottaa <strong>laajennettavuutta</strong></td>
+<td>Ei aina suorituskykyisin valinta</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kayttokohteita">Käyttökohteita</h2>
+<ul>
+<li><strong>Tiedostojärjestelmät</strong> (kansiot ja tiedostot)</li>
+<li><strong>Käyttöliittymät</strong> (komponenttipuut, esim. napit, valikot)</li>
+<li><strong>Organisaatiokaaviot</strong> (työntekijät ja tiimit)</li>
+<li><strong>HTML DOM</strong> (elementtien sisäkkäisyys)</li>
+<li><strong>Pelit</strong> (pelihahmojen koostaminen osista)</li>
+</ul>
+<h2 id="composite-vs-muut-mallit">Composite vs muut mallit</h2>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Compositeen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Decorator</strong></td>
+<td>Lisää toiminnallisuutta olioon dynaamisesti</td>
+<td>Composite luo hierarkkisen rakenteen</td>
+</tr>
+<tr>
+<td><strong>Interpreter</strong></td>
+<td>Käyttää usein Compositea rakenteensa pohjana</td>
+<td>Interpreter tulkitsee; Composite vain rakentaa</td>
+</tr>
+<tr>
+<td><strong>Flyweight</strong></td>
+<td>Jakaa tilaa monien olioiden kesken</td>
+<td>Composite ei jaa tilaa, vaan rakentaa puumaisen rakenteen</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pythonin-nakokulma">Pythonin näkökulma</h2>
+<p>Pythonissa on helppoa luoda puumaisia rakenteita käyttämällä:</p>
+<ul>
+<li><strong>Luokkia ja listoja</strong></li>
+<li><strong>Rekursiivisia metodeja</strong></li>
+<li>Ei vaadi monimutkaista rajapintaa — duck typing riittää</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Mahdollistaa yksittäisten ja koostettujen olioiden yhtenäinen käsittely</td>
+</tr>
+<tr>
+<td>Käyttökohteet</td>
+<td>UI-puut, tiedostojärjestelmät, organisaatiorakenteet</td>
+</tr>
+<tr>
+<td>Edut</td>
+<td>Yhtenäinen käsittely, rekursiivisuus, hyvä laajennettavuus</td>
+</tr>
+<tr>
+<td>Pythonin etu</td>
+<td>Toteutus on yksinkertainen luokkien ja listojen avulla</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Composite-malli</strong> tekee monimutkaisista rakenteista selkeitä ja hallittavia. Mallin avulla voidaan rakentaa tehokkaita ja laajennettavia hierarkioita, joita voidaan käsitellä helposti yhtenäisen rajapinnan kautta.</p>
+</div>
+</body>
+</html>

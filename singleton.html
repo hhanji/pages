@@ -1,0 +1,223 @@
+
+<html>
+<head>
+<title>
+Singleton-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="singleton-suunnittelumalli-pythonissa">Singleton-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-singleton">Mikä on Singleton?</h3>
+<p><strong>Singleton</strong> on luokkapohjainen suunnittelumalli, jonka tarkoituksena on varmistaa, että luokasta on olemassa <strong>vain yksi olio koko ohjelman elinkaaren ajan</strong>. Tämä malli soveltuu erityisesti tilanteisiin, joissa tarvitaan <strong>yhtä globaalia tilaa tai resurssia</strong>, kuten:</p>
+<ul>
+<li>Yhteys tietokantaan</li>
+<li>Lokitusjärjestelmä</li>
+<li>Konfiguraationhallinta</li>
+</ul>
+<h3 id="singletonin-perusajatus">Singletonin perusajatus</h3>
+<p>Yleisesti Singletonissa:</p>
+<ol>
+<li>Estetään luokan useiden instanssien luominen.</li>
+<li>Tarjotaan globaali pääsy olemassa olevaan instanssiin.</li>
+</ol>
+<h3 id="perusimplementaatio-pythonissa">Perusimplementaatio Pythonissa</h3>
+<p>Pythonin dynaaminen luonteen vuoksi Singleton voidaan toteuttaa monella tavalla. Alla on perusesimerkki käyttämällä luokan sisäistä muuttujaa ja <code>@classmethod</code>-rakennetta:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Singleton</span><span class="p">:</span>
+    <span class="n">_instance</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">Singleton</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Tämä luokka on singleton!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Luodaan uusi instanssi.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_instance</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="n">Singleton</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span>
+
+
+<span class="c1"># Käyttö:</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">Singleton</span><span class="o">.</span><span class="n">get_instance</span><span class="p">()</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">Singleton</span><span class="o">.</span><span class="n">get_instance</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">a</span> <span class="ow">is</span> <span class="n">b</span><span class="p">)</span>  <span class="c1"># True</span>
+</code></pre></div>
+
+<p><strong>Selitys:</strong></p>
+<ul>
+<li>Ensimmäinen kutsu <code>get_instance()</code>-metodille luo olion.</li>
+<li>Toinen kutsu palauttaa saman olion.</li>
+<li><code>is</code>-operaattori tarkistaa, että muuttujat viittaavat täsmälleen samaan instanssiin.</li>
+</ul>
+<h3 id="singleton-koristeen-decorator-avulla">Singleton koristeen (decorator) avulla</h3>
+<p>Toinen Pythonille idiomaattinen tapa on toteuttaa Singleton-malli <strong>koristeella (decorator)</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">singleton</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="n">instances</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">get_instance</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
+            <span class="n">instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">get_instance</span>
+
+<span class="nd">@singleton</span>
+<span class="k">class</span> <span class="nc">Logger</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Luodaan Logger-instanssi.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Käyttö:</span>
+<span class="n">log1</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+<span class="n">log2</span> <span class="o">=</span> <span class="n">Logger</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">log1</span> <span class="ow">is</span> <span class="n">log2</span><span class="p">)</span>  <span class="c1"># True</span>
+</code></pre></div>
+
+<p><strong>Hyödyt:</strong></p>
+<ul>
+<li>Koodi pysyy siistinä.</li>
+<li>Voidaan helposti käyttää mihin tahansa luokkaan.</li>
+<li>Ei tarvitse kirjoittaa ylimääräisiä luokkametodeja.</li>
+</ul>
+<h3 id="singleton-metaluokan-avulla">Singleton metaluokan avulla</h3>
+<p>Pythonissa voidaan myös käyttää <strong>metaluokkaa</strong> Singletonin toteuttamiseen:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">SingletonMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="n">_instances</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span>
+
+<span class="k">class</span> <span class="nc">Configuration</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">SingletonMeta</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Luodaan Configuration-instanssi.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Käyttö:</span>
+<span class="n">cfg1</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">()</span>
+<span class="n">cfg2</span> <span class="o">=</span> <span class="n">Configuration</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">cfg1</span> <span class="ow">is</span> <span class="n">cfg2</span><span class="p">)</span>  <span class="c1"># True</span>
+</code></pre></div>
+
+<p><strong>Etuna:</strong> tämä malli antaa täyden hallinnan instanssien luomiseen ja on laajennettavissa muihin suunnittelumalleihin, kuten Factoryyn.</p>
+<h3 id="milloin-kayttaa-singletonia">Milloin käyttää Singletonia?</h3>
+<p><strong>Hyviä käyttökohteita:</strong></p>
+<ul>
+<li>Sovelluskohtainen konfiguraatio (esim. <code>settings</code>)</li>
+<li>Lokaalit cache-objektit</li>
+<li>Yhden yhteyden resurssit (esim. DB-yhteys)</li>
+</ul>
+<p><strong>Varottavaa:</strong></p>
+<ul>
+<li>Singleton voi helposti johtaa <strong>globaaleihin tiloihin</strong>, mikä vaikeuttaa testattavuutta.</li>
+<li>Usein pidetään <strong>anti-patternina</strong>, jos sitä käytetään väärin tai liian usein.</li>
+<li>Multithreaded-ympäristössä pitää varmistaa säikeiden turvallisuus (thread safety).</li>
+</ul>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Vain yksi instanssi luokasta</td>
+</tr>
+<tr>
+<td>Käyttö</td>
+<td>Lokitus, konfiguraatio, resurssien hallinta</td>
+</tr>
+<tr>
+<td>Toteutustavat Pythonissa</td>
+<td>Luokkametodi, dekoratori, metaluokka</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Globaali tila, testauksen vaikeutuminen</td>
+</tr>
+</tbody>
+</table>
+<p>Singleton on voimakas mutta helposti väärinkäytetty malli. Kun sitä käyttää harkiten ja tilanteen vaatiessa, se voi yksinkertaistaa ohjelman rakennetta huomattavasti.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,256 @@
+
+<html>
+<head>
+<title>
+Flyweight-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="flyweight-suunnittelumalli-pythonissa">Flyweight-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-flyweight">Mikä on Flyweight?</h3>
+<p><strong>Flyweight</strong> on rakenteellinen suunnittelumalli, jonka tavoitteena on <strong>vähentää muistinkulutusta jakamalla samanlaista dataa useiden olioiden välillä</strong>. Se tekee tämän erottamalla:</p>
+<ul>
+<li><strong>Intrinsinen tila</strong> (jaettu, muuttumaton tila – esim. väri, muoto)</li>
+<li><strong>Ekstrinsinen tila</strong> (ulkoisesti annettava muuttuva tila – esim. sijainti)</li>
+</ul>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Säästää muistia ja luoda vähemmän olioita, kun suuri määrä olioita jakaa saman sisäisen tilan.</p>
+</blockquote>
+<h3 id="missa-flyweight-mallia-kaytetaan">Missä Flyweight-mallia käytetään?</h3>
+<ul>
+<li>Sovelluksissa, joissa luodaan paljon samantyyppisiä olioita (esim. tekstieditorit, pelit, grafiikka).</li>
+<li>Esimerkiksi tekstieditorissa jokainen kirjain ei tarvitse omaa olioaan: kirjain “A” voi olla jaettu, mutta sijainti ja muotoilu ovat erillisiä.</li>
+</ul>
+<h3 id="flyweight-mallin-rakenne">Flyweight-mallin rakenne</h3>
+<ul>
+<li><strong>Flyweight (jaettu olio):</strong> sisältää sisäisen tilan</li>
+<li><strong>FlyweightFactory:</strong> palauttaa olemassa olevan olion, jos se on jo luotu</li>
+<li><strong>Client:</strong> antaa ulkoisen tilan, kun käyttää olioita</li>
+</ul>
+<h3 id="python-esimerkki-puu-instanssit-kartalla">Python-esimerkki: Puu-instanssit kartalla</h3>
+<p>Kuvitellaan sovellus, jossa piirretään <strong>kymmeniä tuhansia puita</strong> kartalle. Jokainen puu on joko <em>koivu</em>, <em>kuusi</em> tai <em>mänty</em>.</p>
+<h4 id="1-flyweight-luokka-jaettu-tilat">1. Flyweight-luokka (jaettu tilat)</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">TreeType</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">texture</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">texture</span> <span class="o">=</span> <span class="n">texture</span>
+
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Piirretään puu: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">texture</span><span class="si">}</span><span class="s2">) sijaintiin (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h4 id="2-flyweight-tehdas-jakaa-puutyypit">2. Flyweight-tehdas (jakaa puutyypit)</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">TreeFactory</span><span class="p">:</span>
+    <span class="n">_tree_types</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_tree_type</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">texture</span><span class="p">):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">texture</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_tree_types</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_tree_types</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">TreeType</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">texture</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_tree_types</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</code></pre></div>
+
+<h4 id="3-asiakasluokka-antaa-ulkoiset-tilat">3. Asiakasluokka (antaa ulkoiset tilat)</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Tree</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">tree_type</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree_type</span> <span class="o">=</span> <span class="n">tree_type</span>
+
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tree_type</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</code></pre></div>
+
+<h4 id="4-metsa-luokka-luo-ja-hallitsee-puita">4. Metsä-luokka (luo ja hallitsee puita)</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Forest</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trees</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">plant_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">texture</span><span class="p">):</span>
+        <span class="n">tree_type</span> <span class="o">=</span> <span class="n">TreeFactory</span><span class="o">.</span><span class="n">get_tree_type</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">texture</span><span class="p">)</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">Tree</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">tree_type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trees</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">tree</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trees</span><span class="p">:</span>
+            <span class="n">tree</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</code></pre></div>
+
+<h4 id="5-kayttoesimerkki">5. Käyttöesimerkki</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">forest</span> <span class="o">=</span> <span class="n">Forest</span><span class="p">()</span>
+
+<span class="c1"># Istutetaan satoja puita, mutta jaetaan puutyypit</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
+    <span class="n">forest</span><span class="o">.</span><span class="n">plant_tree</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">&quot;Koivu&quot;</span><span class="p">,</span> <span class="s2">&quot;Vihreä&quot;</span><span class="p">,</span> <span class="s2">&quot;Lehtevä&quot;</span><span class="p">)</span>
+    <span class="n">forest</span><span class="o">.</span><span class="n">plant_tree</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;Kuusi&quot;</span><span class="p">,</span> <span class="s2">&quot;Tummanvihreä&quot;</span><span class="p">,</span> <span class="s2">&quot;Neulaset&quot;</span><span class="p">)</span>
+
+<span class="n">forest</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</code></pre></div>
+
+<p><strong>Tulostus (esimerkinomaisesti):</strong></p>
+<div class="codehilite"><pre><span></span><code>Piirretään puu: Koivu (Vihreä, Lehtevä) sijaintiin (0, 0)
+Piirretään puu: Kuusi (Tummanvihreä, Neulaset) sijaintiin (0, 10)
+...
+</code></pre></div>
+
+<p><strong>Muistinkäytön hyöty:</strong> vaikka metsässä on 20 puuta, luodaan vain 2 <code>TreeType</code>-oliota – yksi koivulle ja yksi kuuselle.</p>
+<h3 id="flyweight-mallin-hyodyt-ja-haitat">Flyweight-mallin hyödyt ja haitat</h3>
+<table>
+<thead>
+<tr>
+<th>Etu</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vähemmän olioita muistissa</td>
+<td>Jaettu tila vähentää muistinkulutusta</td>
+</tr>
+<tr>
+<td>Parempi suorituskyky</td>
+<td>Vähemmän resurssien kulutusta toistuvissa rakenteissa</td>
+</tr>
+<tr>
+<td>Erottaa muuttuvan ja muuttumattoman tiedon</td>
+<td>Selkeyttää rakenteita ja optimointia</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Haitta</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lisää kompleksisuutta</td>
+<td>Tarvitaan tehdas, tilaerottelu ja enemmän hallintaa</td>
+</tr>
+<tr>
+<td>Ekstrinsinen tila voi olla vaikea hallita</td>
+<td>Asiakas vastaa tilan antamisesta</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kayttokohteita-oikeassa-elamassa">Käyttökohteita oikeassa elämässä</h3>
+<ul>
+<li><strong>Tekstinkäsittely</strong>: jokainen merkki ei ole uusi olio, vaan kirjain ja fontti jaetaan</li>
+<li><strong>Pelimoottorit</strong>: toistuvat elementit kuten ammukset, viholliset, taustakuvat</li>
+<li><strong>Karttasovellukset</strong>: toistuvat ikonit tai symbolit (esim. liikennevalot, rakennukset)</li>
+<li><strong>GUI-komponentit</strong>: samanlaiset elementit kuten painikkeet, taustat</li>
+</ul>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Vähentää muistinkulutusta jakamalla samanlaista oliodataa</td>
+</tr>
+<tr>
+<td>Jaettava tila</td>
+<td>Intrinsinen (muuttumaton)</td>
+</tr>
+<tr>
+<td>Asiakkaan vastuu</td>
+<td>Ekstrinsisen (muuttuvan) tilan syöttäminen</td>
+</tr>
+<tr>
+<td>Sovellukset</td>
+<td>Pelit, graafiset järjestelmät, editorit, kartat</td>
+</tr>
+<tr>
+<td>Suorituskyky</td>
+<td>Erinomainen, kun instanssien määrä suuri ja data toistuva</td>
+</tr>
+</tbody>
+</table>
+<p>Flyweight on erityisen hyödyllinen, kun tarvitaan <strong>suuria määriä kevyitä, samanlaisia olioita</strong>, joiden sisäinen tila voidaan jakaa muiden kanssa. Se on optimaalinen valinta muistitehokkuuden kannalta.</p>
+</div>
+</body>
+</html>

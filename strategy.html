@@ -1,0 +1,285 @@
+
+<html>
+<head>
+<title>
+Strategy-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="strategy-suunnittelumalli-pythonissa">Strategy-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-strategy">Mikä on Strategy?</h3>
+<p><strong>Strategy</strong> on käyttäytymismalli, jossa joukko samankaltaisia algoritmeja kapseloidaan omiin olioihinsa ja <strong>niitä voidaan vaihtaa dynaamisesti ohjelman suorituksen aikana</strong>.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Erotella algoritmi sen käyttävästä kontekstista, jolloin voit vaihtaa algoritmia ilman, että muutat kontekstin koodia.</p>
+</blockquote>
+<h3 id="milloin-kayttaa-strategy-mallia">Milloin käyttää Strategy-mallia?</h3>
+<p>Strategy-malli sopii, kun:</p>
+<ul>
+<li>Sinulla on <strong>useita vaihtoehtoisia tapoja suorittaa toiminto</strong> (esim. lajittelu, reititys, maksutavat).</li>
+<li>Haluat <strong>vaihtaa logiikkaa dynaamisesti</strong> ilman, että kirjoitat if-else-koodia.</li>
+<li>Haluat <strong>pitää koodin laajennettavana ja testattavana</strong>.</li>
+<li>Haluat <strong>eriyttää muuttuvan toiminnan</strong> kiinteästä rakenteesta.</li>
+</ul>
+<h3 id="rakenne">Rakenne</h3>
+<ul>
+<li><strong>Strategy (strategia):</strong> määrittelee yhteisen rajapinnan eri algoritmeille.</li>
+<li><strong>ConcreteStrategy:</strong> toteuttaa strategian tietyn version.</li>
+<li><strong>Context:</strong> käyttää valittua strategiaa ja on riippuvainen vain sen rajapinnasta.</li>
+</ul>
+<h3 id="esimerkki-alennuslaskenta-ostoskorissa">Esimerkki: Alennuslaskenta ostoskorissa</h3>
+<p>Kuvitellaan verkkokauppa, jossa eri asiakkaat saavat erilaisia alennuksia:</p>
+<ul>
+<li>Uusille asiakkaille 10 %</li>
+<li>Jäsenille 20 %</li>
+<li>Kampanja-alennus 5 €</li>
+</ul>
+<h3 id="1-strategian-rajapinta">1. Strategian rajapinta</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">DiscountStrategy</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h3 id="2-konkreettiset-strategiat">2. Konkreettiset strategiat</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">NoDiscount</span><span class="p">(</span><span class="n">DiscountStrategy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">total</span>
+
+<span class="k">class</span> <span class="nc">PercentageDiscount</span><span class="p">(</span><span class="n">DiscountStrategy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">percent</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">percent</span> <span class="o">=</span> <span class="n">percent</span>
+
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">total</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">percent</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">FixedDiscount</span><span class="p">(</span><span class="n">DiscountStrategy</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="n">amount</span>
+
+    <span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">total</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-konteksti-ostoskori">3. Konteksti: Ostoskori</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ShoppingCart</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">discount_strategy</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discount_strategy</span> <span class="o">=</span> <span class="n">discount_strategy</span>
+
+    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">price</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">price</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">total_with_discount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">discount_strategy</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="4-kayttoesimerkki">4. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">cart</span> <span class="o">=</span> <span class="n">ShoppingCart</span><span class="p">(</span><span class="n">PercentageDiscount</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>  <span class="c1"># 10 % alennus</span>
+<span class="n">cart</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="s2">&quot;Kirja&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+<span class="n">cart</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="s2">&quot;Laturi&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Normaali hinta: </span><span class="si">{</span><span class="n">cart</span><span class="o">.</span><span class="n">total</span><span class="p">()</span><span class="si">}</span><span class="s2"> €&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Alennettu hinta: </span><span class="si">{</span><span class="n">cart</span><span class="o">.</span><span class="n">total_with_discount</span><span class="p">()</span><span class="si">}</span><span class="s2"> €&quot;</span><span class="p">)</span>
+
+<span class="c1"># Vaihdetaan strategia lennosta</span>
+<span class="n">cart</span><span class="o">.</span><span class="n">discount_strategy</span> <span class="o">=</span> <span class="n">FixedDiscount</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uusi alennettu hinta (5 € pois): </span><span class="si">{</span><span class="n">cart</span><span class="o">.</span><span class="n">total_with_discount</span><span class="p">()</span><span class="si">}</span><span class="s2"> €&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Normaali hinta: 50 €
+Alennettu hinta: 45.0 €
+Uusi alennettu hinta (5 € pois): 45 €
+</code></pre></div>
+
+<h3 id="strategy-mallin-hyodyt-ja-haitat">Strategy-mallin hyödyt ja haitat</h3>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Algoritmit ovat <strong>vaihdettavissa dynaamisesti</strong></td>
+<td>Lisää luokkien määrää</td>
+</tr>
+<tr>
+<td>Koodi on <strong>selkeämpää kuin if-else -rakenteet</strong></td>
+<td>Voi tuntua raskaalta yksinkertaisiin tarpeisiin</td>
+</tr>
+<tr>
+<td>Strategiat voidaan <strong>testata erillään</strong></td>
+<td>Asiakas vastaa strategian valinnasta</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pythonin-erityispiirre-funktiot-strategiassa">Pythonin erityispiirre: funktiot strategiassa</h3>
+<p>Pythonissa voit käyttää <strong>funktioita strategiakuviona</strong> ilman erillisiä luokkia:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">no_discount</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">total</span>
+
+<span class="k">def</span> <span class="nf">ten_percent_discount</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">total</span> <span class="o">*</span> <span class="mf">0.9</span>
+
+<span class="k">def</span> <span class="nf">fixed_discount_5</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">total</span> <span class="o">-</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># ShoppingCart mukautettu:</span>
+<span class="k">class</span> <span class="nc">FunctionalCart</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">discount_func</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">discount_func</span> <span class="o">=</span> <span class="n">discount_func</span>
+
+    <span class="k">def</span> <span class="nf">add_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">price</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">total</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">price</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">price</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">total_with_discount</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">discount_func</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total</span><span class="p">())</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">cart</span> <span class="o">=</span> <span class="n">FunctionalCart</span><span class="p">(</span><span class="n">ten_percent_discount</span><span class="p">)</span>
+<span class="n">cart</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="s2">&quot;Pelikonsoli&quot;</span><span class="p">,</span> <span class="mi">300</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cart</span><span class="o">.</span><span class="n">total_with_discount</span><span class="p">())</span>  <span class="c1"># 270.0</span>
+</code></pre></div>
+
+<h3 id="strategy-vs-muut-kayttaytymismallit">Strategy vs muut käyttäytymismallit</h3>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Strategyyn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Command</strong></td>
+<td>Kapseloi toiminnon, jonka voi suorittaa tai perua</td>
+<td>Command on enemmän toimintopyyntö kuin algoritmivalinta</td>
+</tr>
+<tr>
+<td><strong>State</strong></td>
+<td>Vaihtaa olion käyttäytymistä tilan mukaan</td>
+<td>State muuttaa <strong>olion sisäistä tilaa</strong>, Strategy ei</td>
+</tr>
+<tr>
+<td><strong>Template</strong></td>
+<td>Määrittää rungon ja jättää osat aliluokille</td>
+<td>Strategy käyttää koostetta, Template käyttää perintää</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Kapseloi vaihtoehtoiset algoritmit ja mahdollistaa niiden vaihdon</td>
+</tr>
+<tr>
+<td>Sovelluskohteet</td>
+<td>Alennuslaskenta, maksutavat, reititysalgoritmit, tekoälypäätökset</td>
+</tr>
+<tr>
+<td>Pythonin tuki</td>
+<td>Tukee hyvin sekä luokkien että funktioiden käyttöä strategiassa</td>
+</tr>
+<tr>
+<td>Etu</td>
+<td>Korvaa monimutkaiset if/elif-rakenteet siistillä ja laajennettavalla tavalla</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Strategy-malli</strong> on erinomainen valinta, kun ohjelmasi tarvitsee <strong>vaihdettavia tapoja suorittaa tehtävä</strong>, mutta et halua sitoa ohjelman rakennetta yhteen tiettyyn toteutukseen. Python tekee strategian toteuttamisesta erityisen joustavaa — voit käyttää joko luokkia tai funktioita tilanteen mukaan.</p>
+</div>
+</body>
+</html>

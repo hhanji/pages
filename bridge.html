@@ -1,0 +1,250 @@
+
+<html>
+<head>
+<title>
+Bridge-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="bridge-suunnittelumalli-pythonissa">Bridge-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-bridge">Mikä on Bridge?</h3>
+<p><strong>Bridge</strong>-suunnittelumalli erottaa olion <strong>abstraktion</strong> sen <strong>toteutuksesta</strong>, jolloin molempia voidaan kehittää itsenäisesti. Malli on hyödyllinen tilanteissa, joissa halutaan välttää <strong>periytymisen aiheuttamaa luokkien räjähdystä</strong>.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Irrottaa abstraktion toteutuksesta siten, että ne voivat kehittyä toisistaan riippumatta.</p>
+</blockquote>
+<h3 id="miksi-kayttaa-bridge-mallia">Miksi käyttää Bridge-mallia?</h3>
+<p>Bridge on hyödyllinen kun:</p>
+<ul>
+<li>Sinulla on <strong>kaksi toisistaan riippumatonta ulottuvuutta</strong>, jotka voivat molemmat vaihdella (esim. laite + käyttöjärjestelmä).</li>
+<li>Haluat <strong>välttää monimutkaista periytymishierarkiaa</strong>.</li>
+<li>Tarvitset joustavuutta laajennuksiin <strong>ilman olemassa olevan koodin muuttamista</strong>.</li>
+</ul>
+<h2 id="esimerkki-piirtaminen-eri-kayttojarjestelmissa">Esimerkki: Piirtäminen eri käyttöjärjestelmissä</h2>
+<p>Kuvitellaan, että haluamme piirtää muotoja (esim. ympyröitä), mutta piirtoalusta (Windows, Linux, Mac) voi vaihdella. Sen sijaan, että luomme jokaista muotoa kohti alustaerillisiä luokkia (esim. <code>WindowsCircle</code>, <code>LinuxCircle</code> jne.), käytämme Bridge-mallia.</p>
+<h2 id="rakenne">Rakenne</h2>
+<ul>
+<li><strong>Abstraction:</strong> yleinen rajapinta (esim. <code>Shape</code>)</li>
+<li><strong>RefinedAbstraction:</strong> konkreettinen käyttötapa (esim. <code>Circle</code>)</li>
+<li><strong>Implementor:</strong> rajapinta toteutukselle (esim. <code>DrawingAPI</code>)</li>
+<li><strong>ConcreteImplementor:</strong> konkreettiset alustakohtaiset toteutukset (esim. <code>WindowsAPI</code>, <code>LinuxAPI</code>)</li>
+</ul>
+<h2 id="1-implementointirajapinta-bridge">1. Implementointirajapinta (Bridge)</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">DrawingAPI</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">draw_circle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h2 id="2-konkreettiset-toteutukset">2. Konkreettiset toteutukset</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">WindowsAPI</span><span class="p">(</span><span class="n">DrawingAPI</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">draw_circle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Windows] Piirretään ympyrä koordinaateissa (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">), säde </span><span class="si">{</span><span class="n">radius</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">LinuxAPI</span><span class="p">(</span><span class="n">DrawingAPI</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">draw_circle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Linux] Piirretään ympyrä pisteessä (</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">) säteellä </span><span class="si">{</span><span class="n">radius</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="3-abstrakti-muoto">3. Abstrakti muoto</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Shape</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">drawing_api</span><span class="p">:</span> <span class="n">DrawingAPI</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drawing_api</span> <span class="o">=</span> <span class="n">drawing_api</span>
+
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h2 id="4-konkreettinen-muoto">4. Konkreettinen muoto</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Circle</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">drawing_api</span><span class="p">:</span> <span class="n">DrawingAPI</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">drawing_api</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
+
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drawing_api</span><span class="o">.</span><span class="n">draw_circle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="5-kayttoesimerkki">5. Käyttöesimerkki</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Käytetään Linux-piirtäjää</span>
+<span class="n">linux_circle</span> <span class="o">=</span> <span class="n">Circle</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">LinuxAPI</span><span class="p">())</span>
+<span class="n">linux_circle</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+<span class="c1"># Käytetään Windows-piirtäjää</span>
+<span class="n">windows_circle</span> <span class="o">=</span> <span class="n">Circle</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">WindowsAPI</span><span class="p">())</span>
+<span class="n">windows_circle</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">Linux</span><span class="o">]</span><span class="w"> </span><span class="n">Piirretään</span><span class="w"> </span><span class="n">ympyrä</span><span class="w"> </span><span class="n">pisteessä</span><span class="w"> </span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">)</span><span class="w"> </span><span class="n">säteellä</span><span class="w"> </span><span class="mi">30</span>
+<span class="o">[</span><span class="n">Windows</span><span class="o">]</span><span class="w"> </span><span class="n">Piirretään</span><span class="w"> </span><span class="n">ympyrä</span><span class="w"> </span><span class="n">koordinaateissa</span><span class="w"> </span><span class="p">(</span><span class="mi">300</span><span class="p">,</span><span class="w"> </span><span class="mi">400</span><span class="p">),</span><span class="w"> </span><span class="n">säde</span><span class="w"> </span><span class="mi">50</span>
+</code></pre></div>
+
+<h2 id="edut-ja-haitat">Edut ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Erottaa <strong>abstraktion ja toteutuksen</strong></td>
+<td>Lisää hieman koodin monimutkaisuutta</td>
+</tr>
+<tr>
+<td>Mahdollistaa <strong>itsenäisen kehityksen</strong> molemmille</td>
+<td>Ei aina tarpeellinen yksinkertaisissa tapauksissa</td>
+</tr>
+<tr>
+<td>Vältetään <strong>luokkien määrän räjähtäminen</strong></td>
+<td>Vaatii huolellista rakenteen suunnittelua</td>
+</tr>
+<tr>
+<td>Tukee <strong>laajennettavuutta ja uudelleenkäyttöä</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="bridge-vs-muut-mallit">Bridge vs muut mallit</h2>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Bridgeen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Adapter</strong></td>
+<td>Sovittaa yhteensopimattomat rajapinnat</td>
+<td>Adapter yhdistää olemassa olevat; Bridge jakaa uudet</td>
+</tr>
+<tr>
+<td><strong>Decorator</strong></td>
+<td>Lisää toiminnallisuutta olioon dynaamisesti</td>
+<td>Bridge jakaa abstraktion ja toteutuksen</td>
+</tr>
+<tr>
+<td><strong>Strategy</strong></td>
+<td>Vaihda algoritmia ajonaikaisesti</td>
+<td>Bridge yhdistää kaksi vaihdettavaa ulottuvuutta</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sovelluskohteita">Sovelluskohteita</h2>
+<ul>
+<li><strong>Käyttöliittymät eri alustoilla</strong> (Windows, Linux, Mac)</li>
+<li><strong>Grafiikkakirjastot</strong> (OpenGL, DirectX)</li>
+<li><strong>Tietokantakerrokset</strong>, joissa vaihtuvat taustajärjestelmät (PostgreSQL, MySQL)</li>
+<li><strong>Raporttien tai tulostuksen tuottaminen eri formaateissa</strong> (PDF, HTML, XML)</li>
+<li><strong>Viestintäprotokollien abstraktio</strong> (esim. TCP vs UDP)</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Erottaa abstraktion toteutuksesta</td>
+</tr>
+<tr>
+<td>Hyöty</td>
+<td>Tukee laajennettavuutta ilman luokkien määrän räjähtämistä</td>
+</tr>
+<tr>
+<td>Sovelluskohteet</td>
+<td>Piirtäminen, alustariippuvuus, tietokannat, protokollat</td>
+</tr>
+<tr>
+<td>Pythonin etu</td>
+<td>Helppo toteuttaa ilman monimutkaista periytymishierarkia</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Bridge-malli</strong> on tehokas ratkaisu tilanteisiin, joissa kaksi eri ulottuvuutta voivat vaihdella itsenäisesti. Se auttaa tekemään ohjelmistoista <strong>modulaarisempia, selkeämpiä ja helpommin laajennettavia</strong>.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,281 @@
+
+<html>
+<head>
+<title>
+Abstract Factory -suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="abstract-factory-suunnittelumalli-pythonissa">Abstract Factory -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-abstract-factory">Mikä on Abstract Factory?</h3>
+<p><strong>Abstract Factory</strong> on luomismalli (<em>creational design pattern</em>), jonka avulla voidaan <strong>luoda kokonaisia yhteenkuuluvia olioiden perheitä ilman, että asiakaskoodi tuntee niiden konkreettisia luokkia</strong>.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Tarjota rajapinta, jolla voidaan luoda olioita, jotka kuuluvat samaan &ldquo;tuoteperheeseen&rdquo;, abstraktisti.</p>
+</blockquote>
+<h3 id="milloin-kayttaa-abstract-factorya">Milloin käyttää Abstract Factorya?</h3>
+<p>Abstract Factory -malli on hyödyllinen, kun:</p>
+<ul>
+<li>Tarvitset <strong>yhteensopivia olioita</strong>, jotka on ryhmitelty saman teeman, käyttöliittymän tai järjestelmän mukaan.</li>
+<li>Haluat <strong>eriyttää olioperheiden luomisen logiikan</strong> asiakaskoodista.</li>
+<li>Halutaan tukea <strong>vaihtuvia kokoonpanoja</strong>: esim. Windows/Linux UI, eri tietokanta-ajurit, teemat, pelihahmoluokat.</li>
+</ul>
+<h3 id="esimerkki-graafinen-kayttoliittyma-gui">Esimerkki: Graafinen käyttöliittymä (GUI)</h3>
+<p>Luodaan käyttöliittymäkomponentteja, jotka riippuvat käyttöjärjestelmästä. Jokaisessa ympäristössä (esim. Windows, Linux) on omat komponenttinsa (painike, valikko).</p>
+<h3 id="mallin-rakenne">Mallin rakenne</h3>
+<ul>
+<li><strong>Abstract Factory</strong>: määrittää metodit komponenttien luomiselle.</li>
+<li><strong>Concrete Factories</strong>: toteuttavat Abstract Factoryn ympäristölle sopivilla komponenteilla.</li>
+<li><strong>Abstract Products</strong>: komponenttien yhteiset rajapinnat.</li>
+<li><strong>Concrete Products</strong>: ympäristökohtaiset toteutukset.</li>
+<li><strong>Client</strong>: käyttää vain abstract-rajapintoja, ei tiedä konkreettisista luokista.</li>
+</ul>
+<h3 id="python-esimerkki">Python-esimerkki</h3>
+<h4 id="1-abstraktit-tuotteet">1. Abstraktit tuotteet</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Button</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">Menu</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h4 id="2-konkreettiset-tuotteet">2. Konkreettiset tuotteet</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">WindowsButton</span><span class="p">(</span><span class="n">Button</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Piirretään Windows-tyylinen painike&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">WindowsMenu</span><span class="p">(</span><span class="n">Menu</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Piirretään Windows-valikko&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">LinuxButton</span><span class="p">(</span><span class="n">Button</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Piirretään Linux-tyylinen painike&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">LinuxMenu</span><span class="p">(</span><span class="n">Menu</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Piirretään Linux-valikko&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h4 id="3-abstract-factory">3. Abstract Factory</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">GUIFactory</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">create_button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">create_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h4 id="4-konkreettiset-tehdasluokat">4. Konkreettiset tehdasluokat</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">WindowsFactory</span><span class="p">(</span><span class="n">GUIFactory</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">create_button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">WindowsButton</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">create_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">WindowsMenu</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">LinuxFactory</span><span class="p">(</span><span class="n">GUIFactory</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">create_button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">LinuxButton</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">create_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">LinuxMenu</span><span class="p">()</span>
+</code></pre></div>
+
+<h4 id="5-asiakaskoodi">5. Asiakaskoodi</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">create_ui</span><span class="p">(</span><span class="n">factory</span><span class="p">:</span> <span class="n">GUIFactory</span><span class="p">):</span>
+    <span class="n">button</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_button</span><span class="p">()</span>
+    <span class="n">menu</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="n">create_menu</span><span class="p">()</span>
+    <span class="n">button</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+    <span class="n">menu</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</code></pre></div>
+
+<h4 id="6-kayttoesimerkki">6. Käyttöesimerkki</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Vaihda tehdasympäristö tarpeen mukaan</span>
+<span class="n">factory</span> <span class="o">=</span> <span class="n">WindowsFactory</span><span class="p">()</span>
+<span class="c1"># factory = LinuxFactory()</span>
+
+<span class="n">create_ui</span><span class="p">(</span><span class="n">factory</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus (WindowsFactory):</strong></p>
+<div class="codehilite"><pre><span></span><code>Piirretään Windows-tyylinen painike  
+Piirretään Windows-valikko
+</code></pre></div>
+
+<h3 id="abstract-factory-vs-muut-luomismallit">Abstract Factory vs muut luomismallit</h3>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Käyttötarkoitus</th>
+<th>Ero Abstract Factoryyn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Factory Method</td>
+<td>Luo yksittäinen olio</td>
+<td>Luo <strong>yksi tuote</strong> kerrallaan</td>
+</tr>
+<tr>
+<td>Builder</td>
+<td>Luo olio vaiheittain</td>
+<td>Luo <strong>monimutkaisen</strong> olion</td>
+</tr>
+<tr>
+<td>Prototype</td>
+<td>Kopioi olemassa oleva olio</td>
+<td>Ei rakenna tyhjästä</td>
+</tr>
+<tr>
+<td><strong>Abstract Factory</strong></td>
+<td>Luo kokonaisia tuoteperheitä</td>
+<td>Luo <strong>yhteensopivien olioiden perheitä</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="hyodyt-ja-haitat">Hyödyt ja haitat</h3>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Erottaa tuotteiden luomisen käyttökoodista</td>
+<td>Lisää luokkien määrää</td>
+</tr>
+<tr>
+<td>Tukee vaihtuvia tuotelinjoja helposti</td>
+<td>Uusien tuotteiden lisääminen vaatii paljon muutoksia</td>
+</tr>
+<tr>
+<td>Tuotteet ovat aina yhteensopivia</td>
+<td>Voi olla yliampuva yksinkertaisiin tarpeisiin</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Luo yhteensopivia olioita ilman, että asiakas tuntee niiden toteutuksia</td>
+</tr>
+<tr>
+<td>Rakennuslogiikka</td>
+<td>Abstrakti tehdas tuottaa yhteensopivia tuotteita</td>
+</tr>
+<tr>
+<td>Soveltuu kun</td>
+<td>Vaihtuvia tuoteryhmiä, teemoja, rajapintatoteutuksia</td>
+</tr>
+<tr>
+<td>Esimerkkejä</td>
+<td>UI-teemat, pelihahmoluokat, tietokanta-ajurit, ympäristöriippuvuudet</td>
+</tr>
+</tbody>
+</table>
+<h3 id="laajennus-dynaaminen-tehtaan-valinta">Laajennus: Dynaaminen tehtaan valinta</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">platform</span>
+
+<span class="k">def</span> <span class="nf">get_platform_factory</span><span class="p">():</span>
+    <span class="n">system</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">system</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">WindowsFactory</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">LinuxFactory</span><span class="p">()</span>
+
+<span class="n">create_ui</span><span class="p">(</span><span class="n">get_platform_factory</span><span class="p">())</span>
+</code></pre></div>
+
+<p>Tämä mahdollistaa dynaamisen tehtaan valinnan käyttöjärjestelmän mukaan – ilman, että asiakaskoodi tarvitsee tietää yksityiskohtia.</p>
+<p><strong>Abstract Factory</strong> tarjoaa tehokkaan tavan hallita <strong>vaihtuvia alustoja, teemoja ja komponenttijärjestelmiä</strong>, pitäen koodin modulaarisena ja helposti laajennettavana.</p>
+</div>
+</body>
+</html>

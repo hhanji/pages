@@ -1,0 +1,259 @@
+
+<html>
+<head>
+<title>
+Mediator-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="mediator-suunnittelumalli-pythonissa">Mediator-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-mediator">Mikä on Mediator?</h3>
+<p><strong>Mediator</strong> on käyttäytymismalli, jonka tarkoituksena on <strong>vähentää olioiden välistä suoraa kommunikaatiota</strong>. Se tekee tämän keskittämällä viestinvaihdon yhteen välittäjäolioon (<em>mediator</em>), joka hallitsee ja koordinoi objektien välistä yhteistyötä.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Irrottaa objektit toisistaan siten, etteivät ne enää kommunikoi suoraan keskenään vaan välittäjän kautta.</p>
+</blockquote>
+<h3 id="miksi-kayttaa-mediator-mallia">Miksi käyttää Mediator-mallia?</h3>
+<p>Kun useat oliot ovat vahvasti sidoksissa toisiinsa, koodin ylläpito vaikeutuu:</p>
+<ul>
+<li>Jokainen olio tuntee muut, joihin se vaikuttaa → <strong>tiukka kytkentä (tight coupling)</strong>.</li>
+<li>Pienikin muutos aiheuttaa laajaa uudelleenkirjoitusta.</li>
+</ul>
+<p>Mediator auttaa:</p>
+<ul>
+<li><strong>Vähentämään riippuvuuksia</strong>: Oliot eivät tiedä toistensa yksityiskohdista.</li>
+<li><strong>Helpottamaan testattavuutta ja ylläpidettävyyttä</strong>.</li>
+<li><strong>Keskittämään logiikkaa</strong>, kuten reititystä, tilanhallintaa tai validointia.</li>
+</ul>
+<h3 id="esimerkki-ilman-mediatoria">Esimerkki ilman Mediatoria</h3>
+<p>Kuvitellaan lomake, jossa on kolme komponenttia:</p>
+<ul>
+<li><strong>TextBox</strong></li>
+<li><strong>Button</strong></li>
+<li><strong>Checkbox</strong></li>
+</ul>
+<p>Jos nämä kommunikoivat suoraan toistensa kanssa, syntyy monimutkainen verkko riippuvuuksia.</p>
+<h3 id="mediatorin-kaytto-lomakesovellus">Mediatorin käyttö: Lomakesovellus</h3>
+<h4 id="1-komponenttien-rajapinta">1. Komponenttien rajapinta</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">UIComponent</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mediator</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mediator</span> <span class="o">=</span> <span class="n">mediator</span>
+</code></pre></div>
+
+<h4 id="2-konkreettiset-komponentit">2. Konkreettiset komponentit</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">TextBox</span><span class="p">(</span><span class="n">UIComponent</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mediator</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">input_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TextBox: syöte = &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mediator</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;text_changed&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CheckBox</span><span class="p">(</span><span class="n">UIComponent</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mediator</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">checked</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">toggle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">checked</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;valittu&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checked</span> <span class="k">else</span> <span class="s2">&quot;ei valittu&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CheckBox: </span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mediator</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;checkbox_toggled&quot;</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Button</span><span class="p">(</span><span class="n">UIComponent</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mediator</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">mediator</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">set_enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="n">status</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="s2">&quot;aktiivinen&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="k">else</span> <span class="s2">&quot;harmaana&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Button: </span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h4 id="3-mediator-luokka">3. Mediator-luokka</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">FormMediator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">textbox</span> <span class="o">=</span> <span class="n">TextBox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">checkbox</span> <span class="o">=</span> <span class="n">CheckBox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sender</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span> <span class="o">==</span> <span class="s2">&quot;text_changed&quot;</span> <span class="ow">or</span> <span class="n">event</span> <span class="o">==</span> <span class="s2">&quot;checkbox_toggled&quot;</span><span class="p">:</span>
+            <span class="c1"># Molempien ehtojen täytyttävä</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">textbox</span><span class="o">.</span><span class="n">text</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkbox</span><span class="o">.</span><span class="n">checked</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">button</span><span class="o">.</span><span class="n">set_enabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">button</span><span class="o">.</span><span class="n">set_enabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+
+<h4 id="4-kayttoesimerkki">4. Käyttöesimerkki</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Luodaan lomake mediatorin avulla</span>
+<span class="n">mediator</span> <span class="o">=</span> <span class="n">FormMediator</span><span class="p">()</span>
+
+<span class="c1"># Käyttäjä syöttää tekstiä</span>
+<span class="n">mediator</span><span class="o">.</span><span class="n">textbox</span><span class="o">.</span><span class="n">input_text</span><span class="p">(</span><span class="s2">&quot;Hei maailma&quot;</span><span class="p">)</span>
+
+<span class="c1"># Käyttäjä valitsee checkboxin</span>
+<span class="n">mediator</span><span class="o">.</span><span class="n">checkbox</span><span class="o">.</span><span class="n">toggle</span><span class="p">()</span>
+
+<span class="c1"># Button aktivoituu vasta kun molemmat ehdot täyttyvät</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">TextBox</span><span class="o">:</span><span class="w"> </span><span class="n">syöte</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Hei maailma&#39;</span>
+<span class="n">Button</span><span class="o">:</span><span class="w"> </span><span class="n">harmaana</span>
+<span class="n">CheckBox</span><span class="o">:</span><span class="w"> </span><span class="n">valittu</span>
+<span class="n">Button</span><span class="o">:</span><span class="w"> </span><span class="n">aktiivinen</span>
+</code></pre></div>
+
+<h3 id="mallin-rakenne-uml-sanallisesti">Mallin rakenne (UML-sanallisesti)</h3>
+<ul>
+<li><strong>Colleague-luokat</strong>: esim. <code>TextBox</code>, <code>Button</code>, <code>CheckBox</code></li>
+<li><strong>Mediator</strong>: esim. <code>FormMediator</code></li>
+<li><strong>Colleague-luokat eivät kommunikoi keskenään suoraan</strong>, vaan kaikki kulkee Mediatorin kautta</li>
+</ul>
+<h3 id="kayttokohteita-mediator-mallille">Käyttökohteita Mediator-mallille</h3>
+<ul>
+<li>Lomakekomponenttien yhteistoiminta</li>
+<li>UI-kirjastot (esim. Qt, Tkinter)</li>
+<li>Tapahtumajärjestelmät</li>
+<li>Keskitetyt viestinvälitysjärjestelmät (event bus, message broker)</li>
+<li>Pelimoottorit (esim. yksiköt kommunikoivat pelilogiikan kautta)</li>
+</ul>
+<h3 id="mediator-malli-vs-observer">Mediator-malli vs Observer</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Mediator</th>
+<th>Observer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kommunikaation suunta</td>
+<td>Keskitetty (kaikki kulkee mediatorin kautta)</td>
+<td>Hajautettu (tapahtumien kuuntelu)</td>
+</tr>
+<tr>
+<td>Kytkentä</td>
+<td>Heikko kytkentä komponenttien välillä</td>
+<td>Heikko kytkentä lähteen ja seuraajien välillä</td>
+</tr>
+<tr>
+<td>Soveltuu kun</td>
+<td>Tarvitaan keskitetty hallinta</td>
+<td>Tarvitaan useita reaktiivisia tilapäivityksiä</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Irrottaa oliot toisistaan keskittämällä kommunikaatio mediatoriin</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Vähentää riippuvuuksia, parantaa ylläpidettävyyttä, selkeyttää logiikkaa</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Mediatorista voi tulla monimutkainen ja liian suuri</td>
+</tr>
+<tr>
+<td>Sovelluskohteet</td>
+<td>UI-komponentit, event bus, pelilogiikka, järjestelmien integraatio</td>
+</tr>
+</tbody>
+</table>
+<p>Mediator-malli tuo selkeyttä monimutkaisiin vuorovaikutussuhteisiin ja on tärkeä osa <strong>modulaarisen ja testattavan arkkitehtuurin</strong> rakentamista.</p>
+</div>
+</body>
+</html>

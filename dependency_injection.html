@@ -1,0 +1,267 @@
+
+<html>
+<head>
+<title>
+Dependency Injection
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="dependency-injection-pythonissa">Dependency Injection Pythonissa</h2>
+<h3 id="mika-on-dependency-injection">Mikä on Dependency Injection?</h3>
+<p><strong>Dependency Injection (DI)</strong> on suunnittelumalli, jossa luokan tarvitsemat riippuvuudet <strong>annetaan ulkoa</strong> sen sijaan, että luokka <strong>luo tai hakee ne itse</strong>. Tämä parantaa <strong>modulaarisuutta</strong>, <strong>testattavuutta</strong> ja <strong>uudelleenkäytettävyyttä</strong>.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Erotetaan luokan logiikka sen riippuvuuksista — injektoimalla ne sen ulkopuolelta.</p>
+</blockquote>
+<h3 id="miten-se-toimii">Miten se toimii?</h3>
+<p>Ilman DI\:tä:</p>
+<ul>
+<li>Luokka luo tai kovakoodaa riippuvuudet itse.</li>
+</ul>
+<p>DI\:n kanssa:</p>
+<ul>
+<li>Riippuvuudet <strong>annetaan konstruktorin, metodin tai ominaisuuden kautta</strong>.</li>
+</ul>
+<h2 id="hyodyt">Hyödyt</h2>
+<p>✅ <strong>Löyhä kytkentä</strong> (loosely coupled)<br />
+✅ <strong>Helpompi testata</strong> (voi käyttää mokkeja tai stubbeja)<br />
+✅ <strong>Selkeä vastuunjako</strong><br />
+✅ <strong>Riippuvuuksien hallinta keskitetysti</strong></p>
+<h2 id="esimerkki-ilman-ja-din-kanssa">Esimerkki: Ilman ja DI\:n kanssa</h2>
+<h3 id="1-ilman-dependency-injectionia">1. Ilman Dependency Injectionia</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">EmailService</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lähetetään sähköposti: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">NotificationManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">email_service</span> <span class="o">=</span> <span class="n">EmailService</span><span class="p">()</span>  <span class="c1"># Kovakoodattu riippuvuus</span>
+
+    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">email_service</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</code></pre></div>
+
+<p>🔴 Tämä tekee testauksesta vaikeaa, koska <code>NotificationManager</code> <strong>luo itse</strong> <code>EmailService</code>-olion.</p>
+<h3 id="2-dependency-injection-periaatteella">2. Dependency Injection -periaatteella</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">EmailService</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lähetetään sähköposti: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">NotificationManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service</span><span class="p">):</span>  <span class="c1"># Riippuvuus injektoidaan</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">service</span>
+
+    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="kaytto">Käyttö:</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">email_service</span> <span class="o">=</span> <span class="n">EmailService</span><span class="p">()</span>
+<span class="n">notifier</span> <span class="o">=</span> <span class="n">NotificationManager</span><span class="p">(</span><span class="n">email_service</span><span class="p">)</span>
+<span class="n">notifier</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="s2">&quot;Tervetuloa!&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-dependency-injection-testauksessa-mock">3. Dependency Injection testauksessa (mock)</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">MockService</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[MOCK] Viesti lähetetty: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">mock_service</span> <span class="o">=</span> <span class="n">MockService</span><span class="p">()</span>
+<span class="n">test_notifier</span> <span class="o">=</span> <span class="n">NotificationManager</span><span class="p">(</span><span class="n">mock_service</span><span class="p">)</span>
+<span class="n">test_notifier</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="s2">&quot;Testiviesti&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">MOCK</span><span class="o">]</span><span class="w"> </span><span class="n">Viesti</span><span class="w"> </span><span class="nl">lähetetty</span><span class="p">:</span><span class="w"> </span><span class="n">Testiviesti</span>
+</code></pre></div>
+
+<h2 id="erilaisia-injektiotapoja">Erilaisia injektiotapoja</h2>
+<table>
+<thead>
+<tr>
+<th>Tapa</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Constructor Injection</strong></td>
+<td>Riippuvuus annetaan konstruktorissa (yleisin)</td>
+</tr>
+<tr>
+<td><strong>Setter Injection</strong></td>
+<td>Riippuvuus asetetaan metodilla/propertyllä</td>
+</tr>
+<tr>
+<td><strong>Interface Injection</strong></td>
+<td>Luokka toteuttaa rajapinnan, jonka DI-kehys kutsuu</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sovelluskohteita">Sovelluskohteita</h2>
+<ul>
+<li><strong>Testattavat palvelut</strong> (esim. sähköposti, maksut)</li>
+<li><strong>Web-sovellukset</strong> (esim. Flask, FastAPI)</li>
+<li><strong>REST-rajapinnat</strong> ja niiden logiikkakerrokset</li>
+<li><strong>Tietokantayhteydet</strong>, <strong>välimuistit</strong>, <strong>ulkoiset API\:t</strong></li>
+</ul>
+<h2 id="python-ja-di-kirjastot">Python ja DI-kirjastot</h2>
+<p>Pythonissa Dependency Injection voidaan tehdä helposti manuaalisesti, mutta on olemassa myös kirjastoja:</p>
+<table>
+<thead>
+<tr>
+<th>Kirjasto</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dependency_injector</code></td>
+<td>Tehokas ja suosittu DI-kirjasto Pythonille</td>
+</tr>
+<tr>
+<td><code>injector</code></td>
+<td>Google-tyylinen Dependency Injection</td>
+</tr>
+<tr>
+<td><code>punq</code></td>
+<td>Kevyt DI-kirjasto, sopii pieniin projekteihin</td>
+</tr>
+</tbody>
+</table>
+<h3 id="esimerkki-dependency_injector-kirjastolla">Esimerkki: <code>dependency_injector</code>-kirjastolla</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">dependency_injector</span> <span class="kn">import</span> <span class="n">containers</span><span class="p">,</span> <span class="n">providers</span>
+
+<span class="k">class</span> <span class="nc">EmailService</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lähetetään: </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">NotificationManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service</span><span class="p">:</span> <span class="n">EmailService</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">service</span>
+
+    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+<span class="c1"># DI-container</span>
+<span class="k">class</span> <span class="nc">Container</span><span class="p">(</span><span class="n">containers</span><span class="o">.</span><span class="n">DeclarativeContainer</span><span class="p">):</span>
+    <span class="n">email_service</span> <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">EmailService</span><span class="p">)</span>
+    <span class="n">notifier</span> <span class="o">=</span> <span class="n">providers</span><span class="o">.</span><span class="n">Factory</span><span class="p">(</span><span class="n">NotificationManager</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="n">email_service</span><span class="p">)</span>
+
+<span class="n">container</span> <span class="o">=</span> <span class="n">Container</span><span class="p">()</span>
+<span class="n">notifier</span> <span class="o">=</span> <span class="n">container</span><span class="o">.</span><span class="n">notifier</span><span class="p">()</span>
+<span class="n">notifier</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="s2">&quot;Tervetuloa Dependency Injectioniin!&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Antaa luokille niiden tarvitsemat riippuvuudet ulkoa</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Testattavuus, irrotettavuus, yksinkertainen vaihdettavuus</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Voi lisätä monimutkaisuutta pienissä projekteissa</td>
+</tr>
+<tr>
+<td>Pythonin vahvuus</td>
+<td>Duck typing + helppo käsin tehtävä DI ilman raskaita kehyksiä</td>
+</tr>
+</tbody>
+</table>
+<h2 id="dependency-injection-service-locator">Dependency Injection ≠ Service Locator</h2>
+<p>Vaikka molemmat tarjoavat riippuvuuksia:</p>
+<ul>
+<li><strong>DI:</strong> Riippuvuus annetaan ulkoa → läpinäkyvää</li>
+<li><strong>Service Locator:</strong> Riippuvuus haetaan sisältä → piilottaa riippuvuuden</li>
+</ul>
+<p>👉 DI suositaan, koska se tekee riippuvuudet näkyviksi ja testattaviksi.</p>
+<p><strong>Dependency Injection</strong> ei ole vain &ldquo;arkkitehtien lelu&rdquo; — se on käytännöllinen tapa pitää sovelluksen osat <strong>modulaarisina, uudelleenkäytettävinä ja helposti testattavina</strong>, erityisesti Pythonin kaltaisessa dynaamisessa kielessä.</p>
+</div>
+</body>
+</html>

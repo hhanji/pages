@@ -1,0 +1,289 @@
+
+<html>
+<head>
+<title>
+Visitor-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="visitor-suunnittelumalli-pythonissa">Visitor-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-visitor">Mikä on Visitor?</h3>
+<p><strong>Visitor</strong> on käyttäytymismalli, jonka avulla voit <strong>lisätä uusia operaatioita</strong> olemassa oleviin olioihin <strong>muuttamatta niiden rakennetta</strong>. Se tekee tämän <strong>erottamalla algoritmin olion rakenteesta</strong>.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Erotetaan operaatio (kävijä) olioista, joihin se kohdistuu, ja mahdollistetaan uusien toimintojen lisääminen ilman, että muutetaan itse olioluokkia.</p>
+</blockquote>
+<h3 id="milloin-kayttaa-visitor-mallia">Milloin käyttää Visitor-mallia?</h3>
+<p>Visitor on hyödyllinen, kun:</p>
+<ul>
+<li>Sinulla on <strong>rakenne, jossa on paljon erilaisia olioita</strong>, kuten puu, AST, dokumentti, jne.</li>
+<li>Haluat lisätä <strong>uusia toimintoja muuttamatta olemassa olevia luokkia</strong>.</li>
+<li>Tarvitset toimintoja, jotka <strong>riippuvat olion todellisesta tyypistä</strong>, ei pelkästään rajapinnasta.</li>
+<li>Käytät <strong>kaksinkertaista lähettämistä</strong> (double dispatch): sekä olion että kävijän tyyppi määrittää, mitä tapahtuu.</li>
+</ul>
+<h3 id="esimerkki-tiedostojarjestelma-tiedostoja-ja-kansioita">Esimerkki: Tiedostojärjestelmä (tiedostoja ja kansioita)</h3>
+<p>Kuvitellaan rakenne, jossa on tiedostoja ja kansioita, ja haluamme suorittaa niille erilaisia operaatioita — esimerkiksi laskea kokonaiskoon tai listata nimet.</p>
+<p>Sen sijaan, että laajennamme <code>File</code>- ja <code>Directory</code>-luokkia jokaisella uudella toiminnolla, käytämme <strong>Visitoria</strong>.</p>
+<h3 id="1-elementti-tiedosto-ja-kansio">1. Elementti (tiedosto ja kansio)</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">FileSystemElement</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visitor</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">File</span><span class="p">(</span><span class="n">FileSystemElement</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visitor</span><span class="p">):</span>
+        <span class="n">visitor</span><span class="o">.</span><span class="n">visit_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Directory</span><span class="p">(</span><span class="n">FileSystemElement</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visitor</span><span class="p">):</span>
+        <span class="n">visitor</span><span class="o">.</span><span class="n">visit_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="2-visitor-rajapinta">2. Visitor-rajapinta</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Visitor</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">visit_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">visit_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h3 id="3-konkreettinen-visitor-koon-laskeminen">3. Konkreettinen Visitor: Koon laskeminen</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">SizeCalculatorVisitor</span><span class="p">(</span><span class="n">Visitor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_size</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">visit_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_size</span> <span class="o">+=</span> <span class="n">file</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="k">def</span> <span class="nf">visit_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">directory</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="n">child</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="4-konkreettinen-visitor-nimien-listaus">4. Konkreettinen Visitor: Nimien listaus</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">NameListingVisitor</span><span class="p">(</span><span class="n">Visitor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">visit_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tiedosto: </span><span class="si">{</span><span class="n">file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">visit_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kansio: </span><span class="si">{</span><span class="n">directory</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">directory</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+            <span class="n">child</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="5-kayttoesimerkki">5. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Rakennetaan tiedostojärjestelmä</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">Directory</span><span class="p">(</span><span class="s2">&quot;root&quot;</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">File</span><span class="p">(</span><span class="s2">&quot;README.md&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">root</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">File</span><span class="p">(</span><span class="s2">&quot;main.py&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+
+<span class="n">subdir</span> <span class="o">=</span> <span class="n">Directory</span><span class="p">(</span><span class="s2">&quot;src&quot;</span><span class="p">)</span>
+<span class="n">subdir</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">File</span><span class="p">(</span><span class="s2">&quot;app.py&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+<span class="n">subdir</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">File</span><span class="p">(</span><span class="s2">&quot;utils.py&quot;</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+
+<span class="n">root</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">subdir</span><span class="p">)</span>
+
+<span class="c1"># Lasketaan koko</span>
+<span class="n">size_visitor</span> <span class="o">=</span> <span class="n">SizeCalculatorVisitor</span><span class="p">()</span>
+<span class="n">root</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">size_visitor</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kokonaiskoko: </span><span class="si">{</span><span class="n">size_visitor</span><span class="o">.</span><span class="n">total_size</span><span class="si">}</span><span class="s2"> KB&quot;</span><span class="p">)</span>
+
+<span class="c1"># Listataan nimet</span>
+<span class="n">name_visitor</span> <span class="o">=</span> <span class="n">NameListingVisitor</span><span class="p">()</span>
+<span class="n">root</span><span class="o">.</span><span class="n">accept</span><span class="p">(</span><span class="n">name_visitor</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">name_visitor</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">Kokonaiskoko</span><span class="o">:</span><span class="w"> </span><span class="mi">240</span><span class="w"> </span><span class="n">KB</span>
+<span class="n">Kansio</span><span class="o">:</span><span class="w"> </span><span class="n">root</span>
+<span class="n">Tiedosto</span><span class="o">:</span><span class="w"> </span><span class="n">README</span><span class="o">.</span><span class="na">md</span>
+<span class="n">Tiedosto</span><span class="o">:</span><span class="w"> </span><span class="n">main</span><span class="o">.</span><span class="na">py</span>
+<span class="n">Kansio</span><span class="o">:</span><span class="w"> </span><span class="n">src</span>
+<span class="n">Tiedosto</span><span class="o">:</span><span class="w"> </span><span class="n">app</span><span class="o">.</span><span class="na">py</span>
+<span class="n">Tiedosto</span><span class="o">:</span><span class="w"> </span><span class="n">utils</span><span class="o">.</span><span class="na">py</span>
+</code></pre></div>
+
+<h3 id="visitor-mallin-hyodyt-ja-haitat">Visitor-mallin hyödyt ja haitat</h3>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uusia toimintoja voidaan lisätä <strong>muuttamatta luokkia</strong></td>
+<td>Vaatii jokaiselle uudelle toiminnolle oman visitorin</td>
+</tr>
+<tr>
+<td>Toimii hyvin <strong>kiinteän rakenteen</strong> kanssa</td>
+<td>Jokaisen luokan täytyy <strong>tietää visitor-rajapinta</strong></td>
+</tr>
+<tr>
+<td><strong>Kaksinkertainen lähettäminen</strong> onnistuu helposti</td>
+<td>Ei sovi hyvin tilanteisiin, joissa lisätään paljon uusia elementtityyppejä</td>
+</tr>
+</tbody>
+</table>
+<h3 id="visitor-vs-muut-mallit">Visitor vs muut mallit</h3>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Visitoriin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Strategy</strong></td>
+<td>Vaihdettava algoritmi</td>
+<td>Strategy <strong>ei tunne kohdeolioita</strong>, Visitor käy niitä läpi</td>
+</tr>
+<tr>
+<td><strong>Decorator</strong></td>
+<td>Lisää toimintoja dynaamisesti</td>
+<td>Visitor <strong>ei lisää toimintoja</strong>, vaan erillisen logiikan</td>
+</tr>
+<tr>
+<td><strong>Command</strong></td>
+<td>Kapseloi toiminnon</td>
+<td>Visitor <strong>eriyttää toiminnon olioista</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Suorittaa operaatioita eri tyyppisille olioille ilman niiden muuttamista</td>
+</tr>
+<tr>
+<td>Rakenne</td>
+<td>Elementit kutsuvat kävijän (<code>accept</code>), joka kutsuu tyyppikohtaisen metodin</td>
+</tr>
+<tr>
+<td>Sovelluskohteet</td>
+<td>AST\:t, dokumenttirakenteet, tiedostojärjestelmät, analyysit</td>
+</tr>
+<tr>
+<td>Tuki Pythonissa</td>
+<td>Vaikka Python ei tue monimuotoista dispatchia sisäänrakennettuna, duck typing toimii hyvin</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bonus-kavijan-automaattinen-valinta-pythonin-duck-typingin-avulla">Bonus: Kävijän automaattinen valinta Pythonin duck typingin avulla</h3>
+<p>Pythonissa voidaan tehdä <strong>tyyppipohjainen kävijä ilman manuaalista <code>visit_file()</code> ja <code>visit_directory()</code></strong> -kutsua:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">GenericVisitor</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+        <span class="n">method_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;visit_</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">element</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">visit_method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">generic_visit</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">visit_method</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">generic_visit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ei määriteltyä käyntitapaa: </span><span class="si">{</span><span class="n">element</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Visitor-malli</strong> on tehokas ratkaisu tilanteisiin, joissa halutaan lisätä toimintoja <strong>laajaan ja muuttumattomaan oliohierarkiaan</strong> – erityisesti kun toimintoja lisätään usein, mutta luokkia ei muuteta.</p>
+</div>
+</body>
+</html>

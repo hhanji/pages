@@ -1,0 +1,299 @@
+
+<html>
+<head>
+<title>
+Builder-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="builder-suunnittelumalli-pythonissa">Builder-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-builder">Mikä on Builder?</h3>
+<p><strong>Builder</strong> on luomismalli (<em>creational design pattern</em>), jonka avulla voidaan rakentaa <strong>monimutkaisia olioita vaiheittain</strong>. Malli erottaa <strong>rakennusprosessin</strong> ja <strong>lopullisen olion rakenteen</strong>, jolloin samaa rakennusprosessia voidaan käyttää erilaisten esitysten tuottamiseen.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Mahdollistaa monimutkaisten olioiden luominen vaiheittain ilman, että asiakaskoodi tarvitsee tietää rakentamisen yksityiskohdista.</p>
+</blockquote>
+<h3 id="milloin-kayttaa-builder-mallia">Milloin käyttää Builder-mallia?</h3>
+<p>Builder on hyödyllinen, kun:</p>
+<ul>
+<li>Luotava olio on monimutkainen (paljon valinnaisia kenttiä).</li>
+<li>Olio täytyy rakentaa vaiheittain tai eri järjestyksessä.</li>
+<li>Et halua tehdä kymmeniä eri konstruktoreita tai pitkää listaa parametreja.</li>
+</ul>
+<h3 id="perusesimerkki-rakennetaan-talo">Perusesimerkki: Rakennetaan talo</h3>
+<p>Kuvitellaan, että halutaan rakentaa erilaisia taloja, joissa voi olla valinnainen määrä huoneita, katto, puutarha jne.</p>
+<h4 id="1-tuote-talo">1. Tuote: Talo</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">House</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walls</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">doors</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">windows</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">roof</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">garden</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Talo, jossa on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">walls</span><span class="si">}</span><span class="s2"> seinää, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">doors</span><span class="si">}</span><span class="s2"> ovi(a), </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">windows</span><span class="si">}</span><span class="s2"> ikkuna(a), &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;katto&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">roof</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;ei kattoa&#39;</span><span class="si">}</span><span class="s2">, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;puutarha&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">garden</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;ei puutarhaa&#39;</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h4 id="2-builder-rajapinta">2. Builder-rajapinta</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">HouseBuilder</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">build_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">build_doors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">build_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">build_roof</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">build_garden</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h4 id="3-konkreettinen-builder">3. Konkreettinen builder</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">SimpleHouseBuilder</span><span class="p">(</span><span class="n">HouseBuilder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span> <span class="o">=</span> <span class="n">House</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">build_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span><span class="o">.</span><span class="n">walls</span> <span class="o">=</span> <span class="mi">4</span>
+
+    <span class="k">def</span> <span class="nf">build_doors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span><span class="o">.</span><span class="n">doors</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">build_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span><span class="o">.</span><span class="n">windows</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="k">def</span> <span class="nf">build_roof</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span><span class="o">.</span><span class="n">roof</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">build_garden</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span><span class="o">.</span><span class="n">garden</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">house</span>
+</code></pre></div>
+
+<h4 id="4-ohjaaja-director">4. Ohjaaja (Director)</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ConstructionDirector</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">builder</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">builder</span> <span class="o">=</span> <span class="n">builder</span>
+
+    <span class="k">def</span> <span class="nf">construct</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">build_walls</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">build_doors</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">build_windows</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">build_roof</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">build_garden</span><span class="p">()</span>
+</code></pre></div>
+
+<h4 id="5-kayttoesimerkki">5. Käyttöesimerkki</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">builder</span> <span class="o">=</span> <span class="n">SimpleHouseBuilder</span><span class="p">()</span>
+<span class="n">director</span> <span class="o">=</span> <span class="n">ConstructionDirector</span><span class="p">(</span><span class="n">builder</span><span class="p">)</span>
+<span class="n">director</span><span class="o">.</span><span class="n">construct</span><span class="p">()</span>
+
+<span class="n">house</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">get_result</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">house</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Talo, jossa on 4 seinää, 1 ovi(a), 2 ikkuna(a), katto, ei puutarhaa.
+</code></pre></div>
+
+<h3 id="builder-ilman-director-luokkaa-ketjutus-python-tyyliin">Builder ilman Director-luokkaa (ketjutus Python-tyyliin)</h3>
+<p>Pythonissa voidaan käyttää myös <strong>ketjutettavaa rakentajaa</strong>, ilman erillistä &ldquo;Director&rdquo;-luokkaa:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">FluentHouseBuilder</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span> <span class="o">=</span> <span class="n">House</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">with_walls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span><span class="o">.</span><span class="n">walls</span> <span class="o">=</span> <span class="n">number</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">with_doors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span><span class="o">.</span><span class="n">doors</span> <span class="o">=</span> <span class="n">number</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">with_windows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span><span class="o">.</span><span class="n">windows</span> <span class="o">=</span> <span class="n">number</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">with_roof</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span><span class="o">.</span><span class="n">roof</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">with_garden</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house</span><span class="o">.</span><span class="n">garden</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">house</span>
+</code></pre></div>
+
+<p><strong>Käyttö:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">builder</span> <span class="o">=</span> <span class="n">FluentHouseBuilder</span><span class="p">()</span>
+<span class="n">house</span> <span class="o">=</span> <span class="p">(</span><span class="n">builder</span>
+         <span class="o">.</span><span class="n">with_walls</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+         <span class="o">.</span><span class="n">with_doors</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+         <span class="o">.</span><span class="n">with_windows</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+         <span class="o">.</span><span class="n">with_roof</span><span class="p">()</span>
+         <span class="o">.</span><span class="n">with_garden</span><span class="p">()</span>
+         <span class="o">.</span><span class="n">build</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">house</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Talo, jossa on 6 seinää, 2 ovi(a), 4 ikkuna(a), katto, puutarha.
+</code></pre></div>
+
+<h3 id="builder-vs-muut-luomismallit">Builder vs. muut luomismallit</h3>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Builderiin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Factory</td>
+<td>Luo olioita ilman että paljastaa tarkkaa luokkaa</td>
+<td>Antaa yhden valmiin olion</td>
+</tr>
+<tr>
+<td>AbstractFactory</td>
+<td>Luo kokonaisia perheitä olioita</td>
+<td>Ei rakenna vaiheittain</td>
+</tr>
+<tr>
+<td>Prototype</td>
+<td>Kopioi olemassa olevia olioita</td>
+<td>Ei rakenna uudelleen alusta</td>
+</tr>
+<tr>
+<td><strong>Builder</strong></td>
+<td>Luo monimutkaisia olioita vaiheittain</td>
+<td><strong>Erottaa rakennusprosessin ja lopputuotteen</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Rakentaa monimutkainen olio vaiheittain</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Selkeä, modulaarinen rakentamisprosessi, eri variaatiot helposti</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Lisää hieman koodin määrää, jos olioita on yksinkertaisia</td>
+</tr>
+<tr>
+<td>Käyttökohteet</td>
+<td>Lomakkeet, rakennustyökalut, konfiguroitavat oliohierarkiat</td>
+</tr>
+<tr>
+<td>Pythonissa</td>
+<td>Ketjutus toimii hyvin ilman Director-luokkaa</td>
+</tr>
+</tbody>
+</table>
+<p>Builder on tehokas työkalu, kun haluat rakentaa <strong>selkeästi määriteltyjä, vaiheittain muodostettavia olioita</strong>, varsinkin kun osa ominaisuuksista on valinnaisia tai monimutkaisesti yhdisteltävissä.</p>
+</div>
+</body>
+</html>

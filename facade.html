@@ -1,0 +1,277 @@
+
+<html>
+<head>
+<title>
+Facade-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="facade-suunnittelumalli-pythonissa">Facade-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-facade">Mikä on Facade?</h3>
+<p><strong>Facade (fasadi)</strong> on <strong>rakenteellinen suunnittelumalli</strong>, jonka tarkoituksena on <strong>yksinkertaistaa monimutkaisten järjestelmien käyttöä tarjoamalla niille yhtenäinen rajapinta</strong>.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Piilottaa monimutkainen alijärjestelmä yhden selkeän käyttöliittymän (fasadin) taakse, jolloin asiakaskoodi ei tarvitse tuntea yksityiskohtia.</p>
+</blockquote>
+<h3 id="miksi-kayttaa-facade-mallia">Miksi käyttää Facade-mallia?</h3>
+<p>Fasadi:</p>
+<ul>
+<li><strong>Yksinkertaistaa</strong> käyttöä: tarjoaa helppokäyttöisen rajapinnan monimutkaiseen järjestelmään.</li>
+<li><strong>Erottelee vastuut</strong>: asiakas ei ole suoraan riippuvainen alijärjestelmän luokista.</li>
+<li><strong>Helpottaa ylläpitoa ja testausta</strong>: mahdollistaa testauksen ilman koko järjestelmän tuntemusta.</li>
+<li><strong>Vähentää kytkentää</strong> (loose coupling): asiakas kommunikoi vain fasadin kanssa.</li>
+</ul>
+<h3 id="esimerkki-kotiteatteri">Esimerkki: Kotiteatteri</h3>
+<p>Kuvitellaan kotiteatterijärjestelmä, jossa on useita komponentteja:</p>
+<ul>
+<li>Vahvistin</li>
+<li>Projektori</li>
+<li>DVD-soitin</li>
+<li>Kaiuttimet</li>
+<li>Valot</li>
+</ul>
+<p>Ilman Facade-mallia käyttäjän pitäisi käynnistää ja säätää kaikki nämä erikseen. Facade piilottaa nämä toiminnot yhden metodin taakse, kuten <code>start_movie("Matrix")</code>.</p>
+<h3 id="ilman-facadea">Ilman Facadea</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">DVDPlayer</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DVD-soitin päälle&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">movie</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Toistetaan elokuva: </span><span class="si">{</span><span class="n">movie</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Amplifier</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Vahvistin päälle&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">set_volume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Äänenvoimakkuus: </span><span class="si">{</span><span class="n">level</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Projector</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Projektori päälle&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">set_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Signaalilähde: </span><span class="si">{</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Lights</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">dim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Valot himmennetään&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="asiakaskoodi-ilman-facadea">Asiakaskoodi ilman Facadea</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">dvd</span> <span class="o">=</span> <span class="n">DVDPlayer</span><span class="p">()</span>
+<span class="n">amp</span> <span class="o">=</span> <span class="n">Amplifier</span><span class="p">()</span>
+<span class="n">proj</span> <span class="o">=</span> <span class="n">Projector</span><span class="p">()</span>
+<span class="n">lights</span> <span class="o">=</span> <span class="n">Lights</span><span class="p">()</span>
+
+<span class="n">lights</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span>
+<span class="n">amp</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+<span class="n">amp</span><span class="o">.</span><span class="n">set_volume</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">proj</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+<span class="n">proj</span><span class="o">.</span><span class="n">set_input</span><span class="p">(</span><span class="s2">&quot;DVD&quot;</span><span class="p">)</span>
+<span class="n">dvd</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+<span class="n">dvd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="s2">&quot;Matrix&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="facade-luokka">Facade-luokka</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">HomeTheaterFacade</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dvd</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">proj</span><span class="p">,</span> <span class="n">lights</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dvd</span> <span class="o">=</span> <span class="n">dvd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="n">amp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proj</span> <span class="o">=</span> <span class="n">proj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lights</span> <span class="o">=</span> <span class="n">lights</span>
+
+    <span class="k">def</span> <span class="nf">start_movie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">movie</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Valmistellaan elokuvan katselua...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lights</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amp</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amp</span><span class="o">.</span><span class="n">set_volume</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proj</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proj</span><span class="o">.</span><span class="n">set_input</span><span class="p">(</span><span class="s2">&quot;DVD&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dvd</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dvd</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">movie</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="asiakaskoodi-facaden-kanssa">Asiakaskoodi Facaden kanssa</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Luodaan komponentit ja fasadi</span>
+<span class="n">dvd</span> <span class="o">=</span> <span class="n">DVDPlayer</span><span class="p">()</span>
+<span class="n">amp</span> <span class="o">=</span> <span class="n">Amplifier</span><span class="p">()</span>
+<span class="n">proj</span> <span class="o">=</span> <span class="n">Projector</span><span class="p">()</span>
+<span class="n">lights</span> <span class="o">=</span> <span class="n">Lights</span><span class="p">()</span>
+
+<span class="n">home_theater</span> <span class="o">=</span> <span class="n">HomeTheaterFacade</span><span class="p">(</span><span class="n">dvd</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">proj</span><span class="p">,</span> <span class="n">lights</span><span class="p">)</span>
+
+<span class="c1"># Käynnistetään elokuva yhdellä metodilla</span>
+<span class="n">home_theater</span><span class="o">.</span><span class="n">start_movie</span><span class="p">(</span><span class="s2">&quot;Matrix&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Valmistellaan elokuvan katselua...
+Valot himmennetään
+Vahvistin päälle
+Äänenvoimakkuus: 5
+Projektori päälle
+Signaalilähde: DVD
+DVD-soitin päälle
+Toistetaan elokuva: Matrix
+</code></pre></div>
+
+<h3 id="kayttokohteita-facade-mallille">Käyttökohteita Facade-mallille</h3>
+<ul>
+<li><strong>Kirjastojen käyttöliittymät:</strong> piilotetaan monimutkaiset API\:t (esim. grafiikka, ääni, verkkopyynnöt).</li>
+<li><strong>Sovelluskerrokset:</strong> esimerkiksi web-sovelluksissa controller kutsuu palvelukerroksen tarjoamaa Facadea.</li>
+<li><strong>Monimutkaiset alustat:</strong> esim. pelimoottorit, kotiautomaatio, tietokantajärjestelmät.</li>
+<li><strong>Testaus:</strong> mahdollistaa monimutkaisen järjestelmän simuloimisen yksinkertaisella rajapinnalla.</li>
+</ul>
+<h3 id="facade-vs-muut-mallit">Facade vs muut mallit</h3>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Facadeen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Adapter</td>
+<td>Muuntaa olemassa olevan rajapinnan toiseksi</td>
+<td>Adapter <strong>muuntaa</strong>, Facade <strong>yksinkertaistaa</strong></td>
+</tr>
+<tr>
+<td>Proxy</td>
+<td>Kontrolloi pääsyä todelliseen olioon</td>
+<td>Facade ei hallitse pääsyä, vaan <strong>kätkee monimutkaisuuden</strong></td>
+</tr>
+<tr>
+<td>Mediator</td>
+<td>Hallitsee komponenttien välistä kommunikaatiota</td>
+<td>Facade <strong>ei ohjaa vuorovaikutusta</strong>, vain käärii toiminnallisuuksia</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hyodyt-ja-haitat">Hyödyt ja haitat</h3>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Selkeä ja yksinkertainen käyttöliittymä</td>
+<td>Saattaa piilottaa liikaa logiikkaa</td>
+</tr>
+<tr>
+<td>Vähentää riippuvuuksia</td>
+<td>Uuden toiminnon lisääminen voi vaatia Facaden muuttamista</td>
+</tr>
+<tr>
+<td>Helpottaa ylläpitoa ja testausta</td>
+<td>Fasadin ylläpito vaatii kokonaisymmärrystä alijärjestelmästä</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Piilottaa monimutkainen alijärjestelmä selkeän rajapinnan taakse</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Helpottaa käyttöä, vähentää riippuvuuksia, tukee modulaarisuutta</td>
+</tr>
+<tr>
+<td>Sovelluskohteet</td>
+<td>UI-kerrokset, palvelukerrokset, kirjastot, testaus, automaatio</td>
+</tr>
+<tr>
+<td>Python-ominaisuus</td>
+<td>Voidaan toteuttaa helposti ilman perintää, käyttämällä koostamista</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vinkki-facade-testauksen-apuna">Vinkki: Facade testauksen apuna</h3>
+<p>Fasadin avulla voidaan helposti <strong>mokeerata</strong> tai <strong>simuloida</strong> järjestelmän osia:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">MockHomeTheaterFacade</span><span class="p">(</span><span class="n">HomeTheaterFacade</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">start_movie</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">movie</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[TEST] Aloitetaan simuloitu elokuva: </span><span class="si">{</span><span class="n">movie</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Facade-malli</strong> on yksinkertainen mutta tehokas tapa <strong>hallitsemaan monimutkaisuutta</strong> ohjelmiston arkkitehtuurissa – erityisesti silloin, kun käsitellään laajoja tai vaikeasti hallittavia järjestelmiä.</p>
+</div>
+</body>
+</html>

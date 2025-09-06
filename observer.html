@@ -1,0 +1,280 @@
+
+<html>
+<head>
+<title>
+Observer-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="observer-suunnittelumalli-pythonissa">Observer-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-observer">Mikä on Observer?</h3>
+<p><strong>Observer</strong> on käyttäytymismalli, jossa <strong>useat oliot (observerit)</strong> reagoivat automaattisesti <strong>yhden olion (subjectin)</strong> tilamuutoksiin. Kun subjectin tila muuttuu, se <strong>ilmoittaa kaikille rekisteröidyille tarkkailijoilleen (observereille)</strong>.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Luoda yksi-moneen-suhde objektien välille niin, että kun yksi objekti muuttuu, kaikki siihen liittyvät objektit saavat tiedon muutoksesta ja päivittyvät automaattisesti.</p>
+</blockquote>
+<h3 id="milloin-kayttaa-observer-mallia">Milloin käyttää Observer-mallia?</h3>
+<p>Observer on hyödyllinen, kun:</p>
+<ul>
+<li>Useiden objektien on reagoitava <strong>yksiin ja samoihin muutoksiin</strong>.</li>
+<li>Haluat <strong>irrottaa</strong> tarkkailijat ja tarkkailtavan toisistaan (löyhää kytkentää).</li>
+<li>Rakennat <strong>tilapäivitykseen perustuvaa arkkitehtuuria</strong>, kuten GUI, pelimoottori, datafeed.</li>
+</ul>
+<h3 id="rakenne">Rakenne</h3>
+<ul>
+<li><strong>Subject (Tarkkailtava):</strong> pitää kirjaa tarkkailijoista ja ilmoittaa heille tilamuutoksista.</li>
+<li><strong>Observer (Tarkkailija):</strong> määrittelee rajapinnan, jonka avulla se saa ilmoituksen muutoksista.</li>
+<li><strong>ConcreteObserver:</strong> toteuttaa tarkkailijan logiikan.</li>
+<li><strong>ConcreteSubject:</strong> sisältää tilan ja huolehtii ilmoituksista.</li>
+</ul>
+<h2 id="esimerkki-saaasema">Esimerkki: Sääasema</h2>
+<p>Kuvitellaan sääasema, joka lähettää lämpötilan muutokset rekisteröidyille näytöille ja sovelluksille.</p>
+<h3 id="1-observer-rajapinta">1. Observer-rajapinta</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Observer</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temperature</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h3 id="2-subject-tarkkailtava">2. Subject (tarkkailtava)</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">WeatherStation</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temperature</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">add_observer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observer</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">observer</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">remove_observer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observer</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observers</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">observer</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temperature</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[Lähde] Uusi lämpötila: </span><span class="si">{</span><span class="n">temperature</span><span class="si">}</span><span class="s2">°C&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_temperature</span> <span class="o">=</span> <span class="n">temperature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_notify_observers</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_notify_observers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">observer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observers</span><span class="p">:</span>
+            <span class="n">observer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_temperature</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-konkreettiset-observerit">3. Konkreettiset observerit</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">TemperatureDisplay</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temperature</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Näyttö] Lämpötila on nyt </span><span class="si">{</span><span class="n">temperature</span><span class="si">}</span><span class="s2">°C&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MobileApp</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">temperature</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Sovellus] Push-ilmoitus: </span><span class="si">{</span><span class="n">temperature</span><span class="si">}</span><span class="s2">°C&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="4-kayttoesimerkki">4. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">station</span> <span class="o">=</span> <span class="n">WeatherStation</span><span class="p">()</span>
+
+<span class="n">display</span> <span class="o">=</span> <span class="n">TemperatureDisplay</span><span class="p">()</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">MobileApp</span><span class="p">()</span>
+
+<span class="n">station</span><span class="o">.</span><span class="n">add_observer</span><span class="p">(</span><span class="n">display</span><span class="p">)</span>
+<span class="n">station</span><span class="o">.</span><span class="n">add_observer</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+
+<span class="n">station</span><span class="o">.</span><span class="n">set_temperature</span><span class="p">(</span><span class="mi">22</span><span class="p">)</span>
+<span class="n">station</span><span class="o">.</span><span class="n">set_temperature</span><span class="p">(</span><span class="mi">18</span><span class="p">)</span>
+
+<span class="n">station</span><span class="o">.</span><span class="n">remove_observer</span><span class="p">(</span><span class="n">display</span><span class="p">)</span>
+<span class="n">station</span><span class="o">.</span><span class="n">set_temperature</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">Lähde</span><span class="o">]</span><span class="w"> </span><span class="n">Uusi</span><span class="w"> </span><span class="nl">lämpötila</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span><span class="err">°</span><span class="n">C</span>
+<span class="o">[</span><span class="n">Näyttö</span><span class="o">]</span><span class="w"> </span><span class="n">Lämpötila</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">nyt</span><span class="w"> </span><span class="mi">22</span><span class="err">°</span><span class="n">C</span>
+<span class="o">[</span><span class="n">Sovellus</span><span class="o">]</span><span class="w"> </span><span class="n">Push</span><span class="o">-</span><span class="nl">ilmoitus</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span><span class="err">°</span><span class="n">C</span>
+
+<span class="o">[</span><span class="n">Lähde</span><span class="o">]</span><span class="w"> </span><span class="n">Uusi</span><span class="w"> </span><span class="nl">lämpötila</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="err">°</span><span class="n">C</span>
+<span class="o">[</span><span class="n">Näyttö</span><span class="o">]</span><span class="w"> </span><span class="n">Lämpötila</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">nyt</span><span class="w"> </span><span class="mi">18</span><span class="err">°</span><span class="n">C</span>
+<span class="o">[</span><span class="n">Sovellus</span><span class="o">]</span><span class="w"> </span><span class="n">Push</span><span class="o">-</span><span class="nl">ilmoitus</span><span class="p">:</span><span class="w"> </span><span class="mi">18</span><span class="err">°</span><span class="n">C</span>
+
+<span class="o">[</span><span class="n">Lähde</span><span class="o">]</span><span class="w"> </span><span class="n">Uusi</span><span class="w"> </span><span class="nl">lämpötila</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="err">°</span><span class="n">C</span>
+<span class="o">[</span><span class="n">Sovellus</span><span class="o">]</span><span class="w"> </span><span class="n">Push</span><span class="o">-</span><span class="nl">ilmoitus</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="err">°</span><span class="n">C</span>
+</code></pre></div>
+
+<h2 id="pythonin-vaihtoehto-property-kutsut">Pythonin vaihtoehto: <code>@property</code> + kutsut</h2>
+<p>Pythonissa voit myös yhdistää <code>@property</code>-ominaisuuden observer-mallin logiikkaan:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ReactiveValue</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">initial</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observers</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observer_func</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">observer_func</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+
+    <span class="nd">@value</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">new</span>
+        <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observers</span><span class="p">:</span>
+            <span class="n">callback</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">temp</span> <span class="o">=</span> <span class="n">ReactiveValue</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">temp</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Uusi lämpötila: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">°C&quot;</span><span class="p">))</span>
+
+<span class="n">temp</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">25</span>  <span class="c1"># Triggaa ilmoituksen</span>
+</code></pre></div>
+
+<h2 id="hyodyt-ja-haitat">Hyödyt ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Löyhä kytkentä</strong> subjectin ja observanttien välillä</td>
+<td>Vaikea jäljittää, kuka kuuntelee ketä</td>
+</tr>
+<tr>
+<td>Mahdollistaa <strong>automaattiset päivitykset</strong></td>
+<td>Voi johtaa <strong>spagettimaiseen tapahtumavirtaan</strong></td>
+</tr>
+<tr>
+<td><strong>Laajennettavissa</strong> uusilla observanteilla</td>
+<td>Jos ei hallita, voi muodostua <strong>tilavuotoja (memory leaks)</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="observer-vs-muut-mallit">Observer vs muut mallit</h3>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Observeriin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mediator</strong></td>
+<td>Välittää viestit eri osapuolten välillä</td>
+<td>Mediator <strong>ohjaa liikennettä</strong>, Observer <strong>ilmoittaa suoraan</strong></td>
+</tr>
+<tr>
+<td><strong>Publish–Subscribe</strong></td>
+<td>Hajautetumpi tapahtumajärjestelmä</td>
+<td>Observer toimii usein yhdellä sovellustasolla, PubSub voi olla verkotettu</td>
+</tr>
+<tr>
+<td><strong>Strategy</strong></td>
+<td>Vaihtaa toimintatapaa</td>
+<td>Observer <strong>reagoi muutokseen</strong>, Strategy <strong>valitsee logiikan</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Synkronoida olioita automaattisesti tilamuutosten mukaan</td>
+</tr>
+<tr>
+<td>Käyttökohteet</td>
+<td>Käyttöliittymät, tapahtumajärjestelmät, pelimoottorit, datavirrat</td>
+</tr>
+<tr>
+<td>Etuja</td>
+<td>Löyhä kytkentä, automaattisuus, dynaamisuus</td>
+</tr>
+<tr>
+<td>Python-tuki</td>
+<td>Mahdollistaa helposti dynaamisen ja funktionaalisen mallin</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Observer-malli</strong> tarjoaa elegantin tavan reagoida muutoksiin ohjelmassa ilman, että komponentit kytkeytyvät tiukasti toisiinsa. Se on erityisen käyttökelpoinen, kun rakennetaan <strong>reaktiivisia</strong>, <strong>dynaamisia</strong> tai <strong>modulaarisia</strong> järjestelmiä.</p>
+</div>
+</body>
+</html>

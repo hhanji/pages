@@ -1,0 +1,274 @@
+
+<html>
+<head>
+<title>
+Iterator-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="iterator-suunnittelumalli-pythonissa">Iterator-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-iterator">Mikä on Iterator?</h3>
+<p><strong>Iterator</strong> on suunnittelumalli, jonka avulla voidaan <strong>käydä läpi kokoelman alkioita</strong> ilman, että paljastetaan sen sisäistä rakennetta. Tämä saavutetaan käyttämällä erityistä <strong>iteraattoriluokkaa</strong>, joka kapseloi läpikäyntilogiikan.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Tarjota yhtenäinen tapa käydä kokoelman läpi ilman riippuvuutta sen toteutuksesta.</p>
+</blockquote>
+<h3 id="milloin-kayttaa">Milloin käyttää?</h3>
+<p>Käytä Iterator-mallia, kun:</p>
+<ul>
+<li>Sinulla on <strong>kokoelma</strong>, jonka läpikäynti täytyy kapseloida.</li>
+<li>Haluat <strong>eriyttää läpikäynnin logiikan kokoelman rakenteesta</strong>.</li>
+<li>Tarvitset <strong>useita rinnakkaisia tai erilaisia läpikäyntistrategioita</strong>.</li>
+</ul>
+<h2 id="python-ja-iteraattorit">Python ja iteraattorit</h2>
+<p>Python tukee iterointia natiivisti:</p>
+<ul>
+<li><code>for</code>-silmukka</li>
+<li><code>iter()</code> ja <code>next()</code></li>
+<li><code>__iter__()</code> ja <code>__next__()</code> -metodit</li>
+</ul>
+<p>Pythonin <code>for</code>-silmukka <strong>käyttää Iterator-suunnittelumallia</strong> kulissien takana.</p>
+<h2 id="esimerkki-oman-kokoelman-iteraattori">Esimerkki: Oman kokoelman iteraattori</h2>
+<p>Rakennetaan oma kokoelma (<code>BookCollection</code>) ja sille mukautettu iteraattori.</p>
+<h3 id="1-olio-jota-sailytetaan-book">1. Olio, jota säilytetään: <code>Book</code></h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Book</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span>
+</code></pre></div>
+
+<h3 id="2-kokoelma-bookcollection">2. Kokoelma: <code>BookCollection</code></h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">BookCollection</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_books</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">add_book</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">book</span><span class="p">:</span> <span class="n">Book</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_books</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">book</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">BookIterator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_books</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-iterator-luokka-bookiterator">3. Iterator-luokka: <code>BookIterator</code></h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">BookIterator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">books</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_books</span> <span class="o">=</span> <span class="n">books</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_books</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_books</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_index</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">raise</span> <span class="ne">StopIteration</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+</code></pre></div>
+
+<h3 id="4-kayttoesimerkki">4. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Luodaan kirjoja ja lisätään kokoelmaan</span>
+<span class="n">collection</span> <span class="o">=</span> <span class="n">BookCollection</span><span class="p">()</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">add_book</span><span class="p">(</span><span class="n">Book</span><span class="p">(</span><span class="s2">&quot;Tuntematon sotilas&quot;</span><span class="p">))</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">add_book</span><span class="p">(</span><span class="n">Book</span><span class="p">(</span><span class="s2">&quot;Sinuhe egyptiläinen&quot;</span><span class="p">))</span>
+<span class="n">collection</span><span class="o">.</span><span class="n">add_book</span><span class="p">(</span><span class="n">Book</span><span class="p">(</span><span class="s2">&quot;Seitsemän veljestä&quot;</span><span class="p">))</span>
+
+<span class="c1"># Käytetään iteraattoria</span>
+<span class="k">for</span> <span class="n">book</span> <span class="ow">in</span> <span class="n">collection</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kirja: </span><span class="si">{</span><span class="n">book</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">Kirja</span><span class="o">:</span><span class="w"> </span><span class="n">Tuntematon</span><span class="w"> </span><span class="n">sotilas</span>
+<span class="n">Kirja</span><span class="o">:</span><span class="w"> </span><span class="n">Sinuhe</span><span class="w"> </span><span class="n">egyptiläinen</span>
+<span class="n">Kirja</span><span class="o">:</span><span class="w"> </span><span class="n">Seitsemän</span><span class="w"> </span><span class="n">veljestä</span>
+</code></pre></div>
+
+<h2 id="hyodyt-ja-haitat">Hyödyt ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Yhtenäinen ja turvallinen läpikäyntitapa</td>
+<td>Lisää luokkia, jos tehdään manuaalisesti</td>
+</tr>
+<tr>
+<td>Piilottaa kokoelman sisäisen rakenteen</td>
+<td>Vähemmän hyödyllinen hyvin yksinkertaisessa käytössä</td>
+</tr>
+<tr>
+<td>Tukee useita iteraattoreita samalle kokoelmalle</td>
+<td></td>
+</tr>
+<tr>
+<td>Mahdollistaa <strong>lajitellut tai suodatetut iteroinnit</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="iterator-vs-muut-mallit">Iterator vs muut mallit</h2>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Iteratoriin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Composite</strong></td>
+<td>Rakenne puumaisille rakenteille</td>
+<td>Composite käyttää usein Iteratoria sisäisesti</td>
+</tr>
+<tr>
+<td><strong>Visitor</strong></td>
+<td>Toimintojen erottaminen rakenteista</td>
+<td>Visitor suorittaa toimintoja; Iterator liikkuu</td>
+</tr>
+<tr>
+<td><strong>Strategy</strong></td>
+<td>Vaihtuva algoritmi</td>
+<td>Iterator voi käyttää strategioita eri läpikäynteihin</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pythonin-sisaanrakennetut-tyokalut">Pythonin sisäänrakennetut työkalut</h2>
+<p>Python tekee iteraattorien luonnista helppoa:</p>
+<h3 id="generaattorifunktio">Generaattorifunktio:</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">countdown</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">n</span>
+        <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">countdown</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="mf">5</span>
+<span class="mf">4</span>
+<span class="mf">3</span>
+<span class="mf">2</span>
+<span class="mf">1</span>
+</code></pre></div>
+
+<h2 id="kayttokohteita">Käyttökohteita</h2>
+<ul>
+<li><strong>Kokoelmien läpikäynti (listat, puut, graafit)</strong></li>
+<li><strong>Tiedostojen rivikohtainen lukeminen</strong></li>
+<li><strong>Tulosjoukkojen suodatus, lajittelu tai rajaus</strong></li>
+<li><strong>Rajapinnat ja API\:t, jotka palauttavat tuloksia erissä</strong></li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Mahdollistaa kokoelmien yhtenäinen läpikäynti</td>
+</tr>
+<tr>
+<td>Pythonin tuki</td>
+<td><code>__iter__()</code>, <code>__next__()</code>, <code>yield</code> – toimii automaattisesti</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Selkeä rakenne, eriytetty logiikka, useita strategioita</td>
+</tr>
+<tr>
+<td>Sovelluskohteet</td>
+<td>Kokoelmat, tietovirrat, tiedostot, iteratiivinen logiikka</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Iterator-malli</strong> on peruspilari modernissa ohjelmoinnissa. Python tekee sen käytöstä helppoa, mutta mallin manuaalinen toteutus tarjoaa tärkeää ymmärrystä iteraation taustalla olevasta rakenteesta.</p>
+</div>
+</body>
+</html>

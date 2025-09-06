@@ -1,0 +1,267 @@
+
+<html>
+<head>
+<title>
+Interpreter-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="interpreter-suunnittelumalli-pythonissa">Interpreter-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-interpreter">Mikä on Interpreter?</h3>
+<p><strong>Interpreter (tulkki)</strong> on suunnittelumalli, jossa määritetään <strong>oma kieli</strong> (tai sen osajoukko) ja luodaan järjestelmä, joka <strong>tulkitsee ja suorittaa</strong> siinä kirjoitettuja lauseita. Jokaisella lauseen osalla on oma <strong>luokkansa</strong>, joka tuntee merkityksensä ja osaa <strong>tulkita itsensä</strong>.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Antaa rakenteellinen tapa toteuttaa yksinkertaisten kielten tai komentojen tulkintaohjelma.</p>
+</blockquote>
+<h3 id="milloin-kayttaa">Milloin käyttää?</h3>
+<p>Interpreter-malli sopii tilanteisiin, joissa:</p>
+<ul>
+<li>Sinulla on <strong>oma domain-kieli (DSL)</strong>.</li>
+<li>Haluat <strong>tulkita komentoja, ehtolauseita tai lausekkeita</strong>.</li>
+<li>Lauseet noudattavat selkeää rakennetta tai kielioppia.</li>
+<li>Tarvitset <strong>modulaarisen tavan laajentaa syntaksia</strong>.</li>
+</ul>
+<h2 id="rakenne">Rakenne</h2>
+<ul>
+<li><strong>AbstractExpression:</strong> yhteinen rajapinta tulkittaville ilmaisuille.</li>
+<li><strong>TerminalExpression:</strong> peruselementit (esim. numero, muuttuja).</li>
+<li><strong>NonTerminalExpression:</strong> koostavat rakenteet (esim. yhteenlasku, ehto).</li>
+<li><strong>Context:</strong> ympäristö, josta haetaan tietoa (esim. muuttujat).</li>
+<li><strong>Client:</strong> rakentaa lausekkeet ja pyytää tulkintaa.</li>
+</ul>
+<h2 id="esimerkki-laskinlausekkeiden-tulkki">Esimerkki: Laskinlausekkeiden tulkki</h2>
+<p>Luodaan yksinkertainen kieli, joka osaa tulkita matemaattisia lausekkeita kuten:</p>
+<div class="codehilite"><pre><span></span><code><span class="mf">5</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">2</span>
+</code></pre></div>
+
+<h3 id="1-abstrakti-lauseke">1. Abstrakti lauseke</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Expression</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h3 id="2-terminaalilausekkeet-numerot">2. Terminaalilausekkeet (numerot)</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Number</span><span class="p">(</span><span class="n">Expression</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+</code></pre></div>
+
+<h3 id="3-ei-terminaalilausekkeet-operaatiot">3. Ei-terminaalilausekkeet (operaatiot)</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Add</span><span class="p">(</span><span class="n">Expression</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span>
+
+    <span class="k">def</span> <span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">interpret</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">interpret</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Subtract</span><span class="p">(</span><span class="n">Expression</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span>
+
+    <span class="k">def</span> <span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">interpret</span><span class="p">(</span><span class="n">context</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">interpret</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="4-kayttoesimerkki">4. Käyttöesimerkki</h3>
+<p>Tulkitsemme lausekkeen: <strong>(5 + 3) - 2</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Rakenna lauseke puuna</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Subtract</span><span class="p">(</span>
+    <span class="n">Add</span><span class="p">(</span><span class="n">Number</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">Number</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span>
+    <span class="n">Number</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Tulkinta</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">interpret</span><span class="p">({})</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tulos: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">Tulos</span><span class="o">:</span><span class="w"> </span><span class="mi">6</span>
+</code></pre></div>
+
+<h2 id="laajennus-muuttujien-tulkinta">Laajennus: Muuttujien tulkinta</h2>
+<p>Lisätään muuttujien tuki, esim. <code>x + 4</code>, jossa <code>x = 10</code>.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Variable</span><span class="p">(</span><span class="n">Expression</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="k">def</span> <span class="nf">interpret</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">context</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="esimerkki">Esimerkki:</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">context</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">Add</span><span class="p">(</span><span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">Number</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">expr</span><span class="o">.</span><span class="n">interpret</span><span class="p">(</span><span class="n">context</span><span class="p">))</span>  <span class="c1"># 14</span>
+</code></pre></div>
+
+<h2 id="kayttokohteita">Käyttökohteita</h2>
+<ul>
+<li><strong>Matemaattiset laskimet</strong> (kuten yllä)</li>
+<li><strong>Säännöstulkinta</strong>, esim. liiketoimintasäännöt</li>
+<li><strong>Hakukyselyt</strong>, esim. &ldquo;nimi = &lsquo;Jukka&rsquo; JA ikä &gt; 30&rdquo;</li>
+<li><strong>Käyttöliittymän komentokielet</strong> tai komentorivikäskyt</li>
+<li><strong>JSONPath, XPath, SQL-parsijat</strong></li>
+</ul>
+<h2 id="hyodyt-ja-haitat">Hyödyt ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Helpottaa <strong>kielien suunnittelua ja tulkintaa</strong></td>
+<td>Rakenne voi olla raskas monimutkaisille kielille</td>
+</tr>
+<tr>
+<td>Jokaisella kieliopillan osalla on <strong>oma luokka</strong></td>
+<td>Voi johtaa suureen määrään pieniä luokkia</td>
+</tr>
+<tr>
+<td>Helppo <strong>laajentaa uusilla komponenteilla</strong></td>
+<td>Hidas verrattuna käännettyyn koodiin</td>
+</tr>
+</tbody>
+</table>
+<h2 id="interpreter-vs-muut-mallit">Interpreter vs muut mallit</h2>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Interpreteriin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Visitor</strong></td>
+<td>Erottelee toiminnan rakenteesta</td>
+<td>Visitor ei tulkitse, vaan vierailee rakenteissa</td>
+</tr>
+<tr>
+<td><strong>Composite</strong></td>
+<td>Rakenne hierarkkisille objekteille</td>
+<td>Interpreter usein käyttää Compositea sisäisesti</td>
+</tr>
+<tr>
+<td><strong>Command</strong></td>
+<td>Kapseloi toiminnot</td>
+<td>Interpreter määrittelee oman tulkittavan kielen</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pythonin-nakokulma">Pythonin näkökulma</h2>
+<p>Pythonin <strong>eval</strong> ja <strong>ast</strong> tarjoavat sisäänrakennettuja työkaluja, mutta Interpreter-malli tarjoaa <strong>räätälöitävän, turvallisen ja rajatun vaihtoehdon</strong>.</p>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Tulkita lausekkeita tai sääntöjä määritellyn kieliopin mukaan</td>
+</tr>
+<tr>
+<td>Käyttökohteet</td>
+<td>Laskimet, hakukielet, säännöstulkinta, komentokielet</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Modulaarisuus, laajennettavuus, omien kielten tuki</td>
+</tr>
+<tr>
+<td>Pythonin etu</td>
+<td>Luokat ja lambdat tekevät rakenteista helposti hallittavia</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Interpreter-malli</strong> tarjoaa tavan rakentaa omia tulkattavia kieliä, erityisesti kun tarvitset helposti muokattavan ja laajennettavan tavan käsitellä komentoja, ehtoja tai lausekkeita. Malli sopii hyvin tilanteisiin, joissa <strong>säännöt muuttuvat usein</strong> tai <strong>käyttäjät voivat syöttää omia lauseita</strong>.</p>
+</div>
+</body>
+</html>

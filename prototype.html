@@ -1,0 +1,263 @@
+
+<html>
+<head>
+<title>
+Prototype-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="prototype-suunnittelumalli-pythonissa">Prototype-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-prototype">Mikä on Prototype?</h3>
+<p><strong>Prototype</strong> on luomismalli, jossa uusia olioita <strong>luodaan kopioimalla olemassa oleva olio</strong> sen sijaan, että ne rakennettaisiin alusta. Tämä voi olla <strong>tehokkaampaa ja joustavampaa</strong> kuin uuden olion luonti joka kerta erikseen, etenkin jos olion rakentaminen on raskasta tai monimutkaista.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Antaa mahdollisuus luoda uusia olioita kopioimalla olemassa olevia – sen sijaan, että käytetään perinteistä <code>new</code> tai <code>__init__</code>.</p>
+</blockquote>
+<h3 id="milloin-kayttaa">Milloin käyttää?</h3>
+<p>Prototype-malli on hyödyllinen, kun:</p>
+<ul>
+<li>Objektien luominen on <strong>kallista</strong> tai <strong>monimutkaista</strong>.</li>
+<li>Tarvitset <strong>samanlaisten olioiden kopioita</strong>, mahdollisesti pienin muutoksin.</li>
+<li>Halutaan välttää <strong>monimutkaista olion alustamista</strong> (erityisesti, jos olioilla on paljon asetuksia).</li>
+<li>Käytetään <strong>Factory-malleja</strong>, joissa vaaditaan joustavaa olioiden replikointia.</li>
+</ul>
+<h2 id="rakenne">Rakenne</h2>
+<ul>
+<li><strong>Prototype (prototyyppi):</strong> määrittelee rajapinnan olion kloonaamiseksi.</li>
+<li><strong>ConcretePrototype:</strong> toteuttaa kopioinnin.</li>
+<li><strong>Client:</strong> luo uusia olioita prototyypistä kopioimalla.</li>
+</ul>
+<h2 id="pythonin-etu-copy-moduuli">Pythonin etu: <code>copy</code>-moduuli</h2>
+<p>Pythonissa voit käyttää sisäänrakennettua <code>copy</code>-moduulia olioiden kopiointiin:</p>
+<ul>
+<li><code>copy.copy(obj)</code> tekee <strong>shallow copyn</strong> (pintapuolinen kopio).</li>
+<li><code>copy.deepcopy(obj)</code> tekee <strong>deep copyn</strong> (kopioi myös sisäiset rakenteet).</li>
+</ul>
+<h2 id="esimerkki-grafiikkaeditorin-komponentit">Esimerkki: Grafiikkaeditorin komponentit</h2>
+<p>Kuvitellaan vektorigrafiikkaeditori, jossa käyttäjä voi kopioida muotoja (esim. ympyrä, suorakulmio).</p>
+<h3 id="1-prototype-rajapinta">1. Prototype-rajapinta</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="k">class</span> <span class="nc">Shape</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="2-konkreettiset-muodot">2. Konkreettiset muodot</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Circle</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ympyrä: säde=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="si">}</span><span class="s2">, väri=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Rectangle</span><span class="p">(</span><span class="n">Shape</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Suorakulmio: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="si">}</span><span class="s2">, väri=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-kayttoesimerkki">3. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">circle1</span> <span class="o">=</span> <span class="n">Circle</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;sininen&quot;</span><span class="p">)</span>
+<span class="n">circle1</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+<span class="n">circle2</span> <span class="o">=</span> <span class="n">circle1</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+<span class="n">circle2</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;punainen&quot;</span>
+<span class="n">circle2</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+<span class="n">rect1</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;vihreä&quot;</span><span class="p">)</span>
+<span class="n">rect2</span> <span class="o">=</span> <span class="n">rect1</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+<span class="n">rect2</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mi">30</span>
+
+<span class="n">rect1</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+<span class="n">rect2</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">Ympyrä</span><span class="o">:</span><span class="w"> </span><span class="n">säde</span><span class="o">=</span><span class="mi">10</span><span class="o">,</span><span class="w"> </span><span class="n">väri</span><span class="o">=</span><span class="n">sininen</span>
+<span class="n">Ympyrä</span><span class="o">:</span><span class="w"> </span><span class="n">säde</span><span class="o">=</span><span class="mi">10</span><span class="o">,</span><span class="w"> </span><span class="n">väri</span><span class="o">=</span><span class="n">punainen</span>
+<span class="n">Suorakulmio</span><span class="o">:</span><span class="w"> </span><span class="mi">20</span><span class="n">x10</span><span class="o">,</span><span class="w"> </span><span class="n">väri</span><span class="o">=</span><span class="n">vihreä</span>
+<span class="n">Suorakulmio</span><span class="o">:</span><span class="w"> </span><span class="mi">30</span><span class="n">x10</span><span class="o">,</span><span class="w"> </span><span class="n">väri</span><span class="o">=</span><span class="n">vihreä</span>
+</code></pre></div>
+
+<h2 id="syva-vs-pinnallinen-kopio">Syvä vs pinnallinen kopio</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">copy</span>
+
+<span class="n">original</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;asetukset&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;fontti&quot;</span><span class="p">:</span> <span class="s2">&quot;Arial&quot;</span><span class="p">,</span> <span class="s2">&quot;koko&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}}</span>
+
+<span class="n">shallow</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+<span class="n">deep</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">original</span><span class="p">)</span>
+
+<span class="n">original</span><span class="p">[</span><span class="s2">&quot;asetukset&quot;</span><span class="p">][</span><span class="s2">&quot;koko&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">14</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">shallow</span><span class="p">[</span><span class="s2">&quot;asetukset&quot;</span><span class="p">][</span><span class="s2">&quot;koko&quot;</span><span class="p">])</span>  <span class="c1"># 14 – vaikuttaa</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">deep</span><span class="p">[</span><span class="s2">&quot;asetukset&quot;</span><span class="p">][</span><span class="s2">&quot;koko&quot;</span><span class="p">])</span>     <span class="c1"># 12 – ei vaikuta</span>
+</code></pre></div>
+
+<h2 id="hyodyt-ja-haitat">Hyödyt ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nopea ja <strong>tehokas tapa luoda olioita</strong></td>
+<td>Kopiointi voi olla monimutkaista (esim. deep copy)</td>
+</tr>
+<tr>
+<td><strong>Ei tarvitse toistaa monimutkaista alustusta</strong></td>
+<td>Syvät kopiot voivat tuoda suorituskykyhaittoja</td>
+</tr>
+<tr>
+<td>Mahdollistaa <strong>dynaamisen olioiden luomisen</strong></td>
+<td>Vaikeampi hallita, jos olioilla on ulkoisia resursseja</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kayttokohteita">Käyttökohteita</h2>
+<ul>
+<li>Graafiset sovellukset (esim. muotojen kopiointi)</li>
+<li>Pelit (esim. vihollisten kloonaus)</li>
+<li>Lomakkeet, joissa pohjana käytetään valmista mallia</li>
+<li>Koodigeneraattorit, joissa luodaan samanlaisia rakenteita</li>
+</ul>
+<h2 id="prototype-vs-muut-luomismallit">Prototype vs muut luomismallit</h2>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Prototypeen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Factory Method</strong></td>
+<td>Luo olion valitsemalla oikea luokka</td>
+<td>Prototype <strong>kopioi</strong> olemassa olevan olion</td>
+</tr>
+<tr>
+<td><strong>Builder</strong></td>
+<td>Rakentaa olion vaiheittain</td>
+<td>Builder rakentaa aina uuden; Prototype kloonaa</td>
+</tr>
+<tr>
+<td><strong>Abstract Factory</strong></td>
+<td>Luo olioita ilman, että asiakas tuntee tyyppejä</td>
+<td>Prototype voi käyttää Abstract Factoryn sisällä</td>
+</tr>
+</tbody>
+</table>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Luoda uusia olioita kloonaamalla olemassa olevia</td>
+</tr>
+<tr>
+<td>Sovelluskohteet</td>
+<td>Pelit, graafiset työkalut, dokumenttipohjat, konfiguraatiot</td>
+</tr>
+<tr>
+<td>Pythonin etu</td>
+<td>Sisäänrakennettu <code>copy</code>-moduuli tekee toteutuksesta helppoa</td>
+</tr>
+<tr>
+<td>Etu</td>
+<td>Tehokas, joustava, vähentää alustamiseen liittyvää toistoa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Prototype-malli</strong> tarjoaa nopean ja selkeän tavan luoda uusia olioita ilman uudelleenalustusta. Python tekee mallin toteuttamisesta erityisen helppoa ja tehokasta sisäänrakennettujen kopiointimekanismien ansiosta.</p>
+</div>
+</body>
+</html>

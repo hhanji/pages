@@ -1,0 +1,220 @@
+
+<html>
+<head>
+<title>
+Lazy Initialization
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="lazy-initialization-pythonissa">Lazy Initialization Pythonissa</h2>
+<h3 id="mika-on-lazy-initialization">Mikä on Lazy Initialization?</h3>
+<p><strong>Lazy Initialization</strong> (laiska alustaminen) on suunnittelumalli, jossa resurssi <strong>luodaan vasta silloin, kun sitä todella tarvitaan</strong>, eikä heti olion alustuksen yhteydessä. Tämä säästää muistia ja voi parantaa suorituskykyä, etenkin jos alustaminen on raskasta tai sitä ei aina tarvita.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Viivästyttää raskaan tai harvoin tarvittavan olion luontia siihen hetkeen, kun sitä oikeasti tarvitaan.</p>
+</blockquote>
+<h2 id="hyodyt">Hyödyt</h2>
+<p>✅ Parantaa suorituskykyä<br />
+✅ Säästää muistia<br />
+✅ Vähentää käynnistysaikaa<br />
+✅ Yleisesti hyödynnetty suurissa tai monimutkaisissa järjestelmissä</p>
+<h2 id="esimerkki-raskas-resurssi">Esimerkki: Raskas resurssi</h2>
+<p>Kuvitellaan, että meillä on luokka, joka lataa tietoa verkkopalvelusta tai tiedostosta — mutta tätä tietoa ei välttämättä tarvita jokaisessa käyttötapauksessa.</p>
+<h3 id="1-ilman-lazy-initializationia">1. Ilman Lazy Initializationia</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">DataFetcher</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Haetaan data...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Simuloidaan raskasta hakua</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)]</span>
+
+<span class="n">fetcher</span> <span class="o">=</span> <span class="n">DataFetcher</span><span class="p">()</span>
+</code></pre></div>
+
+<p>🔴 Tämä lataa datan heti olion luomisen yhteydessä, vaikka sitä ei ehkä tarvita.</p>
+<h3 id="2-lazy-initialization-periaatteella">2. Lazy Initialization -periaatteella</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">DataFetcher</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ladataan data laiskasti...&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
+
+    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000000</span><span class="p">)]</span>
+</code></pre></div>
+
+<h3 id="kaytto">Käyttö:</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">fetcher</span> <span class="o">=</span> <span class="n">DataFetcher</span><span class="p">()</span>
+<span class="c1"># Dataa ei ole vielä ladattu</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">fetcher</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># Nyt data ladataan</span>
+</code></pre></div>
+
+<p>🟢 Datan lataus tapahtuu <strong>vasta, kun sitä ensimmäisen kerran tarvitaan</strong>.</p>
+<h2 id="esimerkki-2-laiska-resurssi-toisessa-luokassa">Esimerkki 2: Laiska resurssi toisessa luokassa</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Yhdistetään tietokantaan...&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">UserService</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">DatabaseConnection</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span>
+
+    <span class="k">def</span> <span class="nf">get_users</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Käytetään tietokantaa&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span>  <span class="c1"># Luo yhteyden vasta nyt</span>
+</code></pre></div>
+
+<h3 id="kaytto_1">Käyttö:</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">service</span> <span class="o">=</span> <span class="n">UserService</span><span class="p">()</span>
+<span class="c1"># Ei vielä yhteyttä</span>
+
+<span class="n">service</span><span class="o">.</span><span class="n">get_users</span><span class="p">()</span>
+</code></pre></div>
+
+<h2 id="yksinkertainen-laiska-muuttuja-funktiolla">Yksinkertainen laiska muuttuja funktiolla</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">lazy_property</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+    <span class="n">attr_name</span> <span class="o">=</span> <span class="s2">&quot;_lazy_&quot;</span> <span class="o">+</span> <span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_lazy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inicialisoidaan </span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">,</span> <span class="n">fn</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_lazy</span>
+</code></pre></div>
+
+<h3 id="kaytto_2">Käyttö:</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Report</span><span class="p">:</span>
+    <span class="nd">@lazy_property</span>
+    <span class="k">def</span> <span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Tämä on raskas raportti&quot;</span>
+</code></pre></div>
+
+<h2 id="sovelluskohteita">Sovelluskohteita</h2>
+<ul>
+<li><strong>Verkkopyynnöt tai API-kutsut</strong></li>
+<li><strong>Tietokantayhteydet</strong></li>
+<li><strong>Suuret tietorakenteet tai tiedostot</strong></li>
+<li><strong>Laiskat komponentit käyttöliittymässä</strong></li>
+<li><strong>Singleton-oliot, jotka eivät ole aina tarpeen</strong></li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Viivästyttää resurssin luontia ensimmäiseen käyttökertaan asti</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Suorituskyky, muistinsäästö, käynnistysnopeus</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Mahdollinen monimutkaisuus ja viive ensimmäisellä käytöllä</td>
+</tr>
+<tr>
+<td>Pythonin etu</td>
+<td>Helppo toteuttaa <code>@property</code>- tai <code>@lazy_property</code>-decoratorilla</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lazy Initialization</strong> on yksinkertainen mutta tehokas tekniikka, jota voidaan käyttää missä tahansa sovelluksessa resurssien säästämiseksi. Pythonin ominaisuudet, kuten <code>@property</code> ja <code>functools.lru_cache</code>, tekevät sen käyttöönotosta helppoa.</p>
+</div>
+</body>
+</html>

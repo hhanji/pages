@@ -1,0 +1,274 @@
+
+<html>
+<head>
+<title>
+State-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="state-suunnittelumalli-pythonissa">State-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-state">Mikä on State?</h3>
+<p><strong>State (tila)</strong> on käyttäytymismalli, jossa olion <strong>käyttäytyminen muuttuu sen sisäisen tilan mukaan</strong>. Malli siirtää tilakohtaisen logiikan erillisiin tilaluokkiin, jolloin tilasiirtymiä voidaan hallita siististi ja laajennettavasti.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Mahdollistaa olion käyttäytymisen vaihtaminen dynaamisesti sen tilan muuttuessa — ikään kuin olio vaihtaisi luokkaansa ajon aikana.</p>
+</blockquote>
+<h3 id="milloin-kayttaa-state-mallia">Milloin käyttää State-mallia?</h3>
+<p>State-malli on hyödyllinen, kun:</p>
+<ul>
+<li>Olio <strong>toimii eri tavalla eri tilanteissa (tiloissa)</strong>.</li>
+<li>Halutaan <strong>välttää pitkiä if-else- tai switch-rakenteita</strong>.</li>
+<li>Käyttäytyminen on <strong>sidottu tilasiirtymiin</strong> (esim. elinkaarimallit, protokollat, käyttöliittymät).</li>
+</ul>
+<h3 id="rakenne">Rakenne</h3>
+<ul>
+<li><strong>Context:</strong> sisältää nykyisen tilan ja delegoi toimintalogiikan tilaluokille.</li>
+<li><strong>State (tila):</strong> määrittelee yhteisen rajapinnan kaikille tiloille.</li>
+<li><strong>ConcreteState:</strong> toteuttaa tilakohtaisen toiminnan ja voi vaihtaa tilaa.</li>
+</ul>
+<h2 id="esimerkki-ovikello-tila-valmiina-soitettu-estetty">Esimerkki: Ovikello (tila: valmiina, soitettu, estetty)</h2>
+<p>Rakennetaan ovikello, jossa tila määrittää, miten se reagoi napin painallukseen:</p>
+<ul>
+<li>Valmiustila: ovikello soi.</li>
+<li>Soitettu: ei reagoi uudestaan hetkeen.</li>
+<li>Estetty: estää käytön (esim. yöaikaan).</li>
+</ul>
+<h3 id="1-tilojen-rajapinta">1. Tilojen rajapinta</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">DoorbellState</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h3 id="2-konkreettiset-tilat">2. Konkreettiset tilat</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ReadyState</span><span class="p">(</span><span class="n">DoorbellState</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[DING DONG] Ovikello soi.&quot;</span><span class="p">)</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">RingingState</span><span class="p">())</span>
+
+<span class="k">class</span> <span class="nc">RingingState</span><span class="p">(</span><span class="n">DoorbellState</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[ODOTA] Ovikello soi jo. Ei toisteta.&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">BlockedState</span><span class="p">(</span><span class="n">DoorbellState</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[ESTETTY] Ovikello ei ole käytössä.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-konteksti-ovikello">3. Konteksti (ovikello)</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Doorbell</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">ReadyState</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">set_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">state</span>
+
+    <span class="k">def</span> <span class="nf">press_button</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[RESET] Palataan valmiustilaan.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">ReadyState</span><span class="p">())</span>
+</code></pre></div>
+
+<h3 id="4-kayttoesimerkki">4. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">bell</span> <span class="o">=</span> <span class="n">Doorbell</span><span class="p">()</span>
+
+<span class="n">bell</span><span class="o">.</span><span class="n">press_button</span><span class="p">()</span>   <span class="c1"># Soi</span>
+<span class="n">bell</span><span class="o">.</span><span class="n">press_button</span><span class="p">()</span>   <span class="c1"># Ei soi uudelleen</span>
+<span class="n">bell</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>          <span class="c1"># Palautetaan valmiustilaan</span>
+<span class="n">bell</span><span class="o">.</span><span class="n">press_button</span><span class="p">()</span>   <span class="c1"># Soi uudelleen</span>
+
+<span class="n">bell</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">BlockedState</span><span class="p">())</span>
+<span class="n">bell</span><span class="o">.</span><span class="n">press_button</span><span class="p">()</span>   <span class="c1"># Estetty tila</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="p">[</span><span class="n">DING</span><span class="w"> </span><span class="n">DONG</span><span class="p">]</span><span class="w"> </span><span class="n">Ovikello</span><span class="w"> </span><span class="n">soi</span><span class="p">.</span>
+<span class="p">[</span><span class="n">ODOTA</span><span class="p">]</span><span class="w"> </span><span class="n">Ovikello</span><span class="w"> </span><span class="n">soi</span><span class="w"> </span><span class="n">jo</span><span class="p">.</span><span class="w"> </span><span class="n">Ei</span><span class="w"> </span><span class="n">toisteta</span><span class="p">.</span>
+<span class="p">[</span><span class="n">RESET</span><span class="p">]</span><span class="w"> </span><span class="n">Palataan</span><span class="w"> </span><span class="n">valmiustilaan</span><span class="p">.</span>
+<span class="p">[</span><span class="n">DING</span><span class="w"> </span><span class="n">DONG</span><span class="p">]</span><span class="w"> </span><span class="n">Ovikello</span><span class="w"> </span><span class="n">soi</span><span class="p">.</span>
+<span class="p">[</span><span class="n">ESTETTY</span><span class="p">]</span><span class="w"> </span><span class="n">Ovikello</span><span class="w"> </span><span class="n">ei</span><span class="w"> </span><span class="n">ole</span><span class="w"> </span><span class="n">käytössä</span><span class="p">.</span>
+</code></pre></div>
+
+<h2 id="toinen-esimerkki-yhteys-yhdistamaton-yhdistetty-katkaistu">Toinen esimerkki: Yhteys (Yhdistämätön / Yhdistetty / Katkaistu)</h2>
+<p>Voit käyttää State-mallia myös mallintamaan yhteyden elinkaarta, esimerkiksi verkkoyhteyksissä tai API-kutsussa:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">DisconnectedState</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Yhdistetään...&quot;</span><span class="p">)</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">ConnectedState</span><span class="p">())</span>
+
+<span class="k">class</span> <span class="nc">ConnectedState</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Jo yhdistetty.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Katkaistaan yhteys.&quot;</span><span class="p">)</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">DisconnectedState</span><span class="p">())</span>
+</code></pre></div>
+
+<h2 id="hyodyt-ja-haitat">Hyödyt ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Selkeä ja <strong>modulaarinen tilanhallinta</strong></td>
+<td>Lisää luokkien määrää</td>
+</tr>
+<tr>
+<td>Helppo <strong>laajentaa uusia tiloja lisäämällä</strong></td>
+<td>Joskus tilat voivat olla liian pieniä loogisiksi yksiköiksi</td>
+</tr>
+<tr>
+<td>Vähentää <strong>if/elif</strong>-rakenteiden määrää</td>
+<td>Voi olla yliarkkitehtoitu yksinkertaisiin ongelmiin</td>
+</tr>
+</tbody>
+</table>
+<h3 id="state-vs-muut-kayttaytymismallit">State vs muut käyttäytymismallit</h3>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Stateen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Strategy</strong></td>
+<td>Vaihdettavissa oleva logiikka</td>
+<td>Strategy ei seuraa tilamuutoksia</td>
+</tr>
+<tr>
+<td><strong>Observer</strong></td>
+<td>Reaktiivinen tila-ilmoitus</td>
+<td>Observer ei vaikuta käyttäytymiseen</td>
+</tr>
+<tr>
+<td><strong>Command</strong></td>
+<td>Kapseloitu toiminto</td>
+<td>State ohjaa käyttäytymistä jatkuvasti, Command suorittaa kerran</td>
+</tr>
+</tbody>
+</table>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Vaihtaa olion käyttäytymistä sen tilan mukaan</td>
+</tr>
+<tr>
+<td>Sovelluskohteet</td>
+<td>Käyttöliittymät, pelit, tila-automaatiot, verkkoyhteydet</td>
+</tr>
+<tr>
+<td>Etuja</td>
+<td>Moduulisuus, selkeys, laajennettavuus</td>
+</tr>
+<tr>
+<td>Pythonin tuki</td>
+<td>Erinomainen – dynaaminen <code>self._state</code> mahdollistaa vaihtelun</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bonus-tilakaavio">Bonus: Tilakaavio</h3>
+<p>Voit mallintaa tilasiirtymät visuaalisesti:</p>
+<div class="codehilite"><pre><span></span><code><span class="w"> </span><span class="o">[</span><span class="n">Ready</span><span class="o">]</span>
+<span class="w">     </span><span class="o">|</span>
+<span class="w">     </span><span class="n">v</span>
+<span class="w"> </span><span class="o">[</span><span class="n">Ringing</span><span class="o">]</span><span class="w"> </span><span class="o">&lt;-+</span>
+<span class="w">     </span><span class="o">|</span><span class="w">          </span><span class="o">|</span>
+<span class="w">     </span><span class="n">v</span><span class="w">          </span><span class="o">|</span>
+<span class="w"> </span><span class="o">[</span><span class="n">Blocked</span><span class="o">]</span><span class="w"> </span><span class="o">&lt;-+</span>
+</code></pre></div>
+
+<p><strong>State-malli</strong> tekee koodista helpommin ylläpidettävää, kun käyttäytyminen riippuu voimakkaasti olion tilasta. Se poistaa monimutkaiset ehtorakenteet ja <strong>siirtää vastuun tilaluokille</strong>, mikä parantaa luettavuutta ja laajennettavuutta.</p>
+</div>
+</body>
+</html>

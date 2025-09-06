@@ -1,0 +1,275 @@
+
+<html>
+<head>
+<title>
+Factory Method -suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="factory-method-suunnittelumalli-pythonissa">Factory Method -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-factory-method">Mikä on Factory Method?</h3>
+<p><strong>Factory Method</strong> on luomismalli, jossa aliluokat <strong>päättävät, mitä konkreettista oliota luodaan</strong>. Malli siirtää olion luonnin vastuuta pois suoralta <code>__init__</code>-kutsulta ja antaa sen <strong>tehdasmenetelmälle (factory method)</strong>.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Antaa aliluokille mahdollisuus päättää, mitä olioita luodaan – ilman, että yläluokan tarvitsee tietää niistä mitään.</p>
+</blockquote>
+<h3 id="milloin-kayttaa">Milloin käyttää?</h3>
+<p>Factory Method -malli on hyödyllinen, kun:</p>
+<ul>
+<li>Luot <strong>monimutkaisia tai vaihtelevia olioita</strong>, jotka kuuluvat johonkin hierarkiaan.</li>
+<li>Haluat <strong>irrottaa olion luonnin logiikan käyttölogiikasta</strong>.</li>
+<li>Halutaan <strong>laajennettavuus ilman olemassa olevan koodin muuttamista</strong> (Open/Closed-periaate).</li>
+</ul>
+<h2 id="rakenne">Rakenne</h2>
+<ul>
+<li><strong>Product:</strong> määrittelee yhteisen rajapinnan kaikille tuotteille.</li>
+<li><strong>ConcreteProduct:</strong> konkreettiset olioiden toteutukset.</li>
+<li><strong>Creator:</strong> määrittelee tehdasmetodin.</li>
+<li><strong>ConcreteCreator:</strong> toteuttaa tehdasmetodin ja palauttaa tietyn tuotteen.</li>
+</ul>
+<h2 id="esimerkki-dialogikomponentit-windows-web">Esimerkki: Dialogikomponentit (Windows / Web)</h2>
+<p>Kuvitellaan, että rakennetaan sovellus, joka näyttää dialogi-ikkunoita eri ympäristöissä.</p>
+<h3 id="1-tuotteen-rajapinta">1. Tuotteen rajapinta</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Button</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h3 id="2-konkreettiset-tuotteet">2. Konkreettiset tuotteet</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">WindowsButton</span><span class="p">(</span><span class="n">Button</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Windows-nappi: Piirretään nappi Windows-tyyliin.&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">WebButton</span><span class="p">(</span><span class="n">Button</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Web-nappi: Piirretään nappi HTML/CSS-tyyliin.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-luoja-luokka-ja-tehdasmetodi">3. Luoja-luokka ja tehdasmetodi</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Dialog</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">create_button</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Button</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">render_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Luo nappi käyttämällä tehdasmetodia</span>
+        <span class="n">button</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_button</span><span class="p">()</span>
+        <span class="n">button</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="4-konkreettiset-luojat">4. Konkreettiset luojat</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">WindowsDialog</span><span class="p">(</span><span class="n">Dialog</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">create_button</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Button</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">WindowsButton</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">WebDialog</span><span class="p">(</span><span class="n">Dialog</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">create_button</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Button</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">WebButton</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="5-kayttoesimerkki">5. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">application</span><span class="p">(</span><span class="n">platform</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;Windows&quot;</span><span class="p">:</span>
+        <span class="n">dialog</span> <span class="o">=</span> <span class="n">WindowsDialog</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dialog</span> <span class="o">=</span> <span class="n">WebDialog</span><span class="p">()</span>
+
+    <span class="n">dialog</span><span class="o">.</span><span class="n">render_window</span><span class="p">()</span>
+
+<span class="c1"># Testaus</span>
+<span class="n">application</span><span class="p">(</span><span class="s2">&quot;Windows&quot;</span><span class="p">)</span>
+<span class="n">application</span><span class="p">(</span><span class="s2">&quot;Web&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Windows-nappi: Piirretään nappi Windows-tyyliin.
+Web-nappi: Piirretään nappi HTML/CSS-tyyliin.
+</code></pre></div>
+
+<h2 id="factory-method-vs-muut-luomismallit">Factory Method vs muut luomismallit</h2>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Factory Methodiin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Simple Factory</strong></td>
+<td>Keskitetty luokka, joka palauttaa eri tyyppejä</td>
+<td>Factory Method perustuu periytykseen, Simple Factory ei</td>
+</tr>
+<tr>
+<td><strong>Abstract Factory</strong></td>
+<td>Luo kokonaisia perheitä objekteja</td>
+<td>Factory Method keskittyy <strong>yhteen</strong> tuotetyyppiin</td>
+</tr>
+<tr>
+<td><strong>Builder</strong></td>
+<td>Luo monimutkaisia olioita vaiheittain</td>
+<td>Factory Method luo olion kerralla</td>
+</tr>
+<tr>
+<td><strong>Prototype</strong></td>
+<td>Luo kloonaamalla olemassa olevan olion</td>
+<td>Factory Method luo uuden olion</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hyodyt-ja-haitat">Hyödyt ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Irrottaa luomisen</strong> käyttävästä koodista</td>
+<td>Lisää luokkien määrää</td>
+</tr>
+<tr>
+<td><strong>Helppo lisätä uusia olioita</strong> ilman muutoksia</td>
+<td>Saattaa vaikuttaa ylisuunnitellulta yksinkertaisiin tapauksiin</td>
+</tr>
+<tr>
+<td>Tukee <strong>Open/Closed-periaatetta</strong></td>
+<td>Vaatii periytymistä tai käyttöliittymien tuntemusta</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pythonin-nakokulma">Pythonin näkökulma</h2>
+<p>Pythonissa ei ole tarvetta käyttää Factory Method -mallia yhtä muodollisesti kuin esimerkiksi Java- tai C++-kielissä, koska:</p>
+<ul>
+<li><strong>Toiminnot (funktiot) ovat ensimmäisen luokan kansalaisia.</strong></li>
+<li>Voit palauttaa olioita helposti funktioista ilman luokkia.</li>
+</ul>
+<h3 id="kevyempi-python-esimerkki-elaintehdas">Kevyempi Python-esimerkki: eläintehdas</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Dog</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">speak</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Hau!&quot;</span>
+
+<span class="k">class</span> <span class="nc">Cat</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">speak</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Miau!&quot;</span>
+
+<span class="k">def</span> <span class="nf">animal_factory</span><span class="p">(</span><span class="n">kind</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;koira&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Dog</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;kissa&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Cat</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Tuntematon eläinlaji.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Käyttö</span>
+<span class="n">animal</span> <span class="o">=</span> <span class="n">animal_factory</span><span class="p">(</span><span class="s2">&quot;kissa&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">animal</span><span class="o">.</span><span class="n">speak</span><span class="p">())</span>  <span class="c1"># Miau!</span>
+</code></pre></div>
+
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Siirtää olion luonnin vastuu aliluokille</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Ylläpidettävä, laajennettava, irrottaa riippuvuuksia</td>
+</tr>
+<tr>
+<td>Python-tuki</td>
+<td>Luonteva toteuttaa luokilla tai funktioilla</td>
+</tr>
+<tr>
+<td>Sovelluskohteet</td>
+<td>UI-komponentit, pelilogiikka, API\:t, alustariippuva koodi</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Factory Method -malli</strong> tarjoaa joustavan tavan kapseloida olion luonti ja mahdollistaa helpot laajennukset. Pythonin dynaamisuus tekee sen toteutuksesta erittäin suoraviivaista ja tehokasta.</p>
+</div>
+</body>
+</html>

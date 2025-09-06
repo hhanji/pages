@@ -1,0 +1,258 @@
+
+<html>
+<head>
+<title>
+Chain of Responsibility -suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="chain-of-responsibility-suunnittelumalli-pythonissa">Chain of Responsibility -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-chain-of-responsibility">Mikä on Chain of Responsibility?</h3>
+<p><strong>Chain of Responsibility</strong> (suom. <em>vastuuketju</em>) on käyttäytymismalli, jossa <strong>vastuun käsitellä pyyntö siirretään ketjussa eteenpäin</strong>, kunnes joku ketjun jäsenistä käsittelee sen.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Välttää kova koodaus käsittelijöihin (esim. <code>if/else</code>) siirtämällä pyyntö automaattisesti sopivalle käsittelijälle.</p>
+</blockquote>
+<h3 id="milloin-kayttaa">Milloin käyttää?</h3>
+<p>Tämä malli on hyödyllinen, kun:</p>
+<ul>
+<li>Pyyntöä voi käsitellä <strong>useampi eri olio</strong>, mutta <strong>vain yksi kerrallaan</strong> sen lopulta hoitaa.</li>
+<li>Halutaan tehdä <strong>joustava, laajennettava ja irrotettu</strong> käsittelyarkkitehtuuri.</li>
+<li>Tarvitaan <strong>poistettavissa tai järjestyksessä muokattavissa oleva käsittelijäketju</strong>.</li>
+</ul>
+<h2 id="rakenne">Rakenne</h2>
+<ul>
+<li><strong>Handler (käsittelijä):</strong> määrittelee rajapinnan ja viittauksen seuraavaan käsittelijään.</li>
+<li><strong>ConcreteHandler:</strong> käsittelee pyynnön tai siirtää sen eteenpäin.</li>
+<li><strong>Client:</strong> lähettää pyynnön ketjun alkuun.</li>
+</ul>
+<h2 id="esimerkki-tukipyyntojen-kasittely">Esimerkki: Tukipyyntöjen käsittely</h2>
+<p>Kuvitellaan IT-tukipalvelu, jossa:</p>
+<ul>
+<li><strong>Taso 1</strong> ratkaisee perusongelmat.</li>
+<li><strong>Taso 2</strong> ratkaisee tekniset ongelmat.</li>
+<li><strong>Taso 3</strong> käsittelee kriittiset tapaukset.</li>
+</ul>
+<h3 id="1-abstrakti-kasittelija">1. Abstrakti käsittelijä</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Handler</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">set_next</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next</span> <span class="o">=</span> <span class="n">handler</span>
+        <span class="k">return</span> <span class="n">handler</span>  <span class="c1"># mahdollistaa ketjutuksen</span>
+
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div>
+
+<h3 id="2-konkreettiset-kasittelijat">2. Konkreettiset käsittelijät</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Level1Support</span><span class="p">(</span><span class="n">Handler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">request</span> <span class="o">==</span> <span class="s2">&quot;salasana unohtunut&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Level 1: Uusi salasana lähetetty sähköpostiin.&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Level2Support</span><span class="p">(</span><span class="n">Handler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">request</span> <span class="o">==</span> <span class="s2">&quot;tulostin ei toimi&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Level 2: Asennetaan tulostinajurit uudelleen.&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Level3Support</span><span class="p">(</span><span class="n">Handler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">request</span> <span class="o">==</span> <span class="s2">&quot;järjestelmä kaatui&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Level 3: Kriittinen tapaus – kehitystiimi mukana.&quot;</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-kayttoesimerkki">3. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Ketjun rakentaminen</span>
+<span class="n">level1</span> <span class="o">=</span> <span class="n">Level1Support</span><span class="p">()</span>
+<span class="n">level2</span> <span class="o">=</span> <span class="n">Level2Support</span><span class="p">()</span>
+<span class="n">level3</span> <span class="o">=</span> <span class="n">Level3Support</span><span class="p">()</span>
+
+<span class="n">level1</span><span class="o">.</span><span class="n">set_next</span><span class="p">(</span><span class="n">level2</span><span class="p">)</span><span class="o">.</span><span class="n">set_next</span><span class="p">(</span><span class="n">level3</span><span class="p">)</span>
+
+<span class="c1"># Pyyntöjä</span>
+<span class="n">requests</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;salasana unohtunut&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;tulostin ei toimi&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;järjestelmä kaatui&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;kahvi loppui&quot;</span>
+<span class="p">]</span>
+
+<span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">requests</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">level1</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OK] </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2"> → </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[X] </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2"> → Ei voitu käsitellä.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">OK</span><span class="o">]</span><span class="w"> </span><span class="n">salasana</span><span class="w"> </span><span class="n">unohtunut</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="k">Level</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span><span class="w"> </span><span class="n">Uusi</span><span class="w"> </span><span class="n">salasana</span><span class="w"> </span><span class="n">lähetetty</span><span class="w"> </span><span class="n">sähköpostiin</span><span class="p">.</span>
+<span class="o">[</span><span class="n">OK</span><span class="o">]</span><span class="w"> </span><span class="n">tulostin</span><span class="w"> </span><span class="n">ei</span><span class="w"> </span><span class="n">toimi</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="k">Level</span><span class="w"> </span><span class="mi">2</span><span class="err">:</span><span class="w"> </span><span class="n">Asennetaan</span><span class="w"> </span><span class="n">tulostinajurit</span><span class="w"> </span><span class="n">uudelleen</span><span class="p">.</span>
+<span class="o">[</span><span class="n">OK</span><span class="o">]</span><span class="w"> </span><span class="n">järjestelmä</span><span class="w"> </span><span class="n">kaatui</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="k">Level</span><span class="w"> </span><span class="mi">3</span><span class="err">:</span><span class="w"> </span><span class="n">Kriittinen</span><span class="w"> </span><span class="n">tapaus</span><span class="w"> </span><span class="err">–</span><span class="w"> </span><span class="n">kehitystiimi</span><span class="w"> </span><span class="n">mukana</span><span class="p">.</span>
+<span class="o">[</span><span class="n">X</span><span class="o">]</span><span class="w"> </span><span class="n">kahvi</span><span class="w"> </span><span class="n">loppui</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Ei</span><span class="w"> </span><span class="n">voitu</span><span class="w"> </span><span class="n">käsitellä</span><span class="p">.</span>
+</code></pre></div>
+
+<h2 id="pythonin-ominaisuudet-ja-vaihtoehto">Pythonin ominaisuudet ja vaihtoehto</h2>
+<p>Pythonin <strong>funktiot ja lambdat</strong> mahdollistavat myös funktionaalisen toteutuksen. Voit rakentaa ketjun yksinkertaisilla kutsuobjekteilla.</p>
+<h3 id="hyodyt-ja-haitat">Hyödyt ja haitat</h3>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Löysä kytkentä</strong> pyynnön ja käsittelijän välillä</td>
+<td>Voi olla vaikea seurata virtausketjua</td>
+</tr>
+<tr>
+<td>Helppo <strong>lisätä/poistaa/muuttaa käsittelijöitä</strong></td>
+<td>Ei takaa, että pyyntö käsitellään</td>
+</tr>
+<tr>
+<td><strong>Joustava järjestys</strong> ja laajennettavuus</td>
+<td>Voi aiheuttaa ylipitkän ketjun tai &ldquo;tyhjiä&rdquo; käsittelijöitä</td>
+</tr>
+</tbody>
+</table>
+<h3 id="chain-of-responsibility-vs-muut-mallit">Chain of Responsibility vs muut mallit</h3>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Chain of Responsibilityyn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Observer</strong></td>
+<td>Ilmoittaa muutoksista useille</td>
+<td>Chain käsittelee pyynnön vain yhdellä käsittelijällä</td>
+</tr>
+<tr>
+<td><strong>Strategy</strong></td>
+<td>Valitsee algoritmin suoraan</td>
+<td>Chain siirtää pyynnön eteenpäin, kunnes joku käsittelee</td>
+</tr>
+<tr>
+<td><strong>Mediator</strong></td>
+<td>Keskittää viestinvälityksen</td>
+<td>Mediator tuntee kaikki osapuolet, ketju ei</td>
+</tr>
+</tbody>
+</table>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Siirtää pyyntöä käsittelijäketjussa eteenpäin</td>
+</tr>
+<tr>
+<td>Käyttökohteet</td>
+<td>Lokitus, virhekäsittely, tukiportaalit, lomakkeet, tapahtumien suodatus</td>
+</tr>
+<tr>
+<td>Etuja</td>
+<td>Käsittelijöiden löyhä kytkentä, helppo laajennettavuus</td>
+</tr>
+<tr>
+<td>Python-tuki</td>
+<td>Helppo toteuttaa luokilla tai funktioilla</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Chain of Responsibility</strong> on erinomainen valinta, kun haluat rakentaa <strong>joustavan käsittelyketjun</strong>, jossa pyynnöt ohjautuvat oikealle käsittelijälle ilman, että pyynnön lähettäjän tarvitsee tietää kenelle se lopulta menee.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,311 @@
+
+<html>
+<head>
+<title>
+Proxy-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="proxy-suunnittelumalli-pythonissa">Proxy-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-proxy">Mikä on Proxy?</h3>
+<p><strong>Proxy</strong> (eli välikappale, sijaisolio) on <strong>rakenteellinen suunnittelumalli</strong>, jonka avulla luodaan <strong>välittäjäolio</strong>, joka kontrolloi pääsyä toiseen olioon.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Tarjota olion sijainen, joka voi lisätä lisälogiikkaa ennen tai jälkeen varsinaisen olion käyttämisen — esimerkiksi tarkistaa oikeudet, tehdä välimuistia tai siirtää kutsu verkon yli.</p>
+</blockquote>
+<h3 id="milloin-kayttaa-proxy-mallia">Milloin käyttää Proxy-mallia?</h3>
+<p>Proxy on hyödyllinen, kun:</p>
+<ul>
+<li>Haluat <strong>rajoittaa tai kontrolloida pääsyä</strong> toiseen olioon.</li>
+<li>Tarvitset <strong>välimuistin</strong>, joka tallentaa aiempia pyyntöjä.</li>
+<li>Halutaan <strong>lyhytkäynnistys</strong> (lazy initialization) eli olio luodaan vasta tarvittaessa.</li>
+<li>Käytät <strong>verkko- tai etäyhteyksiä</strong>, kuten RPC, REST tai tietokanta.</li>
+</ul>
+<h3 id="proxy-mallin-tyyppeja">Proxy-mallin tyyppejä</h3>
+<table>
+<thead>
+<tr>
+<th>Proxy-tyyppi</th>
+<th>Tarkoitus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Virtual Proxy</strong></td>
+<td>Luo tai lataa resurssin vasta tarvittaessa</td>
+</tr>
+<tr>
+<td><strong>Protection Proxy</strong></td>
+<td>Tarkistaa käyttöoikeudet ennen olion käyttöä</td>
+</tr>
+<tr>
+<td><strong>Remote Proxy</strong></td>
+<td>Kutsuu toista oliota esim. verkon yli</td>
+</tr>
+<tr>
+<td><strong>Caching Proxy</strong></td>
+<td>Tallentaa aikaisempien kutsujen tulokset (välimuisti)</td>
+</tr>
+<tr>
+<td><strong>Smart Reference</strong></td>
+<td>Lisää laskentaa tai logitusta olion käytön yhteydessä</td>
+</tr>
+</tbody>
+</table>
+<h3 id="esimerkki-kuvan-lataus">Esimerkki: Kuvan lataus</h3>
+<p>Kuvitellaan sovellus, jossa suuri kuvatiedosto ladataan muistivasta kun sitä todella tarvitaan. Tämä on <strong>virtual proxy</strong> -malli.</p>
+<h3 id="1-abstrakti-rajapinta">1. Abstrakti rajapinta</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Image</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h3 id="2-oikea-olio-real-subject">2. Oikea olio (Real Subject)</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">RealImage</span><span class="p">(</span><span class="n">Image</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_image_from_disk</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">load_image_from_disk</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ladataan kuva levyltä: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Näytetään kuva: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-proxy-olio">3. Proxy-olio</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ProxyImage</span><span class="p">(</span><span class="n">Image</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_real_image</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_real_image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_real_image</span> <span class="o">=</span> <span class="n">RealImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_real_image</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="4-kayttoesimerkki">4. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">image</span> <span class="o">=</span> <span class="n">ProxyImage</span><span class="p">(</span><span class="s2">&quot;suuri_kuva.png&quot;</span><span class="p">)</span>
+
+<span class="c1"># Kuvaa ei ladata vielä tässä vaiheessa</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Kuva-olio luotu, mutta kuvaa ei ole ladattu vielä.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Vasta tässä vaiheessa kuva ladataan ja näytetään</span>
+<span class="n">image</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
+
+<span class="c1"># Toinen kutsu ei lataa uudelleen</span>
+<span class="n">image</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Kuva-olio luotu, mutta kuvaa ei ole ladattu vielä.
+Ladataan kuva levyltä: suuri_kuva.png
+Näytetään kuva: suuri_kuva.png
+Näytetään kuva: suuri_kuva.png
+</code></pre></div>
+
+<h3 id="muita-proxy-esimerkkeja-pythonissa">Muita Proxy-esimerkkejä Pythonissa</h3>
+<h4 id="1-protection-proxy-paasynvalvonta">1. Protection Proxy (pääsynvalvonta)</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">SensitiveData</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">access</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Luetaan salaista tietoa.&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">AccessProxy</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">SensitiveData</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">access</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">==</span> <span class="s2">&quot;admin&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">access</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Pääsy evätty: käyttöoikeudet puuttuvat.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">admin</span> <span class="o">=</span> <span class="n">AccessProxy</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+<span class="n">admin</span><span class="o">.</span><span class="n">access</span><span class="p">()</span>  <span class="c1"># Sallittu</span>
+
+<span class="n">guest</span> <span class="o">=</span> <span class="n">AccessProxy</span><span class="p">(</span><span class="s2">&quot;guest&quot;</span><span class="p">)</span>
+<span class="n">guest</span><span class="o">.</span><span class="n">access</span><span class="p">()</span>  <span class="c1"># Estetty</span>
+</code></pre></div>
+
+<h4 id="2-caching-proxy-valimuisti">2. Caching Proxy (välimuisti)</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ExpensiveService</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lasketaan tulos arvolla </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
+
+<span class="k">class</span> <span class="nc">CachingProxy</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">ExpensiveService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Palautetaan välimuistista: </span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">proxy</span> <span class="o">=</span> <span class="n">CachingProxy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">proxy</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>  <span class="c1"># Lasketaan</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">proxy</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span>  <span class="c1"># Välimuisti</span>
+</code></pre></div>
+
+<h3 id="hyodyt-ja-haitat">Hyödyt ja haitat</h3>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hallitsee resurssien käyttöä</td>
+<td>Lisää abstraktiota ja mahdollisesti monimutkaisuutta</td>
+</tr>
+<tr>
+<td>Tukee pääsynvalvontaa ja välimuistia</td>
+<td>Proxy voi olla pullonkaula</td>
+</tr>
+<tr>
+<td>Lisää joustavuutta arkkitehtuuriin</td>
+<td>Useita proxy-tyyppejä voi olla vaikea erottaa</td>
+</tr>
+</tbody>
+</table>
+<h3 id="proxy-vs-muut-rakenteelliset-mallit">Proxy vs muut rakenteelliset mallit</h3>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Proxyyn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Adapter</strong></td>
+<td>Muuntaa rajapinnan yhteensopivaksi</td>
+<td>Proxy <strong>ei muuta</strong> rajapintaa, vaan ohjaa käyttöä</td>
+</tr>
+<tr>
+<td><strong>Decorator</strong></td>
+<td>Lisää dynaamisesti toiminnallisuutta</td>
+<td>Proxy <strong>ei lisää toiminnallisuutta</strong>, vaan valvoo</td>
+</tr>
+<tr>
+<td><strong>Facade</strong></td>
+<td>Yksinkertaistaa monimutkaista alijärjestelmää</td>
+<td>Proxy <strong>sijaitsee olion edessä</strong>, ei ympärillä</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Kontrolloida pääsyä toiseen olioon</td>
+</tr>
+<tr>
+<td>Proxy-tyypit</td>
+<td>Virtual, Protection, Caching, Remote, Smart Reference</td>
+</tr>
+<tr>
+<td>Sovellukset</td>
+<td>Kuvan- tai tiedostonlataus, käyttöoikeudet, välimuisti, etäpalvelut</td>
+</tr>
+<tr>
+<td>Pythonin tuki</td>
+<td>Luokat ja dynaaminen koostaminen tekevät toteutuksesta helppoa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Proxy-suunnittelumalli</strong> tarjoaa tehokkaan keinon <strong>hallitun pääsyn</strong> tarjoamiseen resursseihin tai olioihin. Pythonissa sen käyttö on erityisen joustavaa, koska kieli tukee dynaamista rakenteiden rakentamista ja koostamista ilman raskasta perintämekanismia.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,245 @@
+
+<html>
+<head>
+<title>
+Decorator-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="decorator-suunnittelumalli-pythonissa">Decorator-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-decorator">Mikä on Decorator?</h3>
+<p><strong>Decorator</strong> on rakenteellinen suunnittelumalli, jonka avulla voit <strong>lisätä olion toiminnallisuutta dynaamisesti ilman, että muutat sen rakennetta</strong>. Toisin sanoen, se tarjoaa joustavan vaihtoehdon perinnälle laajentaaksesi olioiden käytöstä.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Lisätä tai muokata objektin käyttäytymistä käärimällä se toisen olion sisään.</p>
+</blockquote>
+<h3 id="kayttotilanteita">Käyttötilanteita</h3>
+<p>Decoratoria käytetään, kun:</p>
+<ul>
+<li>Haluat lisätä ominaisuuksia tai käyttäytymistä ilman perintää.</li>
+<li>Et voi muuttaa alkuperäisen luokan lähdekoodia (esim. kolmannen osapuolen luokat).</li>
+<li>Haluat ketjuttaa useita toiminnallisuuksia eri tavoin.</li>
+</ul>
+<h3 id="esimerkki-ilman-decoratoria">Esimerkki ilman Decoratoria</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Text</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Hello, world!&quot;</span>
+</code></pre></div>
+
+<p>Jos haluat lisätä esimerkiksi <strong>HTML-muotoilua</strong> (esim. kursivointi tai lihavointi), voit käyttää Decorator-luokkia:</p>
+<h3 id="decorator-luokan-kaytto">Decorator-luokan käyttö</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">BoldDecorator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrapped</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">wrapped</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;b&gt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">render</span><span class="p">()</span><span class="si">}</span><span class="s2">&lt;/b&gt;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">ItalicDecorator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wrapped</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span> <span class="o">=</span> <span class="n">wrapped</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;i&gt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">wrapped</span><span class="o">.</span><span class="n">render</span><span class="p">()</span><span class="si">}</span><span class="s2">&lt;/i&gt;&quot;</span>
+</code></pre></div>
+
+<p><strong>Käyttö:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">text</span> <span class="o">=</span> <span class="n">Text</span><span class="p">()</span>
+<span class="n">decorated</span> <span class="o">=</span> <span class="n">BoldDecorator</span><span class="p">(</span><span class="n">ItalicDecorator</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">decorated</span><span class="o">.</span><span class="n">render</span><span class="p">())</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="p">&lt;</span><span class="nt">b</span><span class="p">&gt;&lt;</span><span class="nt">i</span><span class="p">&gt;</span>Hello, world!<span class="p">&lt;/</span><span class="nt">i</span><span class="p">&gt;&lt;/</span><span class="nt">b</span><span class="p">&gt;</span>
+</code></pre></div>
+
+<p>Tässä <code>BoldDecorator</code> ja <code>ItalicDecorator</code> käärittävät alkuperäisen <code>Text</code>-olion ja muokkaavat sen ulostuloa ilman, että <code>Text</code>-luokkaa tarvitsee muuttaa.</p>
+<h3 id="pythonin-sisaanrakennettu-decorator-syntaksi">Pythonin sisäänrakennettu <code>@decorator</code>-syntaksi</h3>
+<p>Python tarjoaa <strong>funktionaalisen tavan</strong> käyttää decoratoreita <code>@</code>-syntaksilla, mikä on erityisen yleistä esimerkiksi lokituksessa, välimuistissa tai käyttöoikeuksien tarkistuksessa.</p>
+<h4 id="yksinkertainen-funktiodecorator">Yksinkertainen funktiodecorator</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">logger</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Kutsutaan funktiota: </span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@logger</span>
+<span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hei, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+
+<span class="n">greet</span><span class="p">(</span><span class="s2">&quot;Maija&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Kutsutaan funktiota: greet
+Hei, Maija!
+</code></pre></div>
+
+<h3 id="ketjutettavat-decoratori-funktiot">Ketjutettavat decoratori-funktiot</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">uppercase</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="k">def</span> <span class="nf">exclaim</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span> <span class="o">+</span> <span class="s2">&quot;!&quot;</span>
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+<span class="nd">@exclaim</span>
+<span class="nd">@uppercase</span>
+<span class="k">def</span> <span class="nf">say_hello</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;hello&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">say_hello</span><span class="p">())</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>HELLO!
+</code></pre></div>
+
+<p>Decoratorit suoritetaan <strong>alhaalta ylöspäin</strong>, eli ensin <code>uppercase</code>, sitten <code>exclaim</code>.</p>
+<h3 id="decorator-luokat-vs-funktiot">Decorator-luokat vs. funktiot</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Luokkadecorator</th>
+<th>Funktiodecorator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Soveltuvuus</td>
+<td>Monimutkaisempiin olioihin</td>
+<td>Yksinkertaisiin funktioihin</td>
+</tr>
+<tr>
+<td>Tilanhallinta</td>
+<td>Parempi, mahdollista käyttää attribuutteja</td>
+<td>Rajallinen ilman closure-rakenteita</td>
+</tr>
+<tr>
+<td>Yksinkertaisuus</td>
+<td>Vähemmän idiomaattinen Pythonissa</td>
+<td>Hyvin tuettu Pythonissa</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kayttokohteita-pythonissa">Käyttökohteita Pythonissa</h3>
+<ul>
+<li><strong>Lokitus</strong>: seurataan, mitä funktioita kutsutaan</li>
+<li><strong>Käyttöoikeudet</strong>: varmennetaan käyttäjä ennen toiminnon suoritusta</li>
+<li><strong>Välimuisti</strong>: tallennetaan aiemmat tulokset (esim. <code>functools.lru_cache</code>)</li>
+<li><strong>Aikaleimat</strong>: mitataan suoritusajat</li>
+<li><strong>Validointi</strong>: tarkistetaan parametrit ennen funktion ajoa</li>
+</ul>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Lisätä toiminnallisuutta olioon tai funktioon ilman muutoksia</td>
+</tr>
+<tr>
+<td>Toteutusmuodot</td>
+<td>Luokkana tai funktiona, Python tukee molempia</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Joustava, modulaarinen, helposti laajennettava</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Liiallinen käyttö voi vaikeuttaa koodin lukemista</td>
+</tr>
+</tbody>
+</table>
+<p>Decorator on yksi Pythonin tehokkaimmista suunnittelumalleista. Se tarjoaa <strong>modulaarisen ja uudelleenkäytettävän</strong> tavan laajentaa ohjelman toiminnallisuutta ilman monimutkaista perintähierarkiaa tai muutoksia alkuperäiseen koodiin.</p>
+</div>
+</body>
+</html>

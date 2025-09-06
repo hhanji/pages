@@ -1,0 +1,298 @@
+
+<html>
+<head>
+<title>
+Command-suunnittelumalli
+</title>
+<link rel="stylesheet" href="../pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory -suunnittelumalli</a>
+<a class="sbpage" href="adapter.html">Adapter-suunnittelumalli</a>
+<a class="sbpage" href="bridge.html">Bridge-suunnittelumalli</a>
+<a class="sbpage" href="builder.html">Builder-suunnittelumalli</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility -suunnittelumalli</a>
+<a class="sbpage" href="command.html">Command-suunnittelumalli</a>
+<a class="sbpage" href="composite.html">Composite-suunnittelumalli</a>
+<a class="sbpage" href="decorator.html">Decorator-suunnittelumalli</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="facade.html">Facade-suunnittelumalli</a>
+<a class="sbpage" href="factory_method.html">Factory Method -suunnittelumalli</a>
+<a class="sbpage" href="flyweight.html">Flyweight-suunnittelumalli</a>
+<a class="sbpage" href="interpreter.html">Interpreter-suunnittelumalli</a>
+<a class="sbpage" href="iterator.html">Iterator-suunnittelumalli</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="mediator.html">Mediator-suunnittelumalli</a>
+<a class="sbpage" href="observer.html">Observer-suunnittelumalli</a>
+<a class="sbpage" href="prototype.html">Prototype-suunnittelumalli</a>
+<a class="sbpage" href="proxy.html">Proxy-suunnittelumalli</a>
+<a class="sbpage" href="singleton.html">Singleton-suunnittelumalli</a>
+<a class="sbpage" href="state.html">State-suunnittelumalli</a>
+<a class="sbpage" href="strategy.html">Strategy-suunnittelumalli</a>
+<a class="sbpage" href="visitor.html">Visitor-suunnittelumalli</a>
+
+</div>
+<div id="content">
+<h2 id="command-suunnittelumalli-pythonissa">Command-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-command">Mikä on Command?</h3>
+<p><strong>Command (komento)</strong> on käyttäytymismalli, jossa <strong>pyyntö kapseloidaan olioon</strong> siten, että sen suorittaminen voidaan tallentaa, siirtää, kumota tai ajastaa.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Irrottaa pyyntö sen suorittajasta. Command-olio tietää, mitä tehdä, mutta <strong>asiakas ei tarvitse tietää toteutuksesta mitään.</strong></p>
+</blockquote>
+<h3 id="milloin-kayttaa-command-mallia">Milloin käyttää Command-mallia?</h3>
+<p>Command-malli on hyödyllinen, kun:</p>
+<ul>
+<li>Tarvitset <strong>operaation tallentamista, kumoamista (undo)</strong> tai <strong>uudelleensuorittamista (redo)</strong>.</li>
+<li>Haluat <strong>ajastaa, lokittaa tai jonottaa</strong> toimintoja.</li>
+<li>Tarvitset <strong>makroja</strong> eli sarjan komentoja yhdellä kutsulla.</li>
+<li>Haluat <strong>vähentää sidonnaisuuksia</strong> toiminnon kutsujan ja suorittajan välillä.</li>
+</ul>
+<h3 id="rakenne">Rakenne</h3>
+<ul>
+<li><strong>Command (komento):</strong> määrittelee yleisen rajapinnan <code>execute()</code>.</li>
+<li><strong>ConcreteCommand:</strong> toteuttaa <code>Command</code>-rajapinnan ja delegoi kutsun vastaanottajalle.</li>
+<li><strong>Receiver (vastaanottaja):</strong> tietää, miten toiminnot suoritetaan.</li>
+<li><strong>Invoker (kutsuja):</strong> tietää, milloin komentoa pitää käyttää.</li>
+<li><strong>Client:</strong> luo komennot ja asettaa ne Invokeriin.</li>
+</ul>
+<h3 id="esimerkki-alykoti-valo-paallepois">Esimerkki: Älykoti (valo päälle/pois)</h3>
+<p>Kuvitellaan älykotijärjestelmä, jossa käyttäjä voi laittaa valot päälle ja pois. Command-malli erottaa painikkeen logiikan valon toiminnasta.</p>
+<h3 id="1-command-rajapinta">1. Command-rajapinta</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Command</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<h3 id="2-vastaanottaja-valo">2. Vastaanottaja: Valo</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Light</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">on</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Valo on päällä.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Valo on pois päältä.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-konkreettiset-komennot">3. Konkreettiset komennot</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">LightOnCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">light</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light</span> <span class="o">=</span> <span class="n">light</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+
+<span class="k">class</span> <span class="nc">LightOffCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">light</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light</span> <span class="o">=</span> <span class="n">light</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light</span><span class="o">.</span><span class="n">off</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light</span><span class="o">.</span><span class="n">on</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="4-kutsuja-kaukosaadin">4. Kutsuja: Kaukosäädin</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">RemoteControl</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">submit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+        <span class="n">command</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">undo_last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">history</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">command</span><span class="o">.</span><span class="n">undo</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="5-kayttoesimerkki">5. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">light</span> <span class="o">=</span> <span class="n">Light</span><span class="p">()</span>
+
+<span class="n">on_command</span> <span class="o">=</span> <span class="n">LightOnCommand</span><span class="p">(</span><span class="n">light</span><span class="p">)</span>
+<span class="n">off_command</span> <span class="o">=</span> <span class="n">LightOffCommand</span><span class="p">(</span><span class="n">light</span><span class="p">)</span>
+
+<span class="n">remote</span> <span class="o">=</span> <span class="n">RemoteControl</span><span class="p">()</span>
+
+<span class="n">remote</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">on_command</span><span class="p">)</span>    <span class="c1"># Valo päälle</span>
+<span class="n">remote</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">off_command</span><span class="p">)</span>   <span class="c1"># Valo pois</span>
+<span class="n">remote</span><span class="o">.</span><span class="n">undo_last</span><span class="p">()</span>           <span class="c1"># Peru edellinen → valo takaisin päälle</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Valo on päällä.
+Valo on pois päältä.
+Valo on päällä.
+</code></pre></div>
+
+<h3 id="makrokomennot-lisaominaisuus">Makrokomennot (lisäominaisuus)</h3>
+<p>Voit yhdistää useita komentoja makroksi:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">MacroCommand</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commands</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">commands</span> <span class="o">=</span> <span class="n">commands</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="p">:</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="p">):</span>
+            <span class="n">cmd</span><span class="o">.</span><span class="n">undo</span><span class="p">()</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">macro</span> <span class="o">=</span> <span class="n">MacroCommand</span><span class="p">([</span><span class="n">on_command</span><span class="p">,</span> <span class="n">off_command</span><span class="p">])</span>
+<span class="n">remote</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">macro</span><span class="p">)</span>
+<span class="n">remote</span><span class="o">.</span><span class="n">undo_last</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="hyodyt-ja-haitat">Hyödyt ja haitat</h3>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mahdollistaa <strong>undo/redo</strong>-toiminnallisuuden</td>
+<td>Lisää luokkien määrää</td>
+</tr>
+<tr>
+<td>Komentoja voi <strong>ajastaa, lokittaa, makrottaa</strong></td>
+<td>Voi olla &ldquo;yliarkkitehtoitu&rdquo; yksinkertaisiin tapauksiin</td>
+</tr>
+<tr>
+<td>Irrottaa kutsujan ja suorittajan toisistaan</td>
+<td>Jokainen komento vaatii oman luokkansa</td>
+</tr>
+</tbody>
+</table>
+<h3 id="command-vs-muut-kayttaytymismallit">Command vs muut käyttäytymismallit</h3>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Tarkoitus</th>
+<th>Ero Commandiin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Strategy</strong></td>
+<td>Valittava algoritmi</td>
+<td>Strategy ei tallenna tai kumoa toimintaa</td>
+</tr>
+<tr>
+<td><strong>Observer</strong></td>
+<td>Reaktiot tapahtumiin</td>
+<td>Observer toimii <strong>tilanteissa</strong>, Command <strong>pyynnöissä</strong></td>
+</tr>
+<tr>
+<td><strong>Visitor</strong></td>
+<td>Uusien toimintojen lisääminen</td>
+<td>Visitor käy läpi rakennetta, Command suorittaa toiminnon</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yhteenveto">Yhteenveto</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Kapseloi pyynnön olioon</td>
+</tr>
+<tr>
+<td>Sovellukset</td>
+<td>Undo/redo, makrot, ajastus, komentojonot, UI-painikkeet</td>
+</tr>
+<tr>
+<td>Pythonin tuki</td>
+<td>Koodin dynaamisuus mahdollistaa yksinkertaisen toteutuksen</td>
+</tr>
+<tr>
+<td>Erityistä</td>
+<td>Commandit voidaan yhdistää, tallentaa ja kumota helposti</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bonus-lambda-komennot-pythonin-tapa">Bonus: Lambda-komennot (Pythonin tapa)</h3>
+<p>Pythonin lambdat mahdollistavat kevyen version komentomallista:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">remote</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">CommandWrapper</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tulostetaan jotain&quot;</span><span class="p">)))</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CommandWrapper</span><span class="p">(</span><span class="n">Command</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">action</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">undo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ei voi kumota.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Command-malli</strong> antaa mahdollisuuden <strong>modulaarisuuteen, historiaseurantaan ja hallittuun suorittamiseen</strong> – se on erityisen hyödyllinen <strong>käyttöliittymissä, komentopinoissa ja ohjausjärjestelmissä</strong>.</p>
+</div>
+</body>
+</html>
