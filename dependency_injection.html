@@ -130,11 +130,11 @@ td, th {
 <p><strong>Tarkoitus:</strong> Erotetaan luokan logiikka sen riippuvuuksista — injektoimalla ne sen ulkopuolelta.</p>
 </blockquote>
 <h3 id="miten-se-toimii">Miten se toimii?</h3>
-<p>Ilman DI\:tä:</p>
+<p>Ilman DI:tä:</p>
 <ul>
 <li>Luokka luo tai kovakoodaa riippuvuudet itse.</li>
 </ul>
-<p>DI\:n kanssa:</p>
+<p>DI:n kanssa:</p>
 <ul>
 <li>Riippuvuudet <strong>annetaan konstruktorin, metodin tai ominaisuuden kautta</strong>.</li>
 </ul>
@@ -143,7 +143,7 @@ td, th {
 ✅ <strong>Helpompi testata</strong> (voi käyttää mokkeja tai stubbeja)<br />
 ✅ <strong>Selkeä vastuunjako</strong><br />
 ✅ <strong>Riippuvuuksien hallinta keskitetysti</strong></p>
-<h2 id="esimerkki-ilman-ja-din-kanssa">Esimerkki: Ilman ja DI\:n kanssa</h2>
+<h2 id="esimerkki-ilman-ja-din-kanssa">Esimerkki: Ilman ja DI:n kanssa</h2>
 <h3 id="1-ilman-dependency-injectionia">1. Ilman Dependency Injectionia</h3>
 <div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">EmailService</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
@@ -219,7 +219,7 @@ td, th {
 <li><strong>Testattavat palvelut</strong> (esim. sähköposti, maksut)</li>
 <li><strong>Web-sovellukset</strong> (esim. Flask, FastAPI)</li>
 <li><strong>REST-rajapinnat</strong> ja niiden logiikkakerrokset</li>
-<li><strong>Tietokantayhteydet</strong>, <strong>välimuistit</strong>, <strong>ulkoiset API\:t</strong></li>
+<li><strong>Tietokantayhteydet</strong>, <strong>välimuistit</strong>, <strong>ulkoiset API:t</strong></li>
 </ul>
 <h2 id="python-ja-di-kirjastot">Python ja DI-kirjastot</h2>
 <p>Pythonissa Dependency Injection voidaan tehdä helposti manuaalisesti, mutta on olemassa myös kirjastoja:</p>

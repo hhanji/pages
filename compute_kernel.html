@@ -125,7 +125,7 @@ td, th {
 <div id="content">
 <h2 id="compute-kernel-suunnittelumalli-pythonissa">Compute Kernel -suunnittelumalli Pythonissa</h2>
 <h3 id="mika-on-compute-kernel">Mikä on Compute Kernel?</h3>
-<p><strong>Compute Kernel</strong> -suunnittelumalli keskittyy suorittamaan raskaita tai laskennallisesti intensiivisiä operaatioita keskitetysti ja optimoidusti erillisissä ytimissä (kernels), usein hyödyntäen rinnakkaisuutta tai erikoisraudan (GPU\:t, FPGA\:t) laskentakykyä. Tämä erottelu mahdollistaa sovelluksen muun logiikan pysymisen yksinkertaisena, kun raskaat laskutoimitukset on kapseloitu erillisiin komponentteihin.</p>
+<p><strong>Compute Kernel</strong> -suunnittelumalli keskittyy suorittamaan raskaita tai laskennallisesti intensiivisiä operaatioita keskitetysti ja optimoidusti erillisissä ytimissä (kernels), usein hyödyntäen rinnakkaisuutta tai erikoisraudan (GPU:t, FPGA:t) laskentakykyä. Tämä erottelu mahdollistaa sovelluksen muun logiikan pysymisen yksinkertaisena, kun raskaat laskutoimitukset on kapseloitu erillisiin komponentteihin.</p>
 <blockquote>
 <p><strong>Tavoite:</strong><br />
 Keskittää raskaat laskentaoperaatiot erilliseen &ldquo;ydin&rdquo;-moduuliin, joka voi olla optimoitu ja suorittaa tehtävät tehokkaasti.</p>
@@ -133,7 +133,7 @@ Keskittää raskaat laskentaoperaatiot erilliseen &ldquo;ydin&rdquo;-moduuliin, 
 <h2 id="milloin-kayttaa-compute-kernel-mallia">Milloin käyttää Compute Kernel -mallia?</h2>
 <ul>
 <li>Kun ohjelmassa on laskennallisesti raskaita toimintoja, jotka halutaan erottaa muusta sovelluslogiikasta</li>
-<li>Kun halutaan hyödyntää rinnakkaisuutta, GPU\:ta tai muita laskentaytimiä</li>
+<li>Kun halutaan hyödyntää rinnakkaisuutta, GPU:ta tai muita laskentaytimiä</li>
 <li>Kun halutaan ylläpitää koodin selkeyttä ja modulaarisuutta</li>
 </ul>
 <h2 id="esimerkki-keskitetty-matriisilaskenta-compute-kernel-mallilla">Esimerkki: Keskitetty matriisilaskenta Compute Kernel -mallilla</h2>

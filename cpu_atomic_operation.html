@@ -137,7 +137,7 @@ Estää datakorruptio ja kilpajuoksutilanteet suorittamalla kriittiset operaatio
 <li>Kun halutaan minimoida suorituskykyyn kohdistuva lukituskuorma</li>
 </ul>
 <h2 id="pythonin-haasteet-atomisten-operaatioiden-kanssa">Pythonin haasteet atomisten operaatioiden kanssa</h2>
-<p>Pythonissa atomiset operaatiot eivät ole suoraan saatavilla tavallisissa muuttujissa johtuen GIL\:stä ja puutteellisesta tuesta suorille atomisille CPU-operaatioille. GIL takaa atomisuuden vain yksittäisille Python-operaatioille, kuten yksinkertaisille laskuille tai viittauksen päivityksille, mutta ei riitä laajempiin rinnakkaisiin datarakenteisiin.</p>
+<p>Pythonissa atomiset operaatiot eivät ole suoraan saatavilla tavallisissa muuttujissa johtuen GIL:stä ja puutteellisesta tuesta suorille atomisille CPU-operaatioille. GIL takaa atomisuuden vain yksittäisille Python-operaatioille, kuten yksinkertaisille laskuille tai viittauksen päivityksille, mutta ei riitä laajempiin rinnakkaisiin datarakenteisiin.</p>
 <h2 id="esimerkki-atominen-laskuri-threadinglock-avulla">Esimerkki: Atominen laskuri <code>threading.Lock</code> avulla</h2>
 <p>Vaikka Python ei tarjoa suoranaisia atomisia CPU-operaatioita, voimme simuloida niitä käyttämällä lukkoa.</p>
 <div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">threading</span>
