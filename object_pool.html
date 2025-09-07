@@ -1,0 +1,312 @@
+
+<html>
+<head>
+<title>
+Object Pool 
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="object-pool-suunnittelumalli-pythonissa">Object Pool -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-object-pool">Mikä on Object Pool?</h3>
+<p><strong>Object Pool</strong> (eli olioiden allas) on suunnittelumalli, jossa joukko valmiiksi luotuja olioita pidetään <strong>käytettävissä uudelleenkäyttöä varten</strong>. Kun olio tarvitaan, se haetaan poolista. Kun sen käyttö on ohi, se <strong>palautetaan pooliin</strong>, eikä tuhota.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Vähentää olioiden luontikustannuksia ja parantaa suorituskykyä uudelleenkäytön avulla.</p>
+</blockquote>
+<h3 id="kayttokohteita">Käyttökohteita</h3>
+<ul>
+<li><strong>Verkkoyhteydet / socketit</strong></li>
+<li><strong>Tietokantayhteydet</strong></li>
+<li><strong>Grafiikkamoottorit / pelit</strong> (esim. luotien instanssit)</li>
+<li><strong>Suorituskykykriittiset järjestelmät</strong></li>
+<li><strong>Raskaat objektit, kuten PDF-lukijat tai renderöijät</strong></li>
+</ul>
+<h2 id="hyodyt-ja-haitat">Hyödyt ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nopeampi suorituskyky</td>
+<td>Voi kuluttaa enemmän muistia</td>
+</tr>
+<tr>
+<td>Vähemmän olioiden luontia</td>
+<td>Mahdollinen monimutkaisuus hallinnassa</td>
+</tr>
+<tr>
+<td>Soveltuu hyvin raskaiden olioiden kanssa</td>
+<td>Täytyy hallita palauttaminen manuaalisesti</td>
+</tr>
+</tbody>
+</table>
+<h2 id="esimerkki-yksinkertainen-object-pool-pythonissa">Esimerkki: Yksinkertainen Object Pool Pythonissa</h2>
+<p>Kuvitellaan, että olioiden luonti kestää jonkin aikaa (esim. yhteys ulkoiseen palveluun).</p>
+<h3 id="1-raskas-olio">1. Raskas olio</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">class</span> <span class="nc">ExpensiveObject</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Luodaan kallis olio...&quot;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Simuloi raskasta luontia</span>
+
+    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Oliota käytetään.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="2-object-pool-luokka">2. Object Pool -luokka</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ObjectPool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_available</span> <span class="o">=</span> <span class="p">[</span><span class="n">ExpensiveObject</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_in_use</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">acquire</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_available</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Ei vapaita olioita!&quot;</span><span class="p">)</span>
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_available</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_in_use</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_in_use</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_in_use</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_available</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-kayttoesimerkki">3. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">pool</span> <span class="o">=</span> <span class="n">ObjectPool</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Haetaan ensimmäinen olio</span>
+<span class="n">obj1</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+<span class="n">obj1</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
+
+<span class="c1"># Haetaan toinen olio</span>
+<span class="n">obj2</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+<span class="n">obj2</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
+
+<span class="c1"># Palautetaan olio takaisin pooliin</span>
+<span class="n">pool</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">obj1</span><span class="p">)</span>
+
+<span class="c1"># Haetaan uudelleen</span>
+<span class="n">obj3</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+<span class="n">obj3</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">obj1</span> <span class="ow">is</span> <span class="n">obj3</span><span class="p">)</span>  <span class="c1"># True – saatiin sama olio</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Luodaan kallis olio...
+Luodaan kallis olio...
+Oliota käytetään.
+Oliota käytetään.
+Oliota käytetään.
+True
+</code></pre></div>
+
+<h2 id="monisaikeisyys-turvattu-object-pool">Monisäikeisyys: turvattu Object Pool</h2>
+<p>Pythonin <code>queue.Queue</code> sopii hyvin säieturvalliseen Object Pool -malliin:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+
+<span class="k">class</span> <span class="nc">ThreadSafePool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">ExpensiveObject</span><span class="p">())</span>
+
+    <span class="k">def</span> <span class="nf">acquire</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="kaytto-saikeiden-kanssa">Käyttö säikeiden kanssa:</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> käyttää oliota&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">pool</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> palautti olion&quot;</span><span class="p">)</span>
+
+<span class="n">pool</span> <span class="o">=</span> <span class="n">ThreadSafePool</span><span class="p">()</span>
+
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">task</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Säie </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</code></pre></div>
+
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Uudelleenkäyttää kalliita olioita sen sijaan, että ne luotaisiin aina uudelleen</td>
+</tr>
+<tr>
+<td>Soveltuu</td>
+<td>Tietokantayhteydet, pelit, palvelinyhteydet</td>
+</tr>
+<tr>
+<td>Etu</td>
+<td>Parantaa suorituskykyä, vähentää muistiajoa ja resurssien kulutusta</td>
+</tr>
+<tr>
+<td>Pythonissa toteutus</td>
+<td>Yksinkertainen luokka + lista tai säieturvallinen <code>queue.Queue</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="vinkki-objektin-palauttaminen-automaattisesti">Vinkki: Objektin palauttaminen automaattisesti</h2>
+<p>Voit käyttää context manageria, jotta objektit palautuvat automaattisesti:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">pooled_object</span><span class="p">(</span><span class="n">pool</span><span class="p">):</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">obj</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+<span class="c1"># Käyttö:</span>
+<span class="k">with</span> <span class="n">pooled_object</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span> <span class="k">as</span> <span class="n">obj</span><span class="p">:</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
+</code></pre></div>
+
+<p><strong>Object Pool</strong> on hyödyllinen silloin, kun olioiden luonti on kallista, mutta olioita voidaan <strong>kierrättää</strong>. Pythonissa tämä onnistuu helposti joko yksinkertaisella listalla tai säieturvallisesti <code>queue.Queue</code>-rakenteella.</p>
+</div>
+</body>
+</html>

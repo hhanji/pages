@@ -1,0 +1,281 @@
+
+<html>
+<head>
+<title>
+Multiton
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="multiton-suunnittelumalli-pythonissa">Multiton-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-multiton">Mikä on Multiton?</h3>
+<p><strong>Multiton</strong> on suunnittelumalli, joka laajentaa Singleton-mallin ajatusta: sen sijaan että sallitaan <strong>vain yksi instanssi koko sovelluksessa</strong>, Multiton sallii <strong>yhden instanssin per avain (key)</strong>.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Varmistaa, että tietystä luokasta on olemassa <strong>vain yksi instanssi per määritelty avain</strong>, ja tarjota globaali pääsy näihin instansseihin.</p>
+</blockquote>
+<h2 id="multiton-vs-singleton">Multiton vs Singleton</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Singleton</th>
+<th>Multiton</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Instanssimäärä</td>
+<td>Yksi</td>
+<td>Yksi per avain</td>
+</tr>
+<tr>
+<td>Käyttötapaus</td>
+<td>Yksi globaali resurssi</td>
+<td>Eri instanssit, esim. kieli, yhteystyyppi jne.</td>
+</tr>
+<tr>
+<td>Esimerkkejä</td>
+<td>Lokitus, asetukset</td>
+<td>Kielisanakirjat, yhteydet eri tietokantoihin</td>
+</tr>
+</tbody>
+</table>
+<h2 id="esimerkki-kielikohtainen-resurssien-hallinta">Esimerkki: Kielikohtainen resurssien hallinta</h2>
+<p>Kuvitellaan, että meillä on kielikohtaisia sanastoja (englanti, suomi, ruotsi), ja haluamme, että jokaista kieltä vastaa <strong>yksi ja sama olio</strong> sovelluksen elinkaaren ajan.</p>
+<h3 id="1-multiton-toteutus-pythonissa">1. Multiton-toteutus Pythonissa</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Dictionary</span><span class="p">:</span>
+    <span class="n">_instances</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">language</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">language</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">:</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">language</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_load_words</span><span class="p">(</span><span class="n">language</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="n">language</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="n">language</span><span class="p">]</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_load_words</span><span class="p">(</span><span class="n">language</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ladataan sanat kielelle: </span><span class="si">{</span><span class="n">language</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;fi&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;kissa&quot;</span><span class="p">:</span> <span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="s2">&quot;koira&quot;</span><span class="p">:</span> <span class="s2">&quot;dog&quot;</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;en&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;cat&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa&quot;</span><span class="p">,</span> <span class="s2">&quot;dog&quot;</span><span class="p">:</span> <span class="s2">&quot;koira&quot;</span><span class="p">}</span>
+        <span class="k">elif</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">&quot;sv&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;katt&quot;</span><span class="p">:</span> <span class="s2">&quot;kissa&quot;</span><span class="p">,</span> <span class="s2">&quot;hund&quot;</span><span class="p">:</span> <span class="s2">&quot;koira&quot;</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+</code></pre></div>
+
+<h3 id="2-kayttoesimerkki">2. Käyttöesimerkki</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Luodaan kaksi instanssia suomen kielellä</span>
+<span class="n">fi1</span> <span class="o">=</span> <span class="n">Dictionary</span><span class="p">(</span><span class="s2">&quot;fi&quot;</span><span class="p">)</span>
+<span class="n">fi2</span> <span class="o">=</span> <span class="n">Dictionary</span><span class="p">(</span><span class="s2">&quot;fi&quot;</span><span class="p">)</span>
+
+<span class="c1"># Luodaan instanssi englanniksi</span>
+<span class="n">en</span> <span class="o">=</span> <span class="n">Dictionary</span><span class="p">(</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">fi1</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="s2">&quot;kissa&quot;</span><span class="p">])</span>  <span class="c1"># -&gt; cat</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">en</span><span class="o">.</span><span class="n">words</span><span class="p">[</span><span class="s2">&quot;cat&quot;</span><span class="p">])</span>     <span class="c1"># -&gt; kissa</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">fi1</span> <span class="ow">is</span> <span class="n">fi2</span><span class="p">)</span>          <span class="c1"># -&gt; True (sama instanssi)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">fi1</span> <span class="ow">is</span> <span class="n">en</span><span class="p">)</span>           <span class="c1"># -&gt; False (eri kieli = eri instanssi)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Ladataan sanat kielelle: fi
+Ladataan sanat kielelle: en
+cat
+kissa
+True
+False
+</code></pre></div>
+
+<h2 id="sovelluskohteita">Sovelluskohteita</h2>
+<ul>
+<li><strong>Lokaalit resurssit</strong> (esim. kielisanakirjat)</li>
+<li><strong>Yhteydet eri tietokantoihin</strong> avaimen perusteella (esim. asiakas-ID)</li>
+<li><strong>Konfiguraatiot eri ympäristöille</strong> (dev, test, prod)</li>
+<li><strong>Välimuistit per resurssi</strong></li>
+<li><strong>Palvelut per käyttäjä/asiakas</strong></li>
+</ul>
+<h2 id="multiton-vs-vaihtoehdot">Multiton vs vaihtoehdot</h2>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Milloin käyttää</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Singleton</strong></td>
+<td>Kun tarvitaan yksi globaali instanssi</td>
+</tr>
+<tr>
+<td><strong>Multiton</strong></td>
+<td>Kun tarvitaan yksi instanssi per avain</td>
+</tr>
+<tr>
+<td><strong>Factory</strong></td>
+<td>Kun tarvitaan uusi instanssi joka kutsulla</td>
+</tr>
+<tr>
+<td><strong>Service Locator</strong></td>
+<td>Kun palvelut haetaan globaalista rekisteristä</td>
+</tr>
+</tbody>
+</table>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Varmistaa yksi instanssi per avain (esim. kieli, asiakas)</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Estää turhat olioiden duplikaatit, vähentää muistinkäyttöä</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Piilottaa riippuvuuksia, vaikeuttaa testattavuutta</td>
+</tr>
+<tr>
+<td>Pythonin etu</td>
+<td>Helppo toteuttaa luokan <code>__new__()</code>-metodilla ja sanakirjalla</td>
+</tr>
+</tbody>
+</table>
+<h2 id="vinkkeja">Vinkkejä</h2>
+<ul>
+<li>Älä käytä Multitonia, jos jokainen instanssi on <strong>itsenäinen</strong> tai jos tarvitset <strong>skaalautuvuutta.</strong></li>
+<li>Multiton sopii hyvin, kun resurssin <strong>tunniste (key)</strong> on selkeä ja vakioitu.</li>
+<li>Käytä esimerkiksi <code>Enum</code>-tyyppisiä avaimia avainten hallinnan selkeyttämiseksi.</li>
+</ul>
+<p><strong>Multiton-suunnittelumalli</strong> on hyödyllinen erikoistapaus, kun tarvitset hallittua määrää instansseja — ei vain yhtä (Singleton), vaan <strong>yhden per avain</strong>. Pythonissa se on helppo toteuttaa käyttämällä luokan sisäistä sanakirjaa ja <code>__new__</code>-metodia.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,301 @@
+
+<html>
+<head>
+<title>
+Twin
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="twin-suunnittelumalli-pythonissa">Twin-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-twin-malli">Mikä on Twin-malli?</h3>
+<p><strong>Twin-suunnittelumalli</strong> erottaa yhden olion kahdeksi toisiinsa liittyväksi olioksi:</p>
+<ul>
+<li><strong>Looginen olio (logic)</strong> – sisältää liiketoimintasäännöt ja toiminnallisuuden</li>
+<li><strong>Fyysinen olio (representation)</strong> – vastaa olion fyysisestä käyttäytymisestä, kuten sijainnista, animaatiosta tai tilasta</li>
+</ul>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Tarjota vaihtoehto perinteiselle periytymiselle silloin, kun halutaan <strong>joustava tapa yhdistää kahden eri näkökulman vastuut yhdelle kokonaisuudelle</strong> ilman syvää perintähierarkiaa.</p>
+</blockquote>
+<h2 id="missa-twin-mallia-kaytetaan">Missä Twin-mallia käytetään?</h2>
+<table>
+<thead>
+<tr>
+<th>Sovelluskohde</th>
+<th>Esimerkki</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pelit</td>
+<td>Pelihahmon looginen tila vs. animaatio</td>
+</tr>
+<tr>
+<td>Käyttöliittymät</td>
+<td>UI-komponentin logiikka vs. ulkoasu</td>
+</tr>
+<tr>
+<td>Simulaatiot</td>
+<td>Fysiikkalogiikka vs. visuaalinen esitys</td>
+</tr>
+<tr>
+<td>Robotit</td>
+<td>Toimintalogiikka vs. liikkeen hallinta</td>
+</tr>
+</tbody>
+</table>
+<h2 id="twin-vs-perinta">Twin vs perintä</h2>
+<table>
+<thead>
+<tr>
+<th>Perintä</th>
+<th>Twin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aliluokka laajentaa yliluokan toimintoja</td>
+<td>Olio A delegoi vastuuta olioon B</td>
+</tr>
+<tr>
+<td>Kova kytkentä</td>
+<td>Löyhä kytkentä</td>
+</tr>
+<tr>
+<td>Vähemmän joustava</td>
+<td>Joustava yhdistely</td>
+</tr>
+</tbody>
+</table>
+<h2 id="python-esimerkki-pelihahmo-ja-sen-grafiikka">Python-esimerkki: Pelihahmo ja sen grafiikka</h2>
+<h3 id="1-looginen-olio-pelihahmon-tila-ja-toiminta">1. Looginen olio – pelihahmon tila ja toiminta</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">PlayerLogic</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">health</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">twin</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># viittaus grafiikkaan</span>
+
+    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[LOGIIKKA] Hahmo liikkuu kohtaan </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">twin</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">twin</span><span class="o">.</span><span class="n">update_position</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">take_damage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">health</span> <span class="o">-=</span> <span class="n">amount</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[LOGIIKKA] Hahmo ottaa </span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2"> vahinkoa, hp = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">health</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">twin</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">twin</span><span class="o">.</span><span class="n">flash_red</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="2-fyysinen-olio-hahmon-visuaalinen-esitys">2. Fyysinen olio – hahmon visuaalinen esitys</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">PlayerGraphics</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">twin</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># viittaus logiikkaan</span>
+
+    <span class="k">def</span> <span class="nf">update_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[GRAFIIKKA] Päivitetään animaatio kohtaan </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">position</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">flash_red</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[GRAFIIKKA] Hahmo välähtää punaisena (vahinko!)&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-twinien-yhdistaminen">3. Twinien yhdistäminen</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Luodaan instanssit</span>
+<span class="n">logic</span> <span class="o">=</span> <span class="n">PlayerLogic</span><span class="p">()</span>
+<span class="n">graphics</span> <span class="o">=</span> <span class="n">PlayerGraphics</span><span class="p">()</span>
+
+<span class="c1"># Kytketään twin-viitteet</span>
+<span class="n">logic</span><span class="o">.</span><span class="n">twin</span> <span class="o">=</span> <span class="n">graphics</span>
+<span class="n">graphics</span><span class="o">.</span><span class="n">twin</span> <span class="o">=</span> <span class="n">logic</span>
+</code></pre></div>
+
+<h3 id="4-kaytto">4. Käyttö</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">logic</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">logic</span><span class="o">.</span><span class="n">take_damage</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">LOGIIKKA</span><span class="o">]</span><span class="w"> </span><span class="n">Hahmo</span><span class="w"> </span><span class="n">liikkuu</span><span class="w"> </span><span class="n">kohtaan</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
+<span class="o">[</span><span class="n">GRAFIIKKA</span><span class="o">]</span><span class="w"> </span><span class="n">Päivitetään</span><span class="w"> </span><span class="n">animaatio</span><span class="w"> </span><span class="n">kohtaan</span><span class="w"> </span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span>
+<span class="o">[</span><span class="n">LOGIIKKA</span><span class="o">]</span><span class="w"> </span><span class="n">Hahmo</span><span class="w"> </span><span class="n">ottaa</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="n">vahinkoa</span><span class="p">,</span><span class="w"> </span><span class="n">hp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span>
+<span class="o">[</span><span class="n">GRAFIIKKA</span><span class="o">]</span><span class="w"> </span><span class="n">Hahmo</span><span class="w"> </span><span class="n">välähtää</span><span class="w"> </span><span class="n">punaisena</span><span class="w"> </span><span class="p">(</span><span class="n">vahinko</span><span class="err">!</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="hyodyt">Hyödyt</h2>
+<p>✅ Selkeä jako loogiseen ja visuaaliseen/tekniseen vastuuseen<br />
+✅ Ei tarvita moniperintää tai sekavia luokkahierarkioita<br />
+✅ Helppo testattavuus (logiikka ilman grafiikkaa)<br />
+✅ Eri twin-komponentteja voidaan vaihtaa (esim. eri näkymä käyttöliittymälle)</p>
+<h2 id="haitat">Haitat</h2>
+<p>⚠️ Twin-viittaukset on <strong>hallittava manuaalisesti</strong><br />
+⚠️ Ei ole sisäänrakennettu malli Pythonissa → täytyy toteuttaa itse<br />
+⚠️ Mahdolliset <strong>sykliset riippuvuudet</strong>, jos ei olla tarkkana</p>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Jakaa vastuut loogiseen ja fyysiseen/esityspuolen olioon</td>
+</tr>
+<tr>
+<td>Soveltuu</td>
+<td>Pelit, käyttöliittymät, simulaatiot</td>
+</tr>
+<tr>
+<td>Etu</td>
+<td>Selkeä rakenne, joustavuus, vältetään moniperintä</td>
+</tr>
+<tr>
+<td>Toteutus Pythonissa</td>
+<td>Yksinkertaiset luokat ja twin-viittaukset</td>
+</tr>
+</tbody>
+</table>
+<h2 id="twin-malli-vs-mvc">Twin-malli vs MVC</h2>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Vastuujako</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Twin</strong></td>
+<td>Kaksi oliota hoitaa eri näkökulmia yhdestä entiteetistä (esim. logiikka &amp; ulkoasu)</td>
+</tr>
+<tr>
+<td><strong>MVC</strong></td>
+<td>Malli, näkymä ja kontrolleri ovat erilliset ja yleisempi rakenne monille näkymille</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Twin-suunnittelumalli</strong> tarjoaa hyvän rakenteen tilanteisiin, joissa yksi olio tarvitsee kaksi erillistä roolia – esimerkiksi logiikkaa ja esitystä. Pythonissa se on helppo toteuttaa pitämällä kaksi oliota tiiviisti linkitettynä toisiinsa.</p>
+</div>
+</body>
+</html>

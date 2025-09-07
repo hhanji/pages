@@ -1,0 +1,301 @@
+
+<html>
+<head>
+<title>
+MVC
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="mvc-suunnittelumalli-pythonissa">MVC-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-mvc">Mikä on MVC?</h3>
+<p><strong>MVC (Model-View-Controller)</strong> on arkkitehtuurimalli, joka jakaa sovelluksen kolmeen erilliseen komponenttiin:</p>
+<ul>
+<li><strong>Model (Malli)</strong> – sisältää sovelluksen <strong>tiedot ja liiketoimintalogiikan</strong></li>
+<li><strong>View (Näkymä)</strong> – vastaa <strong>tiedon esittämisestä käyttäjälle</strong></li>
+<li><strong>Controller (Ohjain)</strong> – vastaanottaa <strong>käyttäjän syötteet</strong> ja päivittää mallia tai näkymää</li>
+</ul>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Erotella sovelluksen eri vastuut selkeästi, jotta koodia on helpompi kehittää, testata ja ylläpitää.</p>
+</blockquote>
+<h3 id="mvcn-rakenne">MVC\:n rakenne</h3>
+<div class="codehilite"><pre><span></span><code>Käyttäjä
+   ↓
+Controller ───→ päivittää → Model
+   ↓                     ↑
+päivittää               |
+   ↓                     |
+ View  ←─── näyttää ─────┘
+</code></pre></div>
+
+<h2 id="esimerkki-yksinkertainen-laskin-console-mvc">Esimerkki: Yksinkertainen laskin (console-MVC)</h2>
+<h3 id="1-model-laskutoimitukset-ja-tila">1. Model – laskutoimitukset ja tila</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CalculatorModel</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">+=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">subtract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">-=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span>
+</code></pre></div>
+
+<h3 id="2-view-tulosten-nayttaminen">2. View – tulosten näyttäminen</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CalculatorView</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">show_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tulos: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">show_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Virhe: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-controller-ohjaa-logiikkaa-ja-nakymaa">3. Controller – ohjaa logiikkaa ja näkymää</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CalculatorController</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">view</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">view</span>
+
+    <span class="k">def</span> <span class="nf">handle_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;add&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;sub&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">show_error</span><span class="p">(</span><span class="s2">&quot;Tuntematon komento.&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">show_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_result</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">show_error</span><span class="p">(</span><span class="s2">&quot;Virheellinen syöte.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="4-kayttoliittyma-console-loop">4. Käyttöliittymä (console loop)</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">CalculatorModel</span><span class="p">()</span>
+    <span class="n">view</span> <span class="o">=</span> <span class="n">CalculatorView</span><span class="p">()</span>
+    <span class="n">controller</span> <span class="o">=</span> <span class="n">CalculatorController</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">view</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">command</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Komento (add/sub/exit): &quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">command</span> <span class="o">==</span> <span class="s2">&quot;exit&quot;</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Arvo: &quot;</span><span class="p">)</span>
+        <span class="n">controller</span><span class="o">.</span><span class="n">handle_input</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="tulostusesimerkki">Tulostusesimerkki</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">Komento</span><span class="w"> </span><span class="ss">(</span><span class="nv">add</span><span class="o">/</span><span class="nv">sub</span><span class="o">/</span><span class="k">exit</span><span class="ss">)</span>:<span class="w"> </span><span class="nv">add</span>
+<span class="nv">Arvo</span>:<span class="w"> </span><span class="mi">10</span>
+<span class="nv">Tulos</span>:<span class="w"> </span><span class="mi">10</span>
+<span class="nv">Komento</span><span class="w"> </span><span class="ss">(</span><span class="nv">add</span><span class="o">/</span><span class="nv">sub</span><span class="o">/</span><span class="k">exit</span><span class="ss">)</span>:<span class="w"> </span><span class="nv">sub</span>
+<span class="nv">Arvo</span>:<span class="w"> </span><span class="mi">4</span>
+<span class="nv">Tulos</span>:<span class="w"> </span><span class="mi">6</span>
+<span class="nv">Komento</span><span class="w"> </span><span class="ss">(</span><span class="nv">add</span><span class="o">/</span><span class="nv">sub</span><span class="o">/</span><span class="k">exit</span><span class="ss">)</span>:<span class="w"> </span><span class="k">exit</span>
+</code></pre></div>
+
+<h2 id="mvcn-hyodyt-ja-haitat">MVC\:n hyödyt ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Koodin selkeä erottelu</td>
+<td>Vaatii enemmän koodia kuin yksinkertainen skripti</td>
+</tr>
+<tr>
+<td>Helpottaa testattavuutta</td>
+<td>Ei aina optimaalinen pienille projekteille</td>
+</tr>
+<tr>
+<td>Mahdollistaa uudelleenkäytettävyyden</td>
+<td>Voi johtaa monimutkaisiin rakenteisiin suurissa projekteissa</td>
+</tr>
+<tr>
+<td>Soveltuu käyttöliittymiin ja webiin</td>
+<td>Ei aina paras valinta komentorivisovelluksiin</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mvc-web-kehyksissa-esim-flask">MVC web-kehyksissä (esim. Flask)</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">render_template_string</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># Model</span>
+<span class="k">def</span> <span class="nf">calculate</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="c1"># Controller + View</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">calculate</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render_template_string</span><span class="p">(</span><span class="s2">&quot;&lt;h1&gt;Tulos: {{ result }}&lt;/h1&gt;&quot;</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">)</span>
+
+<span class="c1"># Käynnistä: app.run(debug=True)</span>
+</code></pre></div>
+
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Komponentti</th>
+<th>Vastuualue</th>
+<th>Pythonissa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model</td>
+<td>Data ja liiketoimintalogiikka</td>
+<td>Luokka tai tietokantarakenne</td>
+</tr>
+<tr>
+<td>View</td>
+<td>Käyttöliittymä tai tulosteet</td>
+<td><code>print</code>, HTML, GUI-komponentti</td>
+</tr>
+<tr>
+<td>Controller</td>
+<td>Syötteen tulkinta ja ohjaus</td>
+<td>Inputit, reitit, logiikkapisteet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mvc-ja-python">MVC ja Python</h2>
+<p>Pythonissa MVC-malli voidaan toteuttaa helposti, vaikka kieli ei pakota siihen. Se sopii erityisesti:</p>
+<ul>
+<li>Web-kehitykseen (Flask, Django, FastAPI)</li>
+<li>GUI-kehitykseen (Tkinter, PyQt)</li>
+<li>Simulaatioihin ja peleihin</li>
+</ul>
+<p><strong>MVC-suunnittelumalli</strong> auttaa hallitsemaan sovellusten monimutkaisuutta jakamalla ne loogisiin osiin. Pythonin yksinkertainen syntaksi tekee siitä hyvän valinnan MVC-arkkitehtuurin toteuttamiseen – olipa kyseessä komentorivisovellus tai monimutkainen web-järjestelmä.</p>
+</div>
+</body>
+</html>

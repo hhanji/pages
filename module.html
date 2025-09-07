@@ -1,0 +1,308 @@
+
+<html>
+<head>
+<title>
+Module
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="module-suunnittelumalli-pythonissa">Module-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-module-pattern">Mikä on Module Pattern?</h3>
+<p><strong>Module-suunnittelumalli</strong> (engl. <em>Module Pattern</em>) on rakenne, jossa <strong>koodi jaetaan erillisiin loogisiin kokonaisuuksiin</strong>, joilla on omat vastuunsa ja rajapinnat. Näitä kutsutaan <strong>moduleiksi</strong> (<em>moduuleiksi</em>), ja ne voivat piilottaa sisäisen toteutuksen tarjoten vain rajatun käyttöliittymän ulkopuoliselle koodille.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Piilottaa toteutuksen yksityiskohdat ja suojata globaalia nimialuetta. Mahdollistaa <strong>selkeän kapseloinnin</strong>, <strong>uudelleenkäytön</strong> ja <strong>selkeyden</strong>.</p>
+</blockquote>
+<h2 id="module-suunnittelumallin-ominaisuudet">Module-suunnittelumallin ominaisuudet</h2>
+<ul>
+<li>Koodi on jaettu <strong>itsenäisiin yksiköihin (moduuleihin)</strong></li>
+<li>Jokainen moduuli <strong>piilottaa sisäisen toteutuksensa</strong></li>
+<li>Vain halutut toiminnot <strong>paljastetaan ulkomaailmalle</strong></li>
+<li>Ei tarvetta olioille tai luokille – toimii myös funktionaalisesti</li>
+</ul>
+<h2 id="module-suunnittelumalli-pythonissa_1">Module-suunnittelumalli Pythonissa</h2>
+<p>Pythonissa <strong>moduuli on yksinkertaisesti <code>.py</code>-tiedosto</strong>, joka voi sisältää:</p>
+<ul>
+<li>muuttujia</li>
+<li>funktioita</li>
+<li>luokkia</li>
+<li>ali-moduuleja</li>
+</ul>
+<h2 id="esimerkki-math_utilspy-matemaattinen-moduuli">Esimerkki: <code>math_utils.py</code> – matemaattinen moduuli</h2>
+<h3 id="1-luodaan-moduuli-math_utilspy">1. Luodaan moduuli (<code>math_utils.py</code>)</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># math_utils.py</span>
+
+<span class="n">PI</span> <span class="o">=</span> <span class="mf">3.14159</span>
+
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="k">def</span> <span class="nf">subtract</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+
+<span class="k">def</span> <span class="nf">_secret_function</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tätä ei ole tarkoitettu käytettäväksi ulkopuolelta.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<blockquote>
+<p>Huom: Funktio <code>_secret_function()</code> on tarkoitettu <strong>sisäiseen käyttöön</strong> (<em>prefixi on konventio, ei tekninen esto</em>).</p>
+</blockquote>
+<h3 id="2-kaytetaan-moduulia">2. Käytetään moduulia</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># main.py</span>
+
+<span class="kn">import</span> <span class="nn">math_utils</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">math_utils</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>         <span class="c1"># 15</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">math_utils</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>    <span class="c1"># 7</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">math_utils</span><span class="o">.</span><span class="n">PI</span><span class="p">)</span>                 <span class="c1"># 3.14159</span>
+
+<span class="c1"># math_utils._secret_function()     # Mahdollista, mutta ei suositeltavaa</span>
+</code></pre></div>
+
+<h3 id="3-rajauksen-tarkempi-hallinta-__all__">3. Rajauksen tarkempi hallinta: <code>__all__</code></h3>
+<p>Voit ohjata, mitä <code>from module import *</code> tuo käyttöön määrittelemällä <code>__all__</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># math_utils.py</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="s1">&#39;subtract&#39;</span><span class="p">]</span>
+
+<span class="c1"># Nyt `from math_utils import *` tuo vain nämä kaksi funktiota</span>
+</code></pre></div>
+
+<h2 id="esimerkki-konfiguraatiomoduuli">Esimerkki: Konfiguraatiomoduuli</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># config.py</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">DATABASE_URI</span> <span class="o">=</span> <span class="s2">&quot;sqlite:///example.db&quot;</span>
+
+<span class="k">def</span> <span class="nf">print_config</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Debug: </span><span class="si">{</span><span class="n">DEBUG</span><span class="si">}</span><span class="s2">, DB: </span><span class="si">{</span><span class="n">DATABASE_URI</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># main.py</span>
+
+<span class="kn">import</span> <span class="nn">config</span>
+
+<span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">print_config</span><span class="p">()</span>
+</code></pre></div>
+
+<h2 id="module-pattern-ilman-tiedostojakoa">Module Pattern ilman tiedostojakoa</h2>
+<p>Pythonissa voi toteuttaa moduulin <strong>myös sisäisesti</strong> yhdellä tiedostolla:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">create_logger</span><span class="p">():</span>
+    <span class="n">_log_level</span> <span class="o">=</span> <span class="s2">&quot;INFO&quot;</span>  <span class="c1"># Yksityinen muuttuja</span>
+
+    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">_log_level</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">log</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">create_logger</span><span class="p">()</span>
+<span class="n">logger</span><span class="p">(</span><span class="s2">&quot;Sovellus käynnistyi&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<blockquote>
+<p>Tässä <code>create_logger()</code> toimii <strong>moduulin tavoin</strong>: se kapseloi yksityisiä tietoja (kuten <code>_log_level</code>).</p>
+</blockquote>
+<h2 id="module-pattern-vs-muut-mallit">Module Pattern vs muut mallit</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Module Pattern</th>
+<th>Singleton / Class-based</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tila</td>
+<td>Säilyy moduulin sisällä</td>
+<td>Säilyy olion tai luokan sisällä</td>
+</tr>
+<tr>
+<td>Kapselointi</td>
+<td>Tiedostopohjainen, funktionaalinen</td>
+<td>Luokkapohjainen</td>
+</tr>
+<tr>
+<td>Laajennettavuus</td>
+<td>Yksinkertainen, selkeä</td>
+<td>Vaatii olioarkkitehtuuria</td>
+</tr>
+<tr>
+<td>Luonnollinen Pythonissa</td>
+<td>✅ Kyllä</td>
+<td>⚠️ Ei automaattisesti</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hyodyt">Hyödyt</h2>
+<p>✅ Luonnollinen ja sisäänrakennettu Pythonissa<br />
+✅ Selkeä koodin jako ja kapselointi<br />
+✅ Vähentää globaaleja muuttujia ja riippuvuuksia<br />
+✅ Toimii hyvin pienissä ja suurissa projekteissa<br />
+✅ Mahdollistaa testauksen ja uudelleenkäytön</p>
+<h2 id="haitat">Haitat</h2>
+<p>⚠️ Ei varsinaista suojausta yksityisiltä jäseniltä<br />
+⚠️ Ylikäyttö voi johtaa monimutkaiseen riippuvuusverkkoon<br />
+⚠️ Ei objektiorientoitunut itsessään (mutta yhdistettävissä muihin malleihin)</p>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Jakaa sovellus erillisiin loogisiin osiin</td>
+</tr>
+<tr>
+<td>Soveltuu</td>
+<td>Apumoduulit, laskenta, konfiguraatio, logitus</td>
+</tr>
+<tr>
+<td>Python-toteutus</td>
+<td><code>.py</code>-tiedostot tai sisäiset funktiokapseloinnit</td>
+</tr>
+<tr>
+<td>Etu</td>
+<td>Yksinkertainen, tehokas, skaalautuva</td>
+</tr>
+<tr>
+<td>Vastaava muissa kielissä</td>
+<td>JavaScript: Module Pattern, Java: packages</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mini-esimerkki-yhdella-silmayksella">Mini-esimerkki yhdellä silmäyksellä</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># utils.py</span>
+<span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hei, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
+
+<span class="c1"># main.py</span>
+<span class="kn">import</span> <span class="nn">utils</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">greet</span><span class="p">(</span><span class="s2">&quot;Maija&quot;</span><span class="p">))</span>
+</code></pre></div>
+
+<p><strong>Module-suunnittelumalli</strong> on yksi tärkeimmistä arkkitehtuurillisista työkaluista Pythonissa. Sen avulla voit pitää koodisi <strong>siistinä, uudelleenkäytettävänä ja hallittavana</strong> – pienistä skripteistä suurten järjestelmien arkkitehtuuriin.</p>
+</div>
+</body>
+</html>

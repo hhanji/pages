@@ -1,0 +1,240 @@
+
+<html>
+<head>
+<title>
+Binding Properties 
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="binding-properties-suunnittelumalli-pythonissa">Binding Properties -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-binding-properties">Mikä on Binding Properties?</h3>
+<p><strong>Binding Properties</strong> -mallissa oliot voivat sitoa (bind) omien ominaisuuksiensa muutokset toisten olioiden ominaisuuksiin siten, että muutos yhdessä ominaisuudessa päivittyy automaattisesti toiseen. Tämä malli helpottaa tilan synkronointia eri komponenttien välillä ja vähentää manuaalisen päivityksen tarvetta.</p>
+<blockquote>
+<p><strong>Tavoite:</strong><br />
+Luoda automaattinen linkitys eri olioiden ominaisuuksien välille niin, että niiden arvot pysyvät synkronoituna.</p>
+</blockquote>
+<h2 id="milloin-kayttaa-binding-properties-mallia">Milloin käyttää Binding Properties -mallia?</h2>
+<ul>
+<li>Kun halutaan, että eri oliot seuraavat toistensa tilaa reaaliajassa</li>
+<li>Käyttöliittymissä, joissa muutokset yhdessä komponentissa päivittyvät toisissa automaattisesti</li>
+<li>Kun halutaan vähentää koodin toistoa ja manuaalista päivitystä</li>
+</ul>
+<h2 id="esimerkki-sitotaan-kaksi-olion-ominaisuutta">Esimerkki: Sitotaan kaksi olion ominaisuutta</h2>
+<h3 id="1-sitova-ominaisuus-bindable-property">1. Sitova ominaisuus (Bindable Property)</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">BindableProperty</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initial_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">initial_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observers</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">bind_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_observers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+
+    <span class="nd">@value</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">new_value</span>
+        <span class="k">for</span> <span class="n">callback</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_observers</span><span class="p">:</span>
+            <span class="n">callback</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="2-olio-jolla-on-sitova-ominaisuus">2. Olio, jolla on sitova ominaisuus</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Person</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">BindableProperty</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-binding-properties-mallin-kaytto">3. Binding Properties -mallin käyttö</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">print_name_change</span><span class="p">(</span><span class="n">new_name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nimi muuttui: </span><span class="si">{</span><span class="n">new_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">person1</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="s2">&quot;Maija&quot;</span><span class="p">)</span>
+<span class="n">person2</span> <span class="o">=</span> <span class="n">Person</span><span class="p">(</span><span class="s2">&quot;Teppo&quot;</span><span class="p">)</span>
+
+<span class="c1"># Sitotaan person1:n nimi person2:n nimeen</span>
+<span class="n">person1</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">bind_to</span><span class="p">(</span><span class="k">lambda</span> <span class="n">val</span><span class="p">:</span> <span class="nb">setattr</span><span class="p">(</span><span class="n">person2</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">val</span><span class="p">))</span>
+
+<span class="c1"># Valinnainen: sitotaan myös person2:n nimi person1:een (kaksisuuntainen binding)</span>
+<span class="n">person2</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">bind_to</span><span class="p">(</span><span class="k">lambda</span> <span class="n">val</span><span class="p">:</span> <span class="nb">setattr</span><span class="p">(</span><span class="n">person1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">val</span><span class="p">))</span>
+
+<span class="c1"># Lisätään tulostus myös molemmille</span>
+<span class="n">person1</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">bind_to</span><span class="p">(</span><span class="n">print_name_change</span><span class="p">)</span>
+<span class="n">person2</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">bind_to</span><span class="p">(</span><span class="n">print_name_change</span><span class="p">)</span>
+
+<span class="c1"># Muutetaan person1:n nimeä</span>
+<span class="n">person1</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;Maija-Mari&quot;</span>
+
+<span class="c1"># Muutetaan person2:n nimeä</span>
+<span class="n">person2</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;Teppo-Pekka&quot;</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Nimi muuttui: Maija-Mari
+Nimi muuttui: Maija-Mari
+Nimi muuttui: Teppo-Pekka
+Nimi muuttui: Teppo-Pekka
+</code></pre></div>
+
+<h2 id="selitys">Selitys</h2>
+<ul>
+<li><code>BindableProperty</code> pitää yllä arvoa ja listaa callback-funktioita (<code>_observers</code>)</li>
+<li>Kun arvoa muutetaan, kaikki rekisteröidyt callbackit kutsutaan uudella arvolla</li>
+<li>Näin ominaisuuksia voidaan sitoa toisiinsa siten, että ne pysyvät synkronoituna automaattisesti</li>
+</ul>
+<h2 id="hyodyt">Hyödyt</h2>
+<ul>
+<li>Automatisoi ominaisuuksien päivitykset ja vähentää virheitä</li>
+<li>Helpottaa käyttäjärajapintojen ja mallien synkronointia</li>
+<li>Mahdollistaa kaksisuuntaisen tiedonsiirron helposti</li>
+</ul>
+<h2 id="haitat">Haitat</h2>
+<ul>
+<li>Voi aiheuttaa ongelmia, jos sitominen on monimutkaista (esim. sykliset päivitykset)</li>
+<li>Vaatii tarkkaa suunnittelua, jotta ei synny odottamattomia päivitysketjuja</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Osa</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sitova ominaisuus</td>
+<td>Ominaisuus, johon voidaan rekisteröidä kuuntelijoita</td>
+</tr>
+<tr>
+<td>Binding</td>
+<td>Ominaisuuksien arvojen automaattinen synkronointi</td>
+</tr>
+<tr>
+<td>Käyttö</td>
+<td>UI-synkronointi, mallien päivitys, kaksisuuntainen data</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Binding Properties</strong> -malli on tehokas tapa hallita tilan synkronointia eri olioiden välillä automaattisesti, mikä helpottaa erityisesti monimutkaisten sovellusten rakentamista.</p>
+</div>
+</body>
+</html>

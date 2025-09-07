@@ -1,0 +1,312 @@
+
+<html>
+<head>
+<title>
+Service Locator 
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="service-locator-suunnittelumalli-pythonissa">Service Locator -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-service-locator">Mikä on Service Locator?</h3>
+<p><strong>Service Locator</strong> on malli, jossa luokka tai komponentti voi <strong>hakea tarvitsemansa palvelun</strong> keskitetystä rekisteristä eli &ldquo;palvelulokaattorista&rdquo;. Tämä rekisteri tuntee kaikki palvelut ja palauttaa niitä pyynnöstä.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Tarjota keskitetty paikka, josta riippuvuuksia (palveluita) voidaan hakea ilman, että niitä injektoidaan manuaalisesti.</p>
+</blockquote>
+<h2 id="milloin-kayttaa">Milloin käyttää?</h2>
+<p>Service Locator -mallia voidaan käyttää kun:</p>
+<ul>
+<li>Halutaan <strong>hallita monia palveluita keskitetysti</strong>.</li>
+<li>Tarvitaan <strong>globaali pääsy</strong> tiettyihin palveluihin.</li>
+<li>Dependency Injection on liian raskas tai monimutkainen ratkaisu.</li>
+</ul>
+<h2 id="varoitus-haittoja">Varoitus: Haittoja</h2>
+<p>❗ Service Locator <strong>piilottaa riippuvuudet</strong>, mikä vaikeuttaa testattavuutta ja tekee koodista tiukemmin kytkettyä.</p>
+<p>Jos tarvitset <strong>hyvin testattavaa</strong> ja <strong>löyhästi kytkettyä</strong> arkkitehtuuria, <strong>Dependency Injection on yleensä parempi valinta</strong>.</p>
+<h2 id="esimerkki-python-service-locator">Esimerkki: Python Service Locator</h2>
+<h3 id="1-palveluiden-maarittely">1. Palveluiden määrittely</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">EmailService</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lähetetään sähköposti: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">SMSService</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lähetetään tekstiviesti: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="2-service-locator-luokka">2. Service Locator -luokka</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ServiceLocator</span><span class="p">:</span>
+    <span class="n">_services</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">service</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_services</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">service</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">service</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_services</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">service</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Palvelua &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; ei löydy.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">service</span>
+</code></pre></div>
+
+<h3 id="3-palveluiden-rekisterointi-ja-kaytto">3. Palveluiden rekisteröinti ja käyttö</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Rekisteröidään palvelut</span>
+<span class="n">ServiceLocator</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="n">EmailService</span><span class="p">())</span>
+<span class="n">ServiceLocator</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;sms&quot;</span><span class="p">,</span> <span class="n">SMSService</span><span class="p">())</span>
+
+<span class="c1"># Käytetään palveluita</span>
+<span class="n">email</span> <span class="o">=</span> <span class="n">ServiceLocator</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)</span>
+<span class="n">email</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Tervetuloa!&quot;</span><span class="p">)</span>
+
+<span class="n">sms</span> <span class="o">=</span> <span class="n">ServiceLocator</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sms&quot;</span><span class="p">)</span>
+<span class="n">sms</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">&quot;Koodisi on 12345&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Lähetetään sähköposti: Tervetuloa!
+Lähetetään tekstiviesti: Koodisi on 12345
+</code></pre></div>
+
+<h2 id="testattavuusongelma">Testattavuusongelma</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Jos NotificationManager hakee palvelun lokaattorista:</span>
+<span class="k">class</span> <span class="nc">NotificationManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="n">service</span> <span class="o">=</span> <span class="n">ServiceLocator</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)</span>
+        <span class="n">service</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</code></pre></div>
+
+<p>🔴 Nyt <code>NotificationManager</code> on tiukasti sidottu lokaattoriin eikä ole helposti testattavissa ilman monimutkaista mockausta.</p>
+<h2 id="ratkaisu-yhdistetty-malli">Ratkaisu: Yhdistetty malli</h2>
+<p>Joskus voidaan yhdistää <strong>Service Locator</strong> ja <strong>Dependency Injection</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">NotificationManager</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">service</span> <span class="ow">or</span> <span class="n">ServiceLocator</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;email&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">notify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+</code></pre></div>
+
+<p>✅ Tällöin testissä voidaan antaa <code>mock_service</code> suoraan:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">MockService</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[MOCK] </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">mock</span> <span class="o">=</span> <span class="n">MockService</span><span class="p">()</span>
+<span class="n">notifier</span> <span class="o">=</span> <span class="n">NotificationManager</span><span class="p">(</span><span class="n">mock</span><span class="p">)</span>
+<span class="n">notifier</span><span class="o">.</span><span class="n">notify</span><span class="p">(</span><span class="s2">&quot;Testiviesti&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="yhteenveto-edut-ja-haitat">Yhteenveto: Edut ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keskitetty palvelujen hallinta</td>
+<td>Piilottaa riippuvuudet</td>
+</tr>
+<tr>
+<td>Yksinkertainen toteuttaa</td>
+<td>Heikentää testattavuutta</td>
+</tr>
+<tr>
+<td>Vähentää tarvetta manuaaliselle injektiolle</td>
+<td>Tiukempi kytkentä luokkien välillä</td>
+</tr>
+<tr>
+<td>Soveltuu pieniin tai väliaikaisiin ratkaisuihin</td>
+<td>Voi johtaa huonoon arkkitehtuuriin isossa sovelluksessa</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kayttokohteita">Käyttökohteita</h2>
+<ul>
+<li><strong>Pienet tai keskisuuret sovellukset</strong></li>
+<li><strong>Pelit</strong> (esim. globaali resurssihallinta)</li>
+<li><strong>Skriptit ja työkalut</strong>, joissa ei haluta monimutkaista DI-rakennetta</li>
+<li><strong>Nopean prototyypin rakentaminen</strong></li>
+</ul>
+<h2 id="service-locator-vs-dependency-injection">Service Locator vs Dependency Injection</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Service Locator</th>
+<th>Dependency Injection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Riippuvuuksien näkyvyys</td>
+<td>Piilottaa</td>
+<td>Tekee näkyväksi</td>
+</tr>
+<tr>
+<td>Testattavuus</td>
+<td>Vaikeampaa</td>
+<td>Helpompaa</td>
+</tr>
+<tr>
+<td>Koodin kytkentä</td>
+<td>Tiukempi</td>
+<td>Löyhempi</td>
+</tr>
+<tr>
+<td>Joustavuus</td>
+<td>Vähemmän joustava</td>
+<td>Erittäin joustava</td>
+</tr>
+</tbody>
+</table>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Tarjota keskitetty palveluiden rekisteri ja hakumekanismi</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Yksinkertainen, globaali pääsy, ei tarvitse DI-kehystä</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Piilottaa riippuvuudet, vaikeuttaa testattavuutta</td>
+</tr>
+<tr>
+<td>Pythonin etu</td>
+<td>Helppo toteuttaa luokkana tai sanakirjana</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Service Locator</strong> voi olla hyödyllinen pienissä sovelluksissa tai kun halutaan nopeasti yhdistää palveluita ilman erillistä riippuvuuksien injektiomekanismia. Kuitenkin <strong>isommissa järjestelmissä Dependency Injection on usein selkeämpi ja testattavampi ratkaisu.</strong></p>
+</div>
+</body>
+</html>

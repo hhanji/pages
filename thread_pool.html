@@ -1,0 +1,218 @@
+
+<html>
+<head>
+<title>
+Thread Pool 
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="thread-pool-suunnittelumalli-pythonissa">Thread Pool -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-thread-pool">Mikä on Thread Pool?</h3>
+<p><strong>Thread Pool</strong> (säikeiden allas) on suunnittelumalli, jossa etukäteen luodaan joukko säikeitä, joita käytetään tehtävien suorittamiseen. Tämä estää uusien säikeiden jatkuvan luomisen ja tuhoamisen, mikä parantaa suorituskykyä ja resurssien hallintaa.</p>
+<blockquote>
+<p><strong>Tavoite:</strong><br />
+Hallita säikeiden elinkaarta tehokkaasti ja mahdollistaa tehtävien rinnakkainen suoritus ilman liiallista resurssien kulutusta.</p>
+</blockquote>
+<h2 id="milloin-kayttaa">Milloin käyttää?</h2>
+<ul>
+<li>Kun sovellus suorittaa paljon lyhyitä ja usein toistuvia tehtäviä</li>
+<li>Kun halutaan rajoittaa samanaikaisten säikeiden määrää</li>
+<li>Kun halutaan parantaa suorituskykyä ja resurssien käyttöä</li>
+</ul>
+<h2 id="pythonin-concurrentfuturesthreadpoolexecutor">Pythonin <code>concurrent.futures.ThreadPoolExecutor</code></h2>
+<p>Python tarjoaa valmiin <code>ThreadPoolExecutor</code>-luokan <code>concurrent.futures</code>-moduulissa, joka helpottaa thread poolin käyttöä.</p>
+<h3 id="esimerkki-yksinkertainen-thread-pool">Esimerkki: Yksinkertainen Thread Pool</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tehtävä </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> alkaa&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tehtävä </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> päättyy&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Tulos </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="c1"># Luodaan thread pool, jossa 3 säiettä</span>
+<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+    <span class="n">futures</span> <span class="o">=</span> <span class="p">[</span><span class="n">executor</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">futures</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+</code></pre></div>
+
+<h3 id="selitys">Selitys:</h3>
+<ul>
+<li><code>max_workers=3</code> rajoittaa samaan aikaan käynnissä olevien säikeiden määrän kolmeen</li>
+<li><code>submit()</code> käynnistää tehtävän säikeessä</li>
+<li><code>future.result()</code> odottaa tehtävän valmistumista ja palauttaa tuloksen</li>
+</ul>
+<h2 id="esimerkki-thread-pool-tiedostojen-kasittelyssa">Esimerkki: Thread Pool tiedostojen käsittelyssä</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">def</span> <span class="nf">process_file</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Käsitellään tiedostoa </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># Simuloidaan käsittelyä</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tiedosto </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2"> käsitelty&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filename</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+<span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;tiedosto1.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;tiedosto2.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;tiedosto3.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;tiedosto4.txt&#39;</span><span class="p">]</span>
+
+<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">process_file</span><span class="p">,</span> <span class="n">files</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Kaikki tiedostot käsitelty:&quot;</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="hyodyt">Hyödyt</h2>
+<p>✅ Tehtävien suoritus rinnakkain ilman säikeiden jatkuvaa luomista<br />
+✅ Resurssien tehokas hallinta<br />
+✅ Helppo käyttää valmiita kirjastoja kuten <code>concurrent.futures</code><br />
+✅ Soveltuu hyvin IO-sidonnaisiin tehtäviin</p>
+<h2 id="haitat-ja-rajoitukset">Haitat ja rajoitukset</h2>
+<p>⚠️ Pythonin GIL (Global Interpreter Lock) rajoittaa CPU-intensiivisten tehtävien rinnakkaisuutta säikeissä<br />
+⚠️ Vaatii huolellista virheenkäsittelyä säikeissä<br />
+⚠️ Voi johtaa resurssien ylikuormitukseen, jos pool on liian suuri</p>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<p><strong>Thread Pool</strong> on tehokas tapa hallita useita säikeitä Pythonissa, erityisesti IO-sidonnaisissa tehtävissä. Pythonin <code>ThreadPoolExecutor</code> tarjoaa helpon tavan hyödyntää tätä mallia.</p>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Malli</td>
+<td>Säikeiden allas</td>
+</tr>
+<tr>
+<td>Käyttötarkoitus</td>
+<td>Tehtävien rinnakkainen suoritus</td>
+</tr>
+<tr>
+<td>Python-työkalu</td>
+<td><code>concurrent.futures.ThreadPoolExecutor</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>

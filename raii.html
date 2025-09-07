@@ -1,0 +1,294 @@
+
+<html>
+<head>
+<title>
+RAII
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="raii-suunnittelumalli-pythonissa">RAII-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-raii">Mikä on RAII?</h3>
+<p><strong>RAII (Resource Acquisition Is Initialization)</strong> on suunnittelumalli, jossa resurssin elinkaari sidotaan olion elinkaareen:</p>
+<ul>
+<li>Resurssi <strong>varataan (esim. avataan tiedosto)</strong> olion alustuksen yhteydessä (<code>__init__</code>)</li>
+<li>Resurssi <strong>vapautetaan automaattisesti</strong> olion tuhoutumisen yhteydessä (<code>__del__</code> tai vastaava)</li>
+</ul>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Varmistaa, että resurssit kuten tiedostot, lukitukset tai yhteydet vapautetaan automaattisesti ja turvallisesti.</p>
+</blockquote>
+<h3 id="raii-cssa-vs-pythonissa">RAII C++\:ssa vs Pythonissa</h3>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>C++</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Resurssien hallinta</td>
+<td><code>constructor</code> / <code>destructor</code></td>
+<td><code>__enter__</code> / <code>__exit__</code> (context manager)</td>
+</tr>
+<tr>
+<td>Determinismi</td>
+<td>Deterministinen (<code>delete</code>)</td>
+<td>Ei täysin deterministinen (GC)</td>
+</tr>
+<tr>
+<td>Soveltuvuus</td>
+<td>Syntyperäinen</td>
+<td>Simuloitavissa (<code>with</code>-lohko)</td>
+</tr>
+</tbody>
+</table>
+<p>Pythonissa RAII-ideologia toteutuu parhaiten <strong>context managerin (with)</strong> avulla.</p>
+<h2 id="esimerkki-1-tiedostonhallinta-sisaanrakennettu-raii">Esimerkki 1: Tiedostonhallinta (sisäänrakennettu RAII)</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;example.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Tämä tiedosto suljetaan automaattisesti.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>🔍 <code>open()</code> palauttaa olion, jolla on <code>__enter__()</code> ja <code>__exit__()</code> → resurssi vapautetaan automaattisesti <code>with</code>-lohkon lopussa.</p>
+<h2 id="esimerkki-2-oma-raii-luokka-context-managerilla">Esimerkki 2: Oma RAII-luokka context managerilla</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Resource</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resurssi avattu.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resurssi suljettu.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Käytetään resurssia.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Käyttö</span>
+<span class="k">with</span> <span class="n">Resource</span><span class="p">()</span> <span class="k">as</span> <span class="n">res</span><span class="p">:</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Resurssi avattu.
+Käytetään resurssia.
+Resurssi suljettu.
+</code></pre></div>
+
+<h2 id="esimerkki-3-tiedostolukko-raii-periaatteella">Esimerkki 3: Tiedostolukko RAII-periaatteella</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="k">class</span> <span class="nc">LockWrapper</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">lock</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Lukitaan...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Vapautetaan lukko...&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+<span class="c1"># Käyttö</span>
+<span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">LockWrapper</span><span class="p">(</span><span class="n">lock</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Turvallinen lohko&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="esimerkki-4-resurssin-vapautus-ilman-with-ei-suositeltavaa">Esimerkki 4: Resurssin vapautus ilman <code>with</code> (ei suositeltavaa)</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">FileRAII</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tiedosto suljetaan __del__():ssa&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Käyttö</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">FileRAII</span><span class="p">(</span><span class="s2">&quot;raii.txt&quot;</span><span class="p">)</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;RAII toimii myös näin – mutta ei deterministisesti.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>🔴 Haittapuolena: Pythonin <strong>roskankeruu ei ole deterministinen</strong>, eli <code>__del__()</code> ei ehkä kutsuudu heti.</p>
+<p>✅ Käytä <code>with</code>-lohkoa aina kun mahdollista.</p>
+<h2 id="sovelluskohteita-pythonissa">Sovelluskohteita Pythonissa</h2>
+<ul>
+<li><strong>Tiedostonkäsittely</strong></li>
+<li><strong>Lukitukset (mutex, threading.Lock)</strong></li>
+<li><strong>Verkkoyhteydet ja socketit</strong></li>
+<li><strong>Tietokantayhteydet</strong></li>
+<li><strong>Väliaikaisten resurssien hallinta</strong></li>
+<li><strong>Testien &ldquo;setUp/tearDown&rdquo;-toiminnot</strong></li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Resurssien hallinta automaattisesti olion elinkaaren aikana</td>
+</tr>
+<tr>
+<td>Pythonin toteutus</td>
+<td>Context managerin (<code>__enter__</code>, <code>__exit__</code>) kautta</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Turvallinen, virheenkestävä resurssien hallinta</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td><code>__del__()</code> ei ole deterministinen – siksi suositellaan <code>with</code>-lohkoa</td>
+</tr>
+<tr>
+<td>Parhaat käytännöt</td>
+<td>Käytä <code>with</code> aina resurssien kanssa</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pro-vinkki-contextlib-helpottaa">Pro-vinkki: <code>contextlib</code> helpottaa</h2>
+<p>Pythonin <code>contextlib</code>-moduuli tarjoaa helpon tavan luoda context managereita.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">demo_resource</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resurssi avattu&quot;</span><span class="p">)</span>
+    <span class="k">yield</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resurssi suljettu&quot;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">demo_resource</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Käytetään resurssia&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="lopuksi">Lopuksi</h2>
+<p><strong>RAII</strong> on tärkeä resurssinhallintamalli, ja vaikka Python ei tarjoa sille täydellistä tukea kuten C++, sen <strong>periaatteet elävät context manager -käytännössä</strong>.</p>
+<p>Pythonin <code>with</code>-rakennetta kannattaa käyttää <strong>aina kun hallitaan resursseja</strong>, kuten tiedostoja, yhteyksiä tai lukkoja.</p>
+</div>
+</body>
+</html>

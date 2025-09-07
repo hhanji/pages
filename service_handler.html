@@ -1,0 +1,247 @@
+
+<html>
+<head>
+<title>
+Service Handler 
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="service-handler-suunnittelumalli-pythonissa">Service Handler -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-service-handler">Mikä on Service Handler?</h3>
+<p><strong>Service Handler</strong> on suunnittelumalli, joka kapseloi palvelujen kutsun, hallinnan ja toteutuksen yhteen paikkaan. Se tarjoaa keskitetyn tavan hallita erilaisia palveluita tai toimintoja, joiden käyttöönotto ja käyttö voidaan pitää erillään asiakaslogiikasta.</p>
+<blockquote>
+<p><strong>Tavoite:</strong><br />
+Erotella palveluiden käyttö ja niiden toteutus, helpottaa palveluiden vaihtamista ja laajentamista.</p>
+</blockquote>
+<h2 id="milloin-kayttaa">Milloin käyttää?</h2>
+<ul>
+<li>Kun järjestelmässä on useita erilaisia palveluita tai toimintoja</li>
+<li>Kun halutaan keskitetty palveluiden hallinta</li>
+<li>Kun palveluiden kutsut halutaan eristää asiakaslogiikasta ja helpottaa ylläpitoa</li>
+</ul>
+<h2 id="yksinkertainen-service-handler-malli-pythonissa">Yksinkertainen Service Handler -malli Pythonissa</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">ServiceHandler</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_services</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">register_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">service</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_services</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">service</span>
+
+    <span class="k">def</span> <span class="nf">unregister_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_services</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_services</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">service</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_services</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">service</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Palvelua &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; ei löydy.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">service</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="c1"># Palveluita esimerkkinä</span>
+<span class="k">def</span> <span class="nf">greeting_service</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hei, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
+
+<span class="k">def</span> <span class="nf">addition_service</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="c1"># Käyttö</span>
+<span class="n">handler</span> <span class="o">=</span> <span class="n">ServiceHandler</span><span class="p">()</span>
+<span class="n">handler</span><span class="o">.</span><span class="n">register_service</span><span class="p">(</span><span class="s2">&quot;greet&quot;</span><span class="p">,</span> <span class="n">greeting_service</span><span class="p">)</span>
+<span class="n">handler</span><span class="o">.</span><span class="n">register_service</span><span class="p">(</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="n">addition_service</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">handler</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;greet&quot;</span><span class="p">,</span> <span class="s2">&quot;Maija&quot;</span><span class="p">))</span>  <span class="c1"># Hei, Maija!</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">handler</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>       <span class="c1"># 12</span>
+</code></pre></div>
+
+<h2 id="palveluiden-maarittely-luokkina-ja-hallinta">Palveluiden määrittely luokkina ja hallinta</h2>
+<p>Voidaan toteuttaa myös palvelut luokkina, jolloin ne voivat sisältää tilaa tai monimutkaisempaa logiikkaa.</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">GreetingService</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">greet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Tervehdys, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">!&quot;</span>
+
+<span class="k">class</span> <span class="nc">MathService</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="k">class</span> <span class="nc">ServiceHandler</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_services</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">register_service</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">service</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_services</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">service</span>
+
+    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">service</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_services</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">service</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Palvelua &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; ei löydy.&quot;</span><span class="p">)</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">service</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">func</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Metodia &#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39; ei löydy palvelusta &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="c1"># Käyttö</span>
+<span class="n">handler</span> <span class="o">=</span> <span class="n">ServiceHandler</span><span class="p">()</span>
+<span class="n">handler</span><span class="o">.</span><span class="n">register_service</span><span class="p">(</span><span class="s2">&quot;greeting&quot;</span><span class="p">,</span> <span class="n">GreetingService</span><span class="p">())</span>
+<span class="n">handler</span><span class="o">.</span><span class="n">register_service</span><span class="p">(</span><span class="s2">&quot;math&quot;</span><span class="p">,</span> <span class="n">MathService</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">handler</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;greeting&quot;</span><span class="p">,</span> <span class="s2">&quot;greet&quot;</span><span class="p">,</span> <span class="s2">&quot;Matti&quot;</span><span class="p">))</span>  <span class="c1"># Tervehdys, Matti!</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">handler</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;math&quot;</span><span class="p">,</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>           <span class="c1"># 7</span>
+</code></pre></div>
+
+<h2 id="hyodyt">Hyödyt</h2>
+<ul>
+<li>Keskitetty hallinta palveluille</li>
+<li>Helppo laajentaa lisäämällä uusia palveluita</li>
+<li>Selkeä erottelu asiakaslogiikan ja palveluiden välillä</li>
+<li>Mahdollistaa palveluiden dynaamisen rekisteröinnin ja poiston</li>
+</ul>
+<h2 id="haasteet">Haasteet</h2>
+<ul>
+<li>Voi lisätä pienen ylikuormituksen yksinkertaisiin sovelluksiin</li>
+<li>Palveluiden metodikutsujen virheenkäsittely vaatii huolellisuutta</li>
+<li>Palveluiden hallinnan logiikka voi kasvaa monimutkaiseksi suurissa järjestelmissä</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<p><strong>Service Handler</strong> on kätevä malli palveluiden keskitettyyn hallintaan ja käyttöön. Pythonissa se on helppo toteuttaa dynaamisesti, mikä tekee siitä joustavan ja laajennettavan.</p>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Malli</td>
+<td>Palveluiden hallinta</td>
+</tr>
+<tr>
+<td>Käyttötarkoitus</td>
+<td>Palveluiden kutsun kapselointi</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Keskitetty, laajennettava</td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>

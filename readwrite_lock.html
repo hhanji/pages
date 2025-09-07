@@ -1,0 +1,290 @@
+
+<html>
+<head>
+<title>
+Read-write Lock 
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="read-write-lock-suunnittelumalli-pythonissa">Read-write Lock -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-read-write-lock">Mikä on Read-write Lock?</h3>
+<p><strong>Read-write Lock</strong> (lukitus kirjoitukselle ja luvulle) on synkronointimalli, joka erottaa:</p>
+<ul>
+<li><strong>Lukijat (Readers)</strong> – voivat käyttää jaettua resurssia <strong>samanaikaisesti</strong>, jos kukaan ei kirjoita.</li>
+<li><strong>Kirjoittajat (Writers)</strong> – tarvitsevat <strong>yksinoikeuden</strong> resurssiin, jolloin muita ei päästetä lukemaan eikä kirjoittamaan.</li>
+</ul>
+<blockquote>
+<p><strong>Tavoite:</strong><br />
+Parantaa suorituskykyä sallimalla useiden säikeiden lukea samanaikaisesti, mutta rajoittaa kirjoituksen vain yhdelle säikeelle kerrallaan.</p>
+</blockquote>
+<h2 id="milloin-kayttaa">Milloin käyttää?</h2>
+<ul>
+<li>Kun sinulla on <strong>useita lukijoita</strong>, mutta <strong>harvoja kirjoittajia</strong></li>
+<li>Kun <strong>lukeminen on turvallista rinnakkain</strong>, mutta <strong>kirjoittaminen ei</strong></li>
+<li>Esimerkiksi: välimuistit, tietorakenteet, konfiguraation luku</li>
+</ul>
+<h2 id="pythonin-threading-moduuli-ei-tarjoa-valmista-readwritelock-luokkaa-mutta-sen-voi-toteuttaa-itse">Pythonin <code>threading</code>-moduuli ei tarjoa valmista <code>ReadWriteLock</code>-luokkaa, mutta sen voi toteuttaa itse:</h2>
+<h3 id="esimerkki-oma-readwritelock-luokka">🧱 Esimerkki: Oma <code>ReadWriteLock</code>-luokka</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="k">class</span> <span class="nc">ReadWriteLock</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readers</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_writer</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_read_ready</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Condition</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">acquire_read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_ready</span><span class="p">:</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writer</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_read_ready</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_readers</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">release_read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_ready</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_readers</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readers</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_read_ready</span><span class="o">.</span><span class="n">notify_all</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">acquire_write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_ready</span><span class="p">:</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_writer</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readers</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_read_ready</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_writer</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">release_write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_ready</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_writer</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_read_ready</span><span class="o">.</span><span class="n">notify_all</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="esimerkki-kaytosta-jaettu-sanakirja">🔄 Esimerkki käytöstä: Jaettu sanakirja</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">rw_lock</span> <span class="o">=</span> <span class="n">ReadWriteLock</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">reader</span><span class="p">(</span><span class="n">thread_id</span><span class="p">):</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">rw_lock</span><span class="o">.</span><span class="n">acquire_read</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Reader-</span><span class="si">{</span><span class="n">thread_id</span><span class="si">}</span><span class="s2">] Lukee: </span><span class="si">{</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">rw_lock</span><span class="o">.</span><span class="n">release_read</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">writer</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">rw_lock</span><span class="o">.</span><span class="n">acquire_write</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;key</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;value</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Writer] Kirjoitti: key</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> -&gt; value</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">rw_lock</span><span class="o">.</span><span class="n">release_write</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Käynnistetään säikeet</span>
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">reader</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="p">,))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">writer</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="mahdollinen-tulostus">🧾 Mahdollinen tulostus:</h3>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">Writer</span><span class="o">]</span><span class="w"> </span><span class="nl">Kirjoitti</span><span class="p">:</span><span class="w"> </span><span class="n">key0</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">value0</span>
+<span class="o">[</span><span class="n">Reader-0</span><span class="o">]</span><span class="w"> </span><span class="nl">Lukee</span><span class="p">:</span><span class="w"> </span><span class="err">{</span><span class="s1">&#39;key0&#39;</span><span class="err">:</span><span class="w"> </span><span class="s1">&#39;value0&#39;</span><span class="err">}</span>
+<span class="o">[</span><span class="n">Reader-1</span><span class="o">]</span><span class="w"> </span><span class="nl">Lukee</span><span class="p">:</span><span class="w"> </span><span class="err">{</span><span class="s1">&#39;key0&#39;</span><span class="err">:</span><span class="w"> </span><span class="s1">&#39;value0&#39;</span><span class="err">}</span>
+<span class="p">...</span>
+</code></pre></div>
+
+<h2 id="hyodyt">Hyödyt</h2>
+<p>✅ Parempi suorituskyky lukuvaltaisissa sovelluksissa<br />
+✅ Skaalautuvuus useille lukijoille<br />
+✅ Vähentää turhaa odottamista</p>
+<h2 id="haitat">Haitat</h2>
+<p>⚠️ Monimutkaisempi toteuttaa kuin tavallinen lukko<br />
+⚠️ Väärin toteutettuna voi aiheuttaa <strong>nälkiintymistä</strong> (esim. kirjoittajat eivät pääse koskaan läpi)<br />
+⚠️ Pythonin <strong>GIL</strong> (Global Interpreter Lock) rajoittaa todellista rinnakkaisuutta säikeissä – ei ongelma esim. C-extensioissa tai moniprosessoinnissa</p>
+<h2 id="read-write-lock-vs-perinteinen-lock">Read-write Lock vs. Perinteinen Lock</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th><code>Lock</code></th>
+<th><code>ReadWriteLock</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lukeminen</td>
+<td>Estää muut säikeet</td>
+<td>Sallii rinnakkaisesti</td>
+</tr>
+<tr>
+<td>Kirjoittaminen</td>
+<td>Yksinoikeus</td>
+<td>Yksinoikeus</td>
+</tr>
+<tr>
+<td>Suorituskyky</td>
+<td>Heikompi lukuvaltaisissa ohjelmissa</td>
+<td>Parempi lukuvaltaisissa ohjelmissa</td>
+</tr>
+<tr>
+<td>Monimutkaisuus</td>
+<td>Yksinkertainen</td>
+<td>Monimutkaisempi toteuttaa</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sovelluskohteita">Sovelluskohteita</h2>
+<ul>
+<li><strong>Välimuistit</strong></li>
+<li><strong>Konfiguraationhallinta</strong></li>
+<li><strong>Tietorakenteet</strong>, kuten jaetut listat, puut, sanakirjat</li>
+<li>Tiedonluku tietokannoista tai levyltä rinnakkaisesti</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<p><strong>Read-write Lock</strong> tarjoaa tehokkaan synkronointiratkaisun tilanteisiin, joissa <strong>lukemista tapahtuu enemmän kuin kirjoittamista</strong>. Se parantaa suorituskykyä sallimalla useita samanaikaisia lukijoita, mutta varmistaa, että kirjoitus tapahtuu aina yksin.</p>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Malli</td>
+<td>Säikeiden synkronointi lukemiseen/kirjoittamiseen</td>
+</tr>
+<tr>
+<td>Tavoite</td>
+<td>Skaalautuva ja turvallinen rinnakkaisuus</td>
+</tr>
+<tr>
+<td>Työkalu Pythonissa</td>
+<td>Itse toteutettava (<code>threading.Condition</code>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>

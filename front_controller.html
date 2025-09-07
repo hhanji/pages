@@ -1,0 +1,333 @@
+
+<html>
+<head>
+<title>
+Front Controller 
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="front-controller-suunnittelumalli-pythonissa">Front Controller -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-front-controller">Mikä on Front Controller?</h3>
+<p><strong>Front Controller</strong> on suunnittelumalli, jossa <strong>kaikki sovelluksen pyynnöt kulkevat yhden keskitetyn &ldquo;portinvartijan&rdquo; kautta</strong>. Tämä mahdollistaa:</p>
+<ul>
+<li>Yhtenäisen autentikoinnin</li>
+<li>Virheenkäsittelyn</li>
+<li>Lokituksen</li>
+<li>Reitityksen</li>
+<li>Käyttäjän tilanhallinnan</li>
+</ul>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Keskittää pyyntöjen käsittely yhteen kohtaan ennen kuin ne välitetään oikealle käsittelijälle (esim. kontrollerille tai näkymälle).</p>
+</blockquote>
+<h2 id="esimerkki-yksinkertainen-front-controller-malli-pythonilla">Esimerkki: Yksinkertainen Front Controller -malli Pythonilla</h2>
+<p>Oletetaan, että rakennamme kevyttä web-kehystä.</p>
+<h3 id="1-kasittelijat-controllers">1. Käsittelijät (Controllers)</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">home_controller</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Tervetuloa etusivulle!&quot;</span>
+
+<span class="k">def</span> <span class="nf">about_controller</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Tietoa meistä.&quot;</span>
+
+<span class="k">def</span> <span class="nf">not_found_controller</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;404 Sivua ei löytynyt&quot;</span>
+</code></pre></div>
+
+<h3 id="2-front-controller">2. Front Controller</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">FrontController</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">routes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;/&quot;</span><span class="p">:</span> <span class="n">home_controller</span><span class="p">,</span>
+            <span class="s2">&quot;/about&quot;</span><span class="p">:</span> <span class="n">about_controller</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">handle_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Käsitellään pyyntö: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">not_found_controller</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">handler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- Vastaus alkaa -&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;- Vastaus päättyy -&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-kaytto">3. Käyttö</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">fc</span> <span class="o">=</span> <span class="n">FrontController</span><span class="p">()</span>
+
+<span class="n">fc</span><span class="o">.</span><span class="n">handle_request</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>         <span class="c1"># Etusivu</span>
+<span class="n">fc</span><span class="o">.</span><span class="n">handle_request</span><span class="p">(</span><span class="s2">&quot;/about&quot;</span><span class="p">)</span>    <span class="c1"># Tietosivu</span>
+<span class="n">fc</span><span class="o">.</span><span class="n">handle_request</span><span class="p">(</span><span class="s2">&quot;/unknown&quot;</span><span class="p">)</span>  <span class="c1"># Tuntematon sivu</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Käsitellään pyyntö: /
+- Vastaus alkaa -
+Tervetuloa etusivulle!
+- Vastaus päättyy -
+
+Käsitellään pyyntö: /about
+- Vastaus alkaa -
+Tietoa meistä.
+- Vastaus päättyy -
+
+Käsitellään pyyntö: /unknown
+- Vastaus alkaa -
+404 Sivua ei löytynyt
+- Vastaus päättyy -
+</code></pre></div>
+
+<h2 id="laajennus-middleware-tyyppinen-toiminta">Laajennus: Middleware-tyyppinen toiminta</h2>
+<p>Voit lisätä toimintoja, kuten autentikointi tai lokitus:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">FrontController</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">routes</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;/&quot;</span><span class="p">:</span> <span class="n">home_controller</span><span class="p">,</span>
+            <span class="s2">&quot;/about&quot;</span><span class="p">:</span> <span class="n">about_controller</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">handle_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_request</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_auth</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="s2">&quot;403 Kielletty&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">routes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">not_found_controller</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">handler</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">log_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[LOKITUS] Pyydetty: </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">check_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="o">==</span> <span class="s2">&quot;/admin&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Vastaus &quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="front-controller-web-kehyksissa">Front Controller web-kehyksissä</h2>
+<p>Monet modernit web-frameworkit <strong>sisältävät Front Controllerin</strong> rakenteeseensa:</p>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Front Controllerin toteutus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Flask</strong></td>
+<td><code>app.route()</code> ja <code>app.dispatch_request()</code></td>
+</tr>
+<tr>
+<td><strong>Django</strong></td>
+<td><code>urls.py</code> + <code>wsgi.py</code> (tai <code>asgi.py</code>)</td>
+</tr>
+<tr>
+<td><strong>FastAPI</strong></td>
+<td>Reititys + riippuvuuksien injektointi</td>
+</tr>
+</tbody>
+</table>
+<h3 id="esimerkki-flaskissa">Esimerkki Flaskissa</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">home</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Etusivu&quot;</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/about&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">about</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Tietosivu&quot;</span>
+
+<span class="c1"># Flask käyttää sisäisesti Front Controller -mallia</span>
+</code></pre></div>
+
+<h2 id="hyodyt-ja-haitat">Hyödyt ja haitat</h2>
+<table>
+<thead>
+<tr>
+<th>Hyödyt</th>
+<th>Haitat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keskitetty hallinta</td>
+<td>Lisää mahdollisesti monoliittisuutta</td>
+</tr>
+<tr>
+<td>Yhtenäinen autentikointi ja virheenkäsittely</td>
+<td>Voi olla pullonkaula</td>
+</tr>
+<tr>
+<td>Helppo laajentaa (middleware, lokitus, yms.)</td>
+<td>Koodi voi kasvaa liian monimutkaiseksi</td>
+</tr>
+<tr>
+<td>Parempi ylläpidettävyys ja testattavuus</td>
+<td>Vähemmän joustavuutta pienissä skripteissä</td>
+</tr>
+</tbody>
+</table>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Keskittää kaikki pyynnöt yhden pisteen kautta</td>
+</tr>
+<tr>
+<td>Soveltuu</td>
+<td>Web-sovellukset, MVC-arkkitehtuuri, REST-rajapinnat</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Helpottaa hallintaa, valvontaa ja laajennettavuutta</td>
+</tr>
+<tr>
+<td>Pythonin etu</td>
+<td>Helppo rakentaa tai käyttää olemassa olevien frameworkien kautta</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kayttokohteita">Käyttökohteita</h2>
+<ul>
+<li>Web-frameworkit</li>
+<li>REST-API\:t</li>
+<li>Botit (esim. Discord-botit)</li>
+<li>Komentopohjaiset CLI-sovellukset, joissa komennot reititetään keskitetysti</li>
+</ul>
+<p><strong>Front Controller</strong> on olennainen osa skaalautuvaa sovellusarkkitehtuuria, erityisesti <strong>web- ja palvelinsovelluksissa</strong>. Pythonissa voit rakentaa sen kevyesti itse tai käyttää frameworkeja, jotka tarjoavat sen valmiiksi.</p>
+</div>
+</body>
+</html>

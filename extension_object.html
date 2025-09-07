@@ -1,0 +1,260 @@
+
+<html>
+<head>
+<title>
+Extension Object 
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="extension-object-suunnittelumalli-pythonissa">Extension Object -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-extension-object-malli">Mikä on Extension Object -malli?</h3>
+<p><strong>Extension Object -malli</strong> mahdollistaa olion toiminnallisuuden laajentamisen <strong>kiinnittämällä</strong> siihen erillisiä laajennuksia (<em>extensions</em>), jotka tarjoavat lisäominaisuuksia.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong></p>
+<ul>
+<li>Mahdollistaa olion laajentaminen ilman, että sen koodia muutetaan.</li>
+<li>Eristää laajennukset omiksi erillisiksi objekteiksi, jotka voidaan liittää dynaamisesti.</li>
+<li>Tarjoaa joustavuutta ja modulaarisuutta.</li>
+</ul>
+</blockquote>
+<h3 id="mihin-mallia-kaytetaan">Mihin mallia käytetään?</h3>
+<ul>
+<li>Laajennettavat järjestelmät, joissa olion toiminnallisuus voi muuttua tai kasvaa ajan myötä</li>
+<li>Plug-in -tyyppiset arkkitehtuurit</li>
+<li>Toiminnallisuuden konfigurointi ajo-ajossa</li>
+</ul>
+<h2 id="python-esimerkki-extension-object-malli">Python-esimerkki: Extension Object -malli</h2>
+<h3 id="1-perusluokka-johon-laajennukset-kiinnitetaan">1. Perusluokka, johon laajennukset kiinnitetään</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CoreObject</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_extensions</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">add_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extension</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_extensions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">extension</span>
+
+    <span class="k">def</span> <span class="nf">get_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extensions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="2-laajennusluokat-extensionit">2. Laajennusluokat (extensionit)</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">LoggerExtension</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[LOG]: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">SerializerExtension</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">json</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-kaytto-lisataan-ja-kaytetaan-laajennuksia">3. Käyttö: lisätään ja käytetään laajennuksia</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">obj</span> <span class="o">=</span> <span class="n">CoreObject</span><span class="p">()</span>
+
+<span class="c1"># Lisätään logger-laajennus</span>
+<span class="n">obj</span><span class="o">.</span><span class="n">add_extension</span><span class="p">(</span><span class="s1">&#39;logger&#39;</span><span class="p">,</span> <span class="n">LoggerExtension</span><span class="p">())</span>
+
+<span class="c1"># Lisätään serializer-laajennus</span>
+<span class="n">obj</span><span class="o">.</span><span class="n">add_extension</span><span class="p">(</span><span class="s1">&#39;serializer&#39;</span><span class="p">,</span> <span class="n">SerializerExtension</span><span class="p">())</span>
+
+<span class="c1"># Käytetään laajennuksia</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_extension</span><span class="p">(</span><span class="s1">&#39;logger&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">logger</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;Tämä on logiviesti.&quot;</span><span class="p">)</span>
+
+<span class="n">serializer</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_extension</span><span class="p">(</span><span class="s1">&#39;serializer&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">serializer</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Maija&#39;</span><span class="p">,</span> <span class="s1">&#39;age&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">serializer</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">LOG</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">Tämä</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="n">logiviesti</span><span class="p">.</span>
+<span class="err">{</span><span class="ss">&quot;name&quot;</span><span class="err">:</span><span class="w"> </span><span class="ss">&quot;Maija&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">&quot;age&quot;</span><span class="err">:</span><span class="w"> </span><span class="mi">30</span><span class="err">}</span>
+</code></pre></div>
+
+<h3 id="4-vapaaehtoinen-dynaaminen-delegointi-laajennuksille">4. Vapaaehtoinen dynaaminen delegointi laajennuksille</h3>
+<p>Voimme myös tehdä perusolion metodin, joka delegoi laajennuksille, mikä helpottaa käyttöä:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CoreObject</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_extensions</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">add_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extension</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_extensions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">extension</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extensions</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ext</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ext</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&#39; object has no attribute &#39;</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">obj</span> <span class="o">=</span> <span class="n">CoreObject</span><span class="p">()</span>
+<span class="n">obj</span><span class="o">.</span><span class="n">add_extension</span><span class="p">(</span><span class="s1">&#39;logger&#39;</span><span class="p">,</span> <span class="n">LoggerExtension</span><span class="p">())</span>
+<span class="n">obj</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;Delegoitua lokia ilman get_extension-kutsua.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">LOG</span><span class="o">]</span><span class="err">:</span><span class="w"> </span><span class="n">Delegoitua</span><span class="w"> </span><span class="n">lokia</span><span class="w"> </span><span class="n">ilman</span><span class="w"> </span><span class="n">get_extension</span><span class="o">-</span><span class="n">kutsua</span><span class="p">.</span>
+</code></pre></div>
+
+<h2 id="hyodyt">Hyödyt</h2>
+<p>✅ Laajennukset erillisinä, modulaarisina kokonaisuuksina<br />
+✅ Voidaan lisätä, poistaa tai vaihtaa ajo-ajossa<br />
+✅ Vähentää perintäketjujen monimutkaisuutta<br />
+✅ Mahdollistaa olion dynaamisen toiminnallisuuden laajentamisen</p>
+<h2 id="haitat">Haitat</h2>
+<p>⚠️ Lisää hieman monimutkaisuutta koodiin<br />
+⚠️ Vaatii hallintaa laajennusten nimistä ja vastuista<br />
+⚠️ Voi vaikeuttaa virheiden jäljittämistä, jos delegointi on liian dynaamista</p>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Laajentaa olion toiminnallisuutta liittämällä extension-olioita</td>
+</tr>
+<tr>
+<td>Toteutus Pythonissa</td>
+<td>Säilö laajennukset sanakirjaan ja delegoi tarvittaessa</td>
+</tr>
+<tr>
+<td>Soveltuvuus</td>
+<td>Joustavat, muokattavat oliot, plug-in -järjestelmät</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Modulaarisuus, laajennettavuus, joustavuus</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Lisämonimutkaisuus, virheiden jäljitys voi hankaloitua</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Extension Object -malli</strong> tarjoaa joustavan tavan kasvattaa olioiden toiminnallisuutta dynaamisesti ja hallitusti. Se on erinomainen valinta tilanteisiin, joissa olion vastuut voivat muuttua ajan myötä tai kun halutaan pitää ydinkoodi siistinä ja erillään laajennuksista.</p>
+</div>
+</body>
+</html>

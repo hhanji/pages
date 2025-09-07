@@ -1,0 +1,246 @@
+
+<html>
+<head>
+<title>
+Scheduler 
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="scheduler-suunnittelumalli-pythonissa">Scheduler -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-scheduler">Mikä on Scheduler?</h3>
+<p><strong>Scheduler</strong>-suunnittelumalli vastaa tehtävien ajoittamisesta ja hallinnasta ohjelmassa. Sen tehtävänä on päättää, milloin ja missä järjestyksessä eri tehtävät tai toiminnot suoritetaan.</p>
+<p>Scheduler-malli on keskeinen erityisesti moniajoa ja aikataulutusta vaativissa järjestelmissä, kuten käyttöjärjestelmissä, palvelimissa ja ohjelmistoissa, jotka käsittelevät taustatehtäviä tai toistuvia ajastettuja tapahtumia.</p>
+<h2 id="milloin-kayttaa">Milloin käyttää?</h2>
+<ul>
+<li>Kun halutaan ajastaa toistuvia tehtäviä (esim. tietojen varmuuskopiointi, raportointi)</li>
+<li>Kun halutaan hallita samanaikaisesti suoritettavia tehtäviä järjestelmällisesti</li>
+<li>Kun halutaan toteuttaa moniajo ja resurssien hallinta</li>
+</ul>
+<h2 id="yksinkertainen-scheduler-pythonissa-tehtavien-ajoitus-sched-moduulilla">Yksinkertainen Scheduler Pythonissa: tehtävien ajoitus <code>sched</code>-moduulilla</h2>
+<p>Python tarjoaa valmiin <strong><code>sched</code></strong>-moduulin, jolla voi toteuttaa yksinkertaisen tapahtumapohjaisen schedulerin.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">sched</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">sched</span><span class="o">.</span><span class="n">scheduler</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tehtävä </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> suoritetaan kellon aikaan </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Ajastetaan tehtäviä</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">enter</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">argument</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">,))</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">enter</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">argument</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,))</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">enter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">argument</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">,))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scheduler käynnistyy...&quot;</span><span class="p">)</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scheduler lopetti.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="selitys">Selitys:</h3>
+<ul>
+<li><code>enter(delay, priority, action, argument=())</code> lisää tehtävän ajastoon</li>
+<li><code>delay</code> on viive sekunteina</li>
+<li><code>priority</code> määrittää suoritusten järjestyksen jos ajankohdat ovat samat</li>
+<li><code>scheduler.run()</code> käynnistää schedulerin, joka suorittaa tehtävät ajastettuna</li>
+</ul>
+<h2 id="esimerkki-yksinkertainen-tehtavien-ajastin-taustasaikeella">Esimerkki: Yksinkertainen tehtävien ajastin taustasäikeellä</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">sched</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">scheduler</span> <span class="o">=</span> <span class="n">sched</span><span class="o">.</span><span class="n">scheduler</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">periodic_task</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%X</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">] Tehtävä </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> suoritetaan.&quot;</span><span class="p">)</span>
+    <span class="c1"># Ajastetaan uudelleen 3 sekunnin päästä</span>
+    <span class="n">scheduler</span><span class="o">.</span><span class="n">enter</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">periodic_task</span><span class="p">,</span> <span class="n">argument</span><span class="o">=</span><span class="p">(</span><span class="n">name</span><span class="p">,))</span>
+
+<span class="k">def</span> <span class="nf">run_scheduler</span><span class="p">():</span>
+    <span class="n">scheduler</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+<span class="c1"># Ajastetaan ensimmäinen tehtävä</span>
+<span class="n">scheduler</span><span class="o">.</span><span class="n">enter</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">periodic_task</span><span class="p">,</span> <span class="n">argument</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;T1&quot;</span><span class="p">,))</span>
+
+<span class="c1"># Käynnistetään scheduler erillisessä säikeessä</span>
+<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">run_scheduler</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Pääsäie jatkaa omaa työtään</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%X</span><span class="s1">&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">] Pääsäie on käynnissä...&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="scheduler-ja-asynkroninen-ohjelmointi-asyncio">Scheduler ja asynkroninen ohjelmointi: <code>asyncio</code></h2>
+<p>Pythonin <code>asyncio</code>-kirjasto sisältää kehittyneemmän aikataulutusjärjestelmän, jossa tehtävät voidaan ajoittaa tapahtumasilmukkaan.</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">periodic_task</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">interval</span><span class="p">):</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">] Tehtävä </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> suoritetaan&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Käynnistetään kaksi toistuvaa tehtävää eri aikaväleillä</span>
+    <span class="n">task1</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">periodic_task</span><span class="p">(</span><span class="s2">&quot;T1&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">task2</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">periodic_task</span><span class="p">(</span><span class="s2">&quot;T2&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># Suoritetaan 10 sekuntia</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+
+<h2 id="scheduler-mallin-hyodyt">Scheduler-mallin hyödyt</h2>
+<ul>
+<li>Tehtävien suoritus ajastettuna tai toistuvasti</li>
+<li>Ajanhallinnan keskittäminen ja hallittu moniajo</li>
+<li>Helppo ylläpitää ja laajentaa eri tehtävien aikatauluja</li>
+</ul>
+<h2 id="scheduler-mallin-haasteet">Scheduler-mallin haasteet</h2>
+<ul>
+<li>Ajoituksen tarkkuus riippuu järjestelmästä ja käytetyistä työkaluista</li>
+<li>Vaatii huolellista synkronointia monisäikeisissä sovelluksissa</li>
+<li>Kompleksinen scheduler voi vaatia paljon tilanhallintaa</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<p>Scheduler-suunnittelumalli tarjoaa rakenteen ja logiikan tehtävien aikatauluttamiseen ja suorituksen hallintaan. Pythonin <code>sched</code>-moduuli ja <code>asyncio</code> tarjoavat hyvät työkalut erilaisten scheduler-ratkaisujen toteuttamiseen.</p>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Malli</td>
+<td>Tehtävien aikataulutus</td>
+</tr>
+<tr>
+<td>Käyttötarkoitus</td>
+<td>Taustatehtävät, moniajo</td>
+</tr>
+<tr>
+<td>Python-työkalut</td>
+<td><code>sched</code>, <code>asyncio</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>

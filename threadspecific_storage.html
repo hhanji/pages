@@ -1,0 +1,250 @@
+
+<html>
+<head>
+<title>
+Thread-specific Storage 
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="thread-specific-storage-suunnittelumalli-pythonissa">Thread-specific Storage -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-thread-specific-storage">Mikä on Thread-specific Storage?</h3>
+<p><strong>Thread-specific Storage (TSS)</strong> tarkoittaa säikeiden omaa yksilöllistä tilaa, joka on kunkin säikeen käytettävissä. Tämä mahdollistaa esimerkiksi säikeiden välisen tietojen eristämisen ilman, että tietoja tarvitsee välittää eksplisiittisesti funktioiden kautta.</p>
+<blockquote>
+<p><strong>Tavoite:</strong><br />
+Tarjota jokaiselle säikeelle oma kopio muuttujasta tai tilasta, jolloin säikeet eivät vahingossa vaikuta toistensa tietoihin.</p>
+</blockquote>
+<h2 id="milloin-kayttaa">Milloin käyttää?</h2>
+<ul>
+<li>Kun halutaan säikeille omaa muuttujaa tai tilaa</li>
+<li>Kun halutaan välttää säikeiden välistä tilan sekaantumista</li>
+<li>Kun halutaan välttää monimutkaista lukitusten hallintaa yksinkertaisissa tilanteissa</li>
+</ul>
+<h2 id="pythonin-threadinglocal-luokka">Pythonin <code>threading.local</code> -luokka</h2>
+<p>Python tarjoaa <code>threading.local</code>-luokan, jonka avulla voi luoda säikeille oman tilan.</p>
+<h3 id="esimerkki-yksinkertainen-thread-specific-storage">Esimerkki: Yksinkertainen Thread-specific Storage</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="c1"># Luodaan thread-local storage -objekti</span>
+<span class="n">thread_local</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">number</span><span class="p">):</span>
+    <span class="n">thread_local</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">number</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Säie </span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2"> asetettu arvoon </span><span class="si">{</span><span class="n">thread_local</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">process</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">process</span><span class="p">():</span>
+    <span class="c1"># Käytetään säikeen omaa arvoa</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Säie </span><span class="si">{</span><span class="n">threading</span><span class="o">.</span><span class="n">current_thread</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> käsittelee arvoa </span><span class="si">{</span><span class="n">thread_local</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">worker</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="p">,))</span>
+    <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="selitys">Selitys:</h3>
+<ul>
+<li><code>thread_local.value</code> on jokaiselle säikeelle oma muuttuja</li>
+<li>Säikeet eivät jaa toistensa <code>value</code>-arvoa, vaikka muuttuja näyttää samalta</li>
+</ul>
+<h2 id="esimerkki-thread-specific-storage-kaytossa-tietokantayhteyksissa">Esimerkki: Thread-specific Storage käytössä tietokantayhteyksissä</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="k">class</span> <span class="nc">DatabaseConnection</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">threading</span><span class="o">.</span><span class="n">current_thread</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> yhdistää tietokantaan.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sql</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Ei yhteyttä tietokantaan!&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">threading</span><span class="o">.</span><span class="n">current_thread</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> suorittaa kyselyn: </span><span class="si">{</span><span class="n">sql</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">thread_local</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">get_connection</span><span class="p">():</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">thread_local</span><span class="p">,</span> <span class="s2">&quot;db_conn&quot;</span><span class="p">):</span>
+        <span class="n">thread_local</span><span class="o">.</span><span class="n">db_conn</span> <span class="o">=</span> <span class="n">DatabaseConnection</span><span class="p">()</span>
+        <span class="n">thread_local</span><span class="o">.</span><span class="n">db_conn</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">thread_local</span><span class="o">.</span><span class="n">db_conn</span>
+
+<span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">sql</span><span class="p">):</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">get_connection</span><span class="p">()</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">queries</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SELECT * FROM users&quot;</span><span class="p">,</span> <span class="s2">&quot;SELECT * FROM orders&quot;</span><span class="p">,</span> <span class="s2">&quot;SELECT * FROM products&quot;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">queries</span><span class="p">:</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">worker</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">q</span><span class="p">,))</span>
+    <span class="n">threads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</code></pre></div>
+
+<h2 id="hyodyt">Hyödyt</h2>
+<ul>
+<li>Säikeiden välinen tila pysyy erillään ja turvallisena</li>
+<li>Ei tarvita monimutkaisia lukkoja yksinkertaisissa tapauksissa</li>
+<li>Selkeä ja helppokäyttöinen rajapinta säikeiden tilalle</li>
+</ul>
+<h2 id="haasteet">Haasteet</h2>
+<ul>
+<li>Ei sovi monisäikeisten objektien jakamiseen, vain säikeiden omaan tilaan</li>
+<li>Liiallinen käyttö voi johtaa vaikeasti jäljitettäviin virheisiin</li>
+<li>Tarvitaan huolellisuutta, ettei säikeille jää &ldquo;vanhoja&rdquo; arvoja</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<p><strong>Thread-specific Storage</strong> on tehokas malli, joka mahdollistaa säikeiden oman tilan hallinnan Pythonissa helposti <code>threading.local</code>-luokan avulla. Se auttaa tekemään säikeistä turvallisempia ja eristetympiä.</p>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Malli</td>
+<td>Säikeiden oma tila</td>
+</tr>
+<tr>
+<td>Käyttötarkoitus</td>
+<td>Tiedon eristäminen säikeille</td>
+</tr>
+<tr>
+<td>Python-työkalu</td>
+<td><code>threading.local</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>

@@ -1,0 +1,233 @@
+
+<html>
+<head>
+<title>
+Balking
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="balking-suunnittelumalli-pythonissa">Balking-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-balking-malli">Mikä on Balking-malli?</h3>
+<p><strong>Balking</strong>-suunnittelumalli on käytännöllinen tapa käsitellä tiloja, joissa halutaan estää toiminnon suorittaminen, jos olio ei ole valmiina tai tietyt ehdot eivät täyty. Toisin sanoen, kun toiminto pyydetään, mutta olio on tilassa, jossa toimintaa ei voi tehdä, toiminto hylätään &ldquo;balkataan&rdquo; eikä suoriteta.</p>
+<blockquote>
+<p><strong>Tavoite:</strong><br />
+Välttää tarpeeton tai virheellinen toiminnon suoritus, kun olio ei ole toimintakykyinen.</p>
+</blockquote>
+<h2 id="milloin-kayttaa-balking-mallia">Milloin käyttää Balking-mallia?</h2>
+<ul>
+<li>Kun toiminto voi olla tilassa, jossa se ei ole sallittu tai järkevä</li>
+<li>Kun halutaan estää samanaikaiset tai päällekkäiset operaatiot</li>
+<li>Kun halutaan yksinkertaisesti hylätä pyyntö ilman virheilmoitusta, jos ehto ei täyty</li>
+</ul>
+<h2 id="esimerkki-tulostuslaite-joka-ei-kaynnisty-jos-se-on-jo-kaynnissa">Esimerkki: Tulostuslaite, joka ei käynnisty, jos se on jo käynnissä</h2>
+<h3 id="1-tulostuslaitteen-luokka-joka-kayttaa-balking-mallia">1. Tulostuslaitteen luokka, joka käyttää Balking-mallia</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">class</span> <span class="nc">Printer</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_printing</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">print_document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_printing</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Printer is busy. Balking!&quot;</span><span class="p">)</span>
+                <span class="k">return</span>  <span class="c1"># Balking: laite on varattu, ei tehdä mitään</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_is_printing</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Printing document: </span><span class="si">{</span><span class="n">document</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Simuloi tulostusaikaa</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Printing completed.&quot;</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_is_printing</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+<h3 id="2-kaytto">2. Käyttö</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">printer</span> <span class="o">=</span> <span class="n">Printer</span><span class="p">()</span>
+
+<span class="c1"># Kokeillaan samanaikaista tulostusta useammassa säikeessä</span>
+<span class="k">def</span> <span class="nf">try_print</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+    <span class="n">printer</span><span class="o">.</span><span class="n">print_document</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="n">t1</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">try_print</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Dokumentti 1&quot;</span><span class="p">,))</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">try_print</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Dokumentti 2&quot;</span><span class="p">,))</span>
+
+<span class="n">t1</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">t2</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="n">t1</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="n">t2</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</code></pre></div>
+
+<p><strong>Tulostus (esimerkki):</strong></p>
+<div class="codehilite"><pre><span></span><code>Printing document: Dokumentti 1
+Printer is busy. Balking!
+Printing completed.
+</code></pre></div>
+
+<h2 id="miten-balking-toimii-tassa">Miten Balking toimii tässä?</h2>
+<ul>
+<li>Kun <code>print_document</code> kutsutaan ja tulostin on varattu (<code>_is_printing=True</code>), toinen pyyntö hylätään välittömästi ilman odotusta tai virheilmoitusta.</li>
+<li>Tämä estää päällekkäiset tulostukset ja turhat jonotukset.</li>
+<li>Lukitus (<code>_lock</code>) varmistaa, että tila on konsistentti monisäikeisessä käytössä.</li>
+</ul>
+<h2 id="hyodyt">Hyödyt</h2>
+<ul>
+<li>Estää tarpeettomat tai virheelliset toiminnot helposti</li>
+<li>Parantaa resurssien hallintaa ja estää kilpailutilanteita</li>
+<li>Yksinkertainen ja tehokas tapa hallita tilariippuvaisia operaatioita</li>
+</ul>
+<h2 id="haitat">Haitat</h2>
+<ul>
+<li>Toimintoa hylätään hiljaisesti, joten käyttäjän pitää huomioida mahdollinen epäonnistuminen</li>
+<li>Ei sovi tilanteisiin, joissa toiminnon pitäisi aina odottaa suorittamista tai tehdä jonotus</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Estää toiminnon suoritus, jos tila ei salli</td>
+</tr>
+<tr>
+<td>Toteutus</td>
+<td>Tarkistus tilasta ja toiminnon hylkäys tarvittaessa</td>
+</tr>
+<tr>
+<td>Käyttö</td>
+<td>Monisäikeisyys, resurssien hallinta, tilariippuvuudet</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Balking-suunnittelumalli</strong> on yksinkertainen mutta tehokas tapa hallita tilaperusteisia rajoituksia toiminnossa ja varmistaa resurssien järkevä käyttö.</p>
+</div>
+</body>
+</html>

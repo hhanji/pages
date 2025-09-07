@@ -1,0 +1,245 @@
+
+<html>
+<head>
+<title>
+Memento
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="memento-suunnittelumalli-pythonissa">Memento-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-memento">Mikä on Memento?</h3>
+<p><strong>Memento-suunnittelumalli</strong> mahdollistaa olion sisäisen tilan tallentamisen ja palauttamisen myöhemmin ilman, että tila paljastetaan ulkopuolisille. Tämä on hyödyllistä mm. kumoa-toiminnallisuudessa, historiassa ja tilanhallinnassa.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong><br />
+Tallentaa ja palauttaa olion tila siten, että kapselointi säilyy.</p>
+</blockquote>
+<h2 id="mallin-osat">Mallin osat</h2>
+<ul>
+<li><strong>Originator</strong>: Olio, jonka tila halutaan tallentaa ja palauttaa</li>
+<li><strong>Memento</strong>: Tallentaa Originatorin tilan</li>
+<li><strong>Caretaker</strong>: Hallitsee mementoja (esim. tallentaa historiat)</li>
+</ul>
+<h2 id="python-esimerkki">Python-esimerkki</h2>
+<h3 id="1-memento-luokka-tallentaa-tilan">1. Memento-luokka: tallentaa tilan</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Memento</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">state</span>
+
+    <span class="k">def</span> <span class="nf">get_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+</code></pre></div>
+
+<h3 id="2-originator-luokka-tila-ja-tilan-tallennuspalautus">2. Originator-luokka: tila ja tilan tallennus/palautus</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Originator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">set_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tila asetettu: </span><span class="si">{</span><span class="n">state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">state</span>
+
+    <span class="k">def</span> <span class="nf">save_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tila tallennettu.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Memento</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">restore_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memento</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">memento</span><span class="o">.</span><span class="n">get_state</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tila palautettu: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-caretaker-luokka-hallitsee-tilahistoriaa">3. Caretaker-luokka: hallitsee tilahistoriaa</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Caretaker</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mementos</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">add_memento</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memento</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mementos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">memento</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_memento</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mementos</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+</code></pre></div>
+
+<h3 id="4-kaytto">4. Käyttö</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">originator</span> <span class="o">=</span> <span class="n">Originator</span><span class="p">()</span>
+<span class="n">caretaker</span> <span class="o">=</span> <span class="n">Caretaker</span><span class="p">()</span>
+
+<span class="n">originator</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="s2">&quot;Tila 1&quot;</span><span class="p">)</span>
+<span class="n">caretaker</span><span class="o">.</span><span class="n">add_memento</span><span class="p">(</span><span class="n">originator</span><span class="o">.</span><span class="n">save_state</span><span class="p">())</span>
+
+<span class="n">originator</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="s2">&quot;Tila 2&quot;</span><span class="p">)</span>
+<span class="n">caretaker</span><span class="o">.</span><span class="n">add_memento</span><span class="p">(</span><span class="n">originator</span><span class="o">.</span><span class="n">save_state</span><span class="p">())</span>
+
+<span class="n">originator</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="s2">&quot;Tila 3&quot;</span><span class="p">)</span>
+
+<span class="c1"># Palautetaan tila 1</span>
+<span class="n">originator</span><span class="o">.</span><span class="n">restore_state</span><span class="p">(</span><span class="n">caretaker</span><span class="o">.</span><span class="n">get_memento</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+<span class="c1"># Palautetaan tila 2</span>
+<span class="n">originator</span><span class="o">.</span><span class="n">restore_state</span><span class="p">(</span><span class="n">caretaker</span><span class="o">.</span><span class="n">get_memento</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>Tila asetettu: Tila 1
+Tila tallennettu.
+Tila asetettu: Tila 2
+Tila tallennettu.
+Tila asetettu: Tila 3
+Tila palautettu: Tila 1
+Tila palautettu: Tila 2
+</code></pre></div>
+
+<h2 id="hyodyt">Hyödyt</h2>
+<ul>
+<li>Mahdollistaa tilan tallentamisen ja palauttamisen kapseloinnin säilyttäen</li>
+<li>Helppo toteuttaa ja käyttää</li>
+<li>Tukee toimintoja kuten undo/redo, historian tallennus</li>
+</ul>
+<h2 id="haitat">Haitat</h2>
+<ul>
+<li>Voi kuluttaa muistia, jos tallennetaan paljon tiloja</li>
+<li>Suuret tilat voivat hidastaa toimintaa, joten harkinta on tarpeen</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Osa</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Originator</td>
+<td>Olio, jonka tila tallennetaan</td>
+</tr>
+<tr>
+<td>Memento</td>
+<td>Tallentaa Originatorin tilan</td>
+</tr>
+<tr>
+<td>Caretaker</td>
+<td>Hallitsee mementoja, esim. historiat</td>
+</tr>
+</tbody>
+</table>
+<p>Memento-malli on kätevä työkalu, kun halutaan säilyttää olion tila ilman, että paljastetaan sen sisäistä rakennetta. Pythonin joustavuus tekee sen toteuttamisesta sujuvaa ja ymmärrettävää.</p>
+</div>
+</body>
+</html>

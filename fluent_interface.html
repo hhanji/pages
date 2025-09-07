@@ -1,0 +1,260 @@
+
+<html>
+<head>
+<title>
+Fluent Interface 
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="fluent-interface-suunnittelumalli-pythonissa">Fluent Interface -suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-fluent-interface">Mikä on Fluent Interface?</h3>
+<p><strong>Fluent Interface</strong> on suunnittelumalli, jossa metodikutsut on järjestetty ketjutettaviksi kutsuiksi, jotka palauttavat yleensä saman olion (tai sen tilan), jolloin kutsuja voi yhdistää sulavasti peräkkäin.</p>
+<blockquote>
+<p><strong>Tavoite:</strong></p>
+<ul>
+<li>Parantaa koodin luettavuutta</li>
+<li>Mahdollistaa konfiguroinnin tai toiminnan rakentaminen &ldquo;lauseenomaisesti&rdquo;</li>
+<li>Vähentää toistuvaa koodia</li>
+</ul>
+</blockquote>
+<h2 id="perusidea">Perusidea</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">obj</span><span class="o">.</span><span class="n">method1</span><span class="p">()</span><span class="o">.</span><span class="n">method2</span><span class="p">()</span><span class="o">.</span><span class="n">method3</span><span class="p">()</span>
+</code></pre></div>
+
+<p>Jokainen metodi palauttaa olion (<code>self</code>), jolloin ketju jatkuu.</p>
+<h2 id="esimerkki-fluent-interface-luokka">Esimerkki: Fluent Interface luokka</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">QueryBuilder</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">fields</span><span class="p">):</span>
+        <span class="n">fields_list</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_query</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;SELECT </span><span class="si">{</span><span class="n">fields_list</span><span class="si">}</span><span class="s2"> &quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">from_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_query</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;FROM </span><span class="si">{</span><span class="n">table_name</span><span class="si">}</span><span class="s2"> &quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">where</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">condition</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_query</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;WHERE </span><span class="si">{</span><span class="n">condition</span><span class="si">}</span><span class="s2"> &quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_query</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</code></pre></div>
+
+<h2 id="kaytto">Käyttö</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">qb</span> <span class="o">=</span> <span class="n">QueryBuilder</span><span class="p">()</span>
+<span class="n">query</span> <span class="o">=</span> <span class="p">(</span><span class="n">qb</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">)</span>
+           <span class="o">.</span><span class="n">from_table</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="p">)</span>
+           <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;age &gt; 18&quot;</span><span class="p">)</span>
+           <span class="o">.</span><span class="n">build</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code>SELECT name, age FROM users WHERE age &gt; 18
+</code></pre></div>
+
+<h2 id="toinen-esimerkki-fluent-interface-ketjutettava-konfiguraattori">Toinen esimerkki: Fluent Interface ketjutettava konfiguraattori</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">CarConfigurator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sunroof</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color_name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_color</span> <span class="o">=</span> <span class="n">color_name</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">engine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_type</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span> <span class="o">=</span> <span class="n">engine_type</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">sunroof</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">has_sunroof</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sunroof</span> <span class="o">=</span> <span class="n">has_sunroof</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Auto: Väri=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_color</span><span class="si">}</span><span class="s2">, Moottori=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="si">}</span><span class="s2">, Kattoluukku=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_sunroof</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">config</span> <span class="o">=</span> <span class="n">CarConfigurator</span><span class="p">()</span>
+<span class="n">car_description</span> <span class="o">=</span> <span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="s2">&quot;Punainen&quot;</span><span class="p">)</span>
+                         <span class="o">.</span><span class="n">engine</span><span class="p">(</span><span class="s2">&quot;V8&quot;</span><span class="p">)</span>
+                         <span class="o">.</span><span class="n">sunroof</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                         <span class="o">.</span><span class="n">build</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">car_description</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">Auto</span><span class="o">:</span><span class="w"> </span><span class="n">Väri</span><span class="o">=</span><span class="n">Punainen</span><span class="o">,</span><span class="w"> </span><span class="n">Moottori</span><span class="o">=</span><span class="n">V8</span><span class="o">,</span><span class="w"> </span><span class="n">Kattoluukku</span><span class="o">=</span><span class="n">True</span>
+</code></pre></div>
+
+<h2 id="fluent-interface-mallin-hyodyt">Fluent Interface -mallin hyödyt</h2>
+<ul>
+<li>Koodi on <strong>selkeää ja helposti luettavaa</strong></li>
+<li>Toimii hyvin tilanteissa, joissa halutaan <strong>ketjuttaa konfiguraatioita tai toimintoja</strong></li>
+<li>Vähentää koodin määrää ja parantaa sen ylläpidettävyyttä</li>
+</ul>
+<h2 id="huomioitavaa">Huomioitavaa</h2>
+<ul>
+<li>Metodien tulee aina palauttaa olio (<code>self</code>) tai tarvittaessa muu olio, jotta ketjutus toimii</li>
+<li>Liian pitkät ketjut voivat heikentää luettavuutta, joten tasapaino on tärkeä</li>
+<li>Ei sovi kaikkiin käyttötapauksiin, mutta erityisen hyödyllinen rakentajissa, kyselyissä ja konfiguraattoreissa</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Mahdollistaa ketjutettu metodikutsu</td>
+</tr>
+<tr>
+<td>Toteutus</td>
+<td>Palautetaan <code>self</code> metodeista</td>
+</tr>
+<tr>
+<td>Käyttökohteet</td>
+<td>Rakentajat, kyselyt, konfiguraattorit</td>
+</tr>
+<tr>
+<td>Edut</td>
+<td>Luettavuus, tiiviys, intuitiivisuus</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Voi johtaa liian pitkiin ketjuihin</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Fluent Interface -malli</strong> tekee koodista luonnollisemmin luettavaa ja rakentaa monimutkaisia toimintoja helposti ja selkeästi.</p>
+</div>
+</body>
+</html>

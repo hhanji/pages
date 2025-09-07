@@ -1,0 +1,301 @@
+
+<html>
+<head>
+<title>
+Delegation
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="delegation-suunnittelumalli-pythonissa">Delegation-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-delegation-pattern">Mikä on Delegation Pattern?</h3>
+<p><strong>Delegation Pattern</strong> on suunnittelumalli, jossa <strong>olio siirtää tehtävän (vastuun) toiselle oliolle</strong>, sen sijaan että toteuttaisi toiminnon itse.</p>
+<blockquote>
+<p><strong>Tarkoitus:</strong> Mahdollistaa koodin uudelleenkäyttö, joustava rakenteen muutos ja vastuujen jakaminen ilman perintää.</p>
+</blockquote>
+<h3 id="delegoinnin-periaate">Delegoinnin periaate</h3>
+<p>Yksinkertaistettuna:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Sen sijaan että toteutat metodin itse...</span>
+<span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="o">...</span>
+
+<span class="c1"># ...delegate it!</span>
+<span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_helper</span><span class="o">.</span><span class="n">do_something</span><span class="p">()</span>
+</code></pre></div>
+
+<h2 id="miksi-kayttaa-delegointia">Miksi käyttää delegointia?</h2>
+<ul>
+<li>Korvaa <strong>perinnän</strong> tilanteissa, joissa se ei ole soveltuva</li>
+<li>Vähentää <strong>moniperinnän tarvetta</strong></li>
+<li>Tukee <strong>komposition</strong> periaatetta: &ldquo;käytä koostamista mieluummin kuin perintää&rdquo;</li>
+<li>Tekee järjestelmästä <strong>joustavamman ja testattavamman</strong></li>
+</ul>
+<h2 id="esimerkki-delegointi-python-luokkien-valilla">Esimerkki: Delegointi Python-luokkien välillä</h2>
+<h3 id="1-palveluluokka">1. Palveluluokka</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Printer</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">print_document</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tulostetaan: </span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="2-asiakasluokka-joka-delegoi">2. Asiakasluokka, joka delegoi</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Report</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">content</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_printer</span> <span class="o">=</span> <span class="n">Printer</span><span class="p">()</span>  <span class="c1"># delegoitu olio</span>
+
+    <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># delegointi tapahtuu tässä</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_printer</span><span class="o">.</span><span class="n">print_document</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-kaytto">3. Käyttö</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span><span class="s2">&quot;Q3 Talousraportti&quot;</span><span class="p">)</span>
+<span class="n">report</span><span class="o">.</span><span class="n">print</span><span class="p">()</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">Tulostetaan</span><span class="o">:</span><span class="w"> </span><span class="n">Q3</span><span class="w"> </span><span class="n">Talousraportti</span>
+</code></pre></div>
+
+<h2 id="esimerkki-usean-vastuun-delegointi">Esimerkki: Usean vastuun delegointi</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Engine</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Moottori käynnistyy.&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Radio</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Soitetaan musiikkia.&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Car</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radio</span> <span class="o">=</span> <span class="n">Radio</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>  <span class="c1"># delegointi moottorille</span>
+
+    <span class="k">def</span> <span class="nf">play_music</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radio</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>    <span class="c1"># delegointi radiolle</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="n">car</span> <span class="o">=</span> <span class="n">Car</span><span class="p">()</span>
+<span class="n">car</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>        <span class="c1"># Moottori käynnistyy.</span>
+<span class="n">car</span><span class="o">.</span><span class="n">play_music</span><span class="p">()</span>   <span class="c1"># Soitetaan musiikkia.</span>
+</code></pre></div>
+
+<h2 id="delegointi-vs-perinta">Delegointi vs Perintä</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Delegointi</th>
+<th>Perintä</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rakenne</td>
+<td>&ldquo;Has-a&rdquo; (kompositio)</td>
+<td>&ldquo;Is-a&rdquo; (perintä)</td>
+</tr>
+<tr>
+<td>Joustavuus</td>
+<td>✅ Korkea (voi vaihtaa delegateja)</td>
+<td>⚠️ Alhaisempi</td>
+</tr>
+<tr>
+<td>Testattavuus</td>
+<td>✅ Hyvä</td>
+<td>⚠️ Vaatii usein enemmän kontekstia</td>
+</tr>
+<tr>
+<td>Uudelleenkäyttö</td>
+<td>✅ Voi käyttää useita delegateja</td>
+<td>⚠️ Sidottu perintäketjuun</td>
+</tr>
+</tbody>
+</table>
+<h2 id="delegointi-dynaamisesti-pythonissa">Delegointi dynaamisesti Pythonissa</h2>
+<p>Pythonin dynaamisuus mahdollistaa myös <strong>yleisdelegoinnin <code>__getattr__</code>-menetelmällä</strong>:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Delegator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_target</span> <span class="o">=</span> <span class="n">target</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="c1"># delegoi kaikki tuntemattomat metodit targetille</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_target</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">RealWorker</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">work</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Työntekijä työskentelee.&quot;</span><span class="p">)</span>
+
+<span class="n">delegator</span> <span class="o">=</span> <span class="n">Delegator</span><span class="p">(</span><span class="n">RealWorker</span><span class="p">())</span>
+<span class="n">delegator</span><span class="o">.</span><span class="n">work</span><span class="p">()</span>  <span class="c1"># → Työntekijä työskentelee.</span>
+</code></pre></div>
+
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tarkoitus</td>
+<td>Siirtää toiminto toiselle oliolle (delegate)</td>
+</tr>
+<tr>
+<td>Python-toteutus</td>
+<td>Käsin metodikutsussa tai <code>__getattr__</code>-metodilla</td>
+</tr>
+<tr>
+<td>Hyödyt</td>
+<td>Joustavuus, uudelleenkäyttö, ei tarvitse perintää</td>
+</tr>
+<tr>
+<td>Haitat</td>
+<td>Voi lisätä välikerroksia, vaikeuttaa debuggausta</td>
+</tr>
+<tr>
+<td>Soveltuu</td>
+<td>Adapterit, wrapperit, palvelut, rajapinnat, komposiitit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pahkinankuoressa">Pähkinänkuoressa</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Helper</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Apuolio tekee työn.&quot;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Client</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">helper</span> <span class="o">=</span> <span class="n">Helper</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">do</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="n">do</span><span class="p">()</span>  <span class="c1"># delegointi</span>
+</code></pre></div>
+
+<p><strong>Delegation Pattern</strong> tukee hyvää ohjelmointikäytäntöä: <strong>yhden vastuun per peruskomponentti</strong>, ja mahdollistaa <strong>laajennettavan ja ylläpidettävän rakenteen</strong> ilman monimutkaisia perintärakenteita.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,270 @@
+
+<html>
+<head>
+<title>
+Join
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="join-suunnittelumalli-pythonissa">Join-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-join-suunnittelumalli">Mikä on Join-suunnittelumalli?</h3>
+<p><strong>Join-suunnittelumalli</strong> on malli, jossa <strong>useita rinnakkaisia suorituksia (esim. säikeitä tai prosesseja)</strong> ajetaan yhtä aikaa, ja pääsuoritus <strong>odottaa niiden kaikkien valmistumista</strong>, ennen kuin se jatkaa. Tavoitteena on synkronoida rinnakkaiset tehtävät yhteisen päämäärän saavuttamiseksi.</p>
+<blockquote>
+<p><strong>Tavoite:</strong><br />
+Yhdistää (join) useita rinnakkaisia suorituksia niin, että ohjelman eteneminen jatkuu vasta, kun kaikki tarvittavat tehtävät ovat valmiit.</p>
+</blockquote>
+<h2 id="milloin-kayttaa-join-mallia">Milloin käyttää Join-mallia?</h2>
+<ul>
+<li>Kun haluat suorittaa useita tehtäviä rinnakkain ja yhdistää niiden tulokset</li>
+<li>Kun jokin toiminto riippuu usean rinnakkaisen prosessin tai säikeen valmistumisesta</li>
+<li>Kun halutaan säilyttää ohjelman kontrolli rinnakkaisten operaatioiden jälkeen</li>
+</ul>
+<h2 id="esimerkki-1-join-saikeiden-kanssa-threadingthreadjoin">Esimerkki 1: Join säikeiden kanssa (<code>threading.Thread.join()</code>)</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">duration</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">] Alkaa&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">] Valmis&quot;</span><span class="p">)</span>
+
+<span class="c1"># Luodaan kolme säiettä</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">task</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Tehtävä 1&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">task</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Tehtävä 2&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">t3</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">task</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Tehtävä 3&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Käynnistetään tehtävät...&quot;</span><span class="p">)</span>
+<span class="n">t1</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">t2</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">t3</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Odotetaan, että kaikki säikeet valmistuvat</span>
+<span class="n">t1</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="n">t2</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="n">t3</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Kaikki tehtävät suoritettu.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="tulostus">Tulostus:</h3>
+<div class="codehilite"><pre><span></span><code>Käynnistetään tehtävät...
+[Tehtävä 1] Alkaa
+[Tehtävä 2] Alkaa
+[Tehtävä 3] Alkaa
+[Tehtävä 3] Valmis
+[Tehtävä 1] Valmis
+[Tehtävä 2] Valmis
+Kaikki tehtävät suoritettu.
+</code></pre></div>
+
+<h2 id="esimerkki-2-join-prosessien-kanssa-multiprocessingprocessjoin">Esimerkki 2: Join prosessien kanssa (<code>multiprocessing.Process.join()</code>)</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">duration</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">] Alkaa&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">] Valmis&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">task</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Prosessi 1&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">p2</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">task</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Prosessi 2&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Käynnistetään prosessit...&quot;</span><span class="p">)</span>
+    <span class="n">p1</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="n">p2</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="c1"># Odotetaan prosessien valmistumista</span>
+    <span class="n">p1</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+    <span class="n">p2</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Kaikki prosessit suoritettu.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="esimerkki-3-join-asyncio-tehtavilla-asynciogather">Esimerkki 3: Join <code>asyncio</code>-tehtävillä (<code>asyncio.gather</code>)</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">task</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">duration</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">] Alkaa&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">] Valmis&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Tulos: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Aloitetaan tehtävät (asynkronisesti)...&quot;</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+        <span class="n">task</span><span class="p">(</span><span class="s2">&quot;Async 1&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="n">task</span><span class="p">(</span><span class="s2">&quot;Async 2&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">task</span><span class="p">(</span><span class="s2">&quot;Async 3&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Kaikki async-tehtävät valmiit.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tulokset:&quot;</span><span class="p">,</span> <span class="n">results</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+
+<h2 id="selitys">Selitys</h2>
+<ul>
+<li><strong><code>join()</code></strong> säikeissä ja prosesseissa pysäyttää pääohjelman etenemisen, kunnes säie tai prosessi on päättynyt.</li>
+<li><strong><code>asyncio.gather()</code></strong> odottaa usean asynkronisen tehtävän valmistumista yhtä aikaa – se on asynkronisen ohjelmoinnin &ldquo;join&rdquo;.</li>
+</ul>
+<h2 id="hyodyt">Hyödyt</h2>
+<ul>
+<li>Mahdollistaa tehokkaan rinnakkaisuuden hallinnan</li>
+<li>Estää ohjelman etenemisen ennen kuin kaikki rinnakkaiset operaatiot ovat valmiit</li>
+<li>Vähentää tarpeetonta odottelua: tehtävät suoritetaan samanaikaisesti</li>
+</ul>
+<h2 id="haitat">Haitat</h2>
+<ul>
+<li>Voi johtaa suorituspolun estymiseen (esim. deadlock), jos ei hallita oikein</li>
+<li>Jos yksi tehtävä epäonnistuu, se voi vaikuttaa koko join-operaatioon (esim. <code>gather</code> periytyy virheestä)</li>
+<li>Ylisuuri määrä rinnakkaisia tehtäviä voi kuormittaa järjestelmää</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Thread.join()</code></td>
+<td>Odottaa säikeen valmistumista</td>
+</tr>
+<tr>
+<td><code>Process.join()</code></td>
+<td>Odottaa prosessin valmistumista</td>
+</tr>
+<tr>
+<td><code>asyncio.gather()</code></td>
+<td>Odottaa kaikkien async-tehtävien valmistumista</td>
+</tr>
+<tr>
+<td>Käyttökohteet</td>
+<td>Rinnakkaisten tehtävien synkronointi</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Join-suunnittelumalli</strong> on yksinkertainen mutta tärkeä osa rinnakkaisten ohjelmien hallintaa. Se varmistaa, että ohjelma etenee vain, kun kaikki tarvittavat tehtävät on suoritettu onnistuneesti.</p>
+</div>
+</body>
+</html>

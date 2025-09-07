@@ -1,0 +1,302 @@
+
+<html>
+<head>
+<title>
+Messaging
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="messaging-suunnittelumalli-pythonissa">Messaging-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-messaging-suunnittelumalli">Mikä on Messaging-suunnittelumalli?</h3>
+<p><strong>Messaging-suunnittelumalli</strong> (viestinvälitysmalli) mahdollistaa kommunikoinnin kahden tai useamman komponentin välillä <strong>viestien</strong> avulla. Se perustuu ideaan, että <strong>tiedon ja käskyjen siirto tapahtuu viestien muodossa</strong> — ei suoraan metodikutsuilla tai objektien välisillä viittauksilla.</p>
+<p>Tämä malli on erityisen hyödyllinen <strong>löyhästi kytketyissä järjestelmissä</strong>, kuten mikropalveluissa, käyttöliittymissä tai monisäikeisissä/moniprosessisissa sovelluksissa.</p>
+<blockquote>
+<p><strong>Tavoite:</strong><br />
+Irrottaa viestin lähettäjä ja vastaanottaja toisistaan, jotta niiden ei tarvitse tietää toistensa olemassaolosta.</p>
+</blockquote>
+<h2 id="milloin-kayttaa-messaging-mallia">Milloin käyttää Messaging-mallia?</h2>
+<ul>
+<li>Kun halutaan <strong>löyhä kytkentä</strong> järjestelmän osien välille</li>
+<li>Kun tarvitaan <strong>asynkronista viestintää</strong> (esim. jonojen kautta)</li>
+<li>Kun eri komponentit voivat toimia <strong>eri ympäristöissä tai prosesseissa</strong></li>
+<li>Kun halutaan mallintaa <strong>event-driven</strong> -arkkitehtuuria</li>
+</ul>
+<h2 id="keskeiset-kasitteet">Keskeiset käsitteet</h2>
+<table>
+<thead>
+<tr>
+<th>Käsite</th>
+<th>Selitys</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Viestin lähettäjä</td>
+<td>Komponentti, joka luo ja lähettää viestin</td>
+</tr>
+<tr>
+<td>Viestin vastaanottaja</td>
+<td>Komponentti, joka vastaanottaa ja käsittelee viestin</td>
+</tr>
+<tr>
+<td>Viestivälittäjä</td>
+<td>(Joskus) komponentti, joka välittää viestit (esim. jono)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="esimerkki-viestien-lahetys-jonon-kautta-tuottajakuluttaja">Esimerkki: Viestien lähetys jonon kautta (tuottaja–kuluttaja)</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">queue</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># Viestijono</span>
+<span class="n">message_queue</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+
+<span class="c1"># Tuottaja</span>
+<span class="k">def</span> <span class="nf">producer</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;viesti </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Tuottaja] Lähettää: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">message_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Kuluttaja</span>
+<span class="k">def</span> <span class="nf">consumer</span><span class="p">():</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="n">message_queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">message</span> <span class="o">==</span> <span class="s2">&quot;loppu&quot;</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[Kuluttaja] Vastaanotti: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">message_queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+
+<span class="c1"># Käynnistetään säikeet</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">producer</span><span class="p">)</span>
+<span class="n">t2</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">consumer</span><span class="p">)</span>
+
+<span class="n">t1</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">t2</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="n">t1</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="n">message_queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;loppu&quot;</span><span class="p">)</span>
+<span class="n">t2</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="tulostus">Tulostus:</h3>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">Tuottaja</span><span class="o">]</span><span class="w"> </span><span class="nl">Lähettää</span><span class="p">:</span><span class="w"> </span><span class="n">viesti</span><span class="w"> </span><span class="mi">0</span>
+<span class="o">[</span><span class="n">Kuluttaja</span><span class="o">]</span><span class="w"> </span><span class="nl">Vastaanotti</span><span class="p">:</span><span class="w"> </span><span class="n">viesti</span><span class="w"> </span><span class="mi">0</span>
+<span class="o">[</span><span class="n">Tuottaja</span><span class="o">]</span><span class="w"> </span><span class="nl">Lähettää</span><span class="p">:</span><span class="w"> </span><span class="n">viesti</span><span class="w"> </span><span class="mi">1</span>
+<span class="o">[</span><span class="n">Kuluttaja</span><span class="o">]</span><span class="w"> </span><span class="nl">Vastaanotti</span><span class="p">:</span><span class="w"> </span><span class="n">viesti</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">...</span>
+</code></pre></div>
+
+<h2 id="esimerkki-viestinvalitys-sovelluskerroksen-sisalla">Esimerkki: Viestinvälitys sovelluskerroksen sisällä</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">Message</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">type_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">payload</span> <span class="o">=</span> <span class="n">payload</span>
+
+<span class="k">class</span> <span class="nc">MessageBus</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handlers</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">register_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message_type</span><span class="p">,</span> <span class="n">handler</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handlers</span><span class="p">[</span><span class="n">message_type</span><span class="p">]</span> <span class="o">=</span> <span class="n">handler</span>
+
+    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">handler</span><span class="p">:</span>
+            <span class="n">handler</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
+
+<span class="c1"># Käsittelijät</span>
+<span class="k">def</span> <span class="nf">handle_order</span><span class="p">(</span><span class="n">payload</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OrderHandler] Käsittelee tilausta: </span><span class="si">{</span><span class="n">payload</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">handle_payment</span><span class="p">(</span><span class="n">payload</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[PaymentHandler] Käsittelee maksua: </span><span class="si">{</span><span class="n">payload</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Käyttö</span>
+<span class="n">bus</span> <span class="o">=</span> <span class="n">MessageBus</span><span class="p">()</span>
+<span class="n">bus</span><span class="o">.</span><span class="n">register_handler</span><span class="p">(</span><span class="s2">&quot;order&quot;</span><span class="p">,</span> <span class="n">handle_order</span><span class="p">)</span>
+<span class="n">bus</span><span class="o">.</span><span class="n">register_handler</span><span class="p">(</span><span class="s2">&quot;payment&quot;</span><span class="p">,</span> <span class="n">handle_payment</span><span class="p">)</span>
+
+<span class="n">bus</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">Message</span><span class="p">(</span><span class="s2">&quot;order&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;product&quot;</span><span class="p">:</span> <span class="s2">&quot;kirja&quot;</span><span class="p">,</span> <span class="s2">&quot;qty&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}))</span>
+<span class="n">bus</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">Message</span><span class="p">(</span><span class="s2">&quot;payment&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="mf">29.99</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;kortti&quot;</span><span class="p">}))</span>
+</code></pre></div>
+
+<h3 id="tulostus_1">Tulostus:</h3>
+<div class="codehilite"><pre><span></span><code><span class="o">[</span><span class="n">OrderHandler</span><span class="o">]</span><span class="w"> </span><span class="n">Käsittelee</span><span class="w"> </span><span class="nl">tilausta</span><span class="p">:</span><span class="w"> </span><span class="err">{</span><span class="s1">&#39;product&#39;</span><span class="err">:</span><span class="w"> </span><span class="s1">&#39;kirja&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;qty&#39;</span><span class="err">:</span><span class="w"> </span><span class="mi">1</span><span class="err">}</span>
+<span class="o">[</span><span class="n">PaymentHandler</span><span class="o">]</span><span class="w"> </span><span class="n">Käsittelee</span><span class="w"> </span><span class="nl">maksua</span><span class="p">:</span><span class="w"> </span><span class="err">{</span><span class="s1">&#39;amount&#39;</span><span class="err">:</span><span class="w"> </span><span class="mf">29.99</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;method&#39;</span><span class="err">:</span><span class="w"> </span><span class="s1">&#39;kortti&#39;</span><span class="err">}</span>
+</code></pre></div>
+
+<h2 id="hyodyt">Hyödyt</h2>
+<ul>
+<li><strong>Löyhä kytkentä</strong>: komponentit eivät tunne toisiaan</li>
+<li><strong>Helppo laajennettavuus</strong>: uusia viestityyppejä ja käsittelijöitä voi lisätä</li>
+<li><strong>Asynkronisuus</strong> mahdollistaa parempaa suorituskykyä ja reagointia</li>
+</ul>
+<h2 id="haitat">Haitat</h2>
+<ul>
+<li>Vaatii <strong>viestien määrittelyn ja hallinnan</strong></li>
+<li>Voi olla <strong>vaikeampi debugata</strong> kuin suorat kutsut</li>
+<li>Viestien käsittelyjärjestys voi vaikuttaa toimintaan</li>
+</ul>
+<h2 id="messaging-vs-observer-vs-mediator">Messaging vs Observer vs Mediator</h2>
+<table>
+<thead>
+<tr>
+<th>Malli</th>
+<th>Viestitys</th>
+<th>Vastaanottajia</th>
+<th>Soveltuu kun…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Messaging</strong></td>
+<td>Eksplisiittinen</td>
+<td>1 tai useita</td>
+<td>Viestit lähetetään yleisesti jonoihin tai busseihin</td>
+</tr>
+<tr>
+<td><strong>Observer</strong></td>
+<td>Automaattinen</td>
+<td>Kaikki tilaajat</td>
+<td>Tilamuutoksista pitää ilmoittaa laajasti</td>
+</tr>
+<tr>
+<td><strong>Mediator</strong></td>
+<td>Keskitetty</td>
+<td>Useita</td>
+<td>Halutaan koordinoida objektien välistä viestintää</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sovelluskohteita">Sovelluskohteita</h2>
+<ul>
+<li>Mikropalveluarkkitehtuuri (esim. Kafka, RabbitMQ, Celery)</li>
+<li>Käyttöliittymät (esim. tapahtumaviestit)</li>
+<li>Pelimoottorit (event dispatching)</li>
+<li>Modulaariset ohjelmistot (plugin-viestintä)</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<p><strong>Messaging-suunnittelumalli</strong> erottaa viestien lähetyksen ja käsittelyn toisistaan, mahdollistaen modulaarisuuden, testattavuuden ja laajennettavuuden. Se toimii perustana monille moderneille ohjelmistoarkkitehtuureille, erityisesti <strong>asynkronisissa ja hajautetuissa</strong> järjestelmissä.</p>
+</div>
+</body>
+</html>

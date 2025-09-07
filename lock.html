@@ -1,0 +1,283 @@
+
+<html>
+<head>
+<title>
+Lock
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="lock-suunnittelumalli-pythonissa">Lock-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-lock-suunnittelumalli">Mikä on Lock-suunnittelumalli?</h3>
+<p><strong>Lock-suunnittelumalli</strong> on keskeinen monisäikeisen ohjelmoinnin rakenne, jota käytetään <strong>estämään rinnakkaista pääsyä jaettuihin resursseihin</strong>. Kun useat säikeet (tai prosessit) käyttävät samaa tietoa tai resurssia, syntyy kilpailutilanteita (race conditions), jotka voivat johtaa virheelliseen toimintaan tai tietojen korruptoitumiseen.</p>
+<p><strong>Lock (lukko)</strong> tarjoaa keinon varmistaa, että vain <strong>yksi säie kerrallaan</strong> pääsee käsittelemään kriittistä aluetta (critical section).</p>
+<blockquote>
+<p><strong>Tavoite:</strong><br />
+Suojata jaettuja resursseja siten, että vain yksi säie kerrallaan voi käyttää niitä.</p>
+</blockquote>
+<h2 id="milloin-kayttaa-lock-mallia">Milloin käyttää Lock-mallia?</h2>
+<ul>
+<li>Kun useat säikeet käyttävät samaa tietorakennetta tai muuttujaa</li>
+<li>Kun haluat suojata kriittistä aluetta kilpailutilanteilta</li>
+<li>Kun tarvitset säieturvallisuutta rinnakkaisessa ohjelmoinnissa</li>
+</ul>
+<h2 id="esimerkki-jaetun-laskurin-paivittaminen-ilman-ja-lukon-kanssa">Esimerkki: Jaetun laskurin päivittäminen ilman ja lukon kanssa</h2>
+<h3 id="ilman-lockia-vaarallinen">Ilman Lockia (vaarallinen)</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="k">def</span> <span class="nf">increment</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">counter</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">):</span>
+        <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">increment</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ilman Lockia: </span><span class="si">{</span><span class="n">counter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus voi vaihdella!</strong> Esimerkiksi:<br />
+<code>Ilman Lockia: 423987</code><br />
+Odotettu arvo olisi 500000, mutta <strong>race condition</strong> aiheuttaa virheen.</p>
+<h3 id="lukon-kanssa-turvallinen">Lukon kanssa (turvallinen)</h3>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">increment</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">counter</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+            <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">increment</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lockin kanssa: </span><span class="si">{</span><span class="n">counter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong><br />
+<code>Lockin kanssa: 500000</code><br />
+→ Nyt tulos on oikea, koska <strong>Lock</strong> estää rinnakkaisen pääsyn <code>counter</code>-muuttujaan.</p>
+<h2 id="lock-pythonissa-threadinglock">Lock Pythonissa: <code>threading.Lock</code></h2>
+<table>
+<thead>
+<tr>
+<th>Toiminto</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lock = Lock()</code></td>
+<td>Luo uuden lukon</td>
+</tr>
+<tr>
+<td><code>lock.acquire()</code></td>
+<td>Ottaa lukon (blokkaa, jos jo varattu)</td>
+</tr>
+<tr>
+<td><code>lock.release()</code></td>
+<td>Vapauttaa lukon</td>
+</tr>
+<tr>
+<td><code>with lock:</code></td>
+<td>Kontekstinhallinta lukon kanssa (turvallisin tapa)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="esimerkki-lukon-kaytto-resurssin-kanssa">Esimerkki: Lukon käyttö resurssin kanssa</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="k">class</span> <span class="nc">SharedResource</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">safe_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="si">{</span><span class="n">threading</span><span class="o">.</span><span class="n">current_thread</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">] Päivittää arvoa...&quot;</span><span class="p">)</span>
+            <span class="n">local</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>  <span class="c1"># Simuloidaan viivettä</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">local</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">resource</span> <span class="o">=</span> <span class="n">SharedResource</span><span class="p">()</span>
+
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">resource</span><span class="o">.</span><span class="n">safe_update</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Lopullinen arvo: </span><span class="si">{</span><span class="n">resource</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Tulostus:</strong><br />
+<code>Lopullinen arvo: 100</code></p>
+<h2 id="hyodyt">Hyödyt</h2>
+<ul>
+<li>Estää kilpailutilanteet</li>
+<li>Yksinkertainen käyttää</li>
+<li>Mahdollistaa säieturvallisuuden kriittisissä kohdissa</li>
+</ul>
+<h2 id="haitat">Haitat</h2>
+<ul>
+<li>Voi aiheuttaa <strong>deadlock</strong>-tilanteita, jos lukkoja ei vapauteta oikein</li>
+<li>Heikentää suorituskykyä, jos käytetään liikaa tai liian laajasti</li>
+<li>Ei toimi prosessien välillä (käytä silloin esim. <code>multiprocessing.Lock</code>)</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Lock</td>
+<td>Estää usean säikeen yhtäaikaisen pääsyn</td>
+</tr>
+<tr>
+<td><code>with lock:</code></td>
+<td>Turvallinen tapa käyttää lukkoa</td>
+</tr>
+<tr>
+<td>Käyttökohde</td>
+<td>Jaettujen resurssien suojaus monisäikeisesti</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lock-suunnittelumalli</strong> on olennainen työkalu säieturvallisen ohjelmoinnin rakentamisessa. Kun jaettuja resursseja käytetään useista säikeistä, <strong>lukko on ensimmäinen ja tärkein suojauskeino</strong> virheiden välttämiseksi.</p>
+</div>
+</body>
+</html>

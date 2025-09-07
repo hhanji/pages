@@ -1,0 +1,326 @@
+
+<html>
+<head>
+<title>
+Reactor
+</title>
+<link rel="stylesheet" href="pygments.css">
+
+<style type='text/css'>
+body {
+   background: black;
+   color: white;
+   font-family: sans-serif;
+}
+
+.linkbar {
+   width: 20%;
+   float: left;
+   margin: 1em;
+   position: fixed;
+   height: 90vh;
+   overflow-y: auto;
+}
+
+.linkbar a{
+   color: black;
+   background: #aaa;
+   border-top: 2px solid #eee;
+   border-left: 2px solid #eee;
+   border-bottom: 2px solid #666;
+   border-right: 2px solid #666;
+   padding: 0.2em;
+   margin: 0.2em;
+   display: block;
+   text-decoration: none;
+}
+
+.linkbar a:active {
+   background: #888;
+   border-top: 2px solid #666;
+   border-left: 2px solid #666;
+   border-bottom: 2px solid #eee;
+   border-right: 2px solid #eee;
+}
+
+#content {
+   display: inline-block;
+   margin-left: 25%;
+   width: 40em;
+   max-width: 70%;
+}
+
+td, th {
+   text-align: left;
+   vertical-align: top;
+   outline: 1px solid #333;
+   padding: 0.5em;
+}
+</style>
+
+</head>
+
+<body>
+<div class='linkbar'>
+<a class="sbpage" href="index.html">Etusivu: ChatGPT-kirja suunnittelumalleista</a>
+<a class="sbpage" href="abstract_factory.html">Abstract Factory </a>
+<a class="sbpage" href="active_object.html">Active Object </a>
+<a class="sbpage" href="adapter.html">Adapter</a>
+<a class="sbpage" href="balking.html">Balking</a>
+<a class="sbpage" href="binding_properties.html">Binding Properties </a>
+<a class="sbpage" href="bridge.html">Bridge</a>
+<a class="sbpage" href="builder.html">Builder</a>
+<a class="sbpage" href="chain_of_responsibility.html">Chain of Responsibility </a>
+<a class="sbpage" href="command.html">Command</a>
+<a class="sbpage" href="composite.html">Composite</a>
+<a class="sbpage" href="compute_kernel.html">Compute Kernel </a>
+<a class="sbpage" href="cpu_atomic_operation.html">CPU Atomic Operation </a>
+<a class="sbpage" href="decorator.html">Decorator</a>
+<a class="sbpage" href="delegate.html">Delegation</a>
+<a class="sbpage" href="dependency_injection.html">Dependency Injection</a>
+<a class="sbpage" href="doublechecked_locking.html">Double-Checked Locking </a>
+<a class="sbpage" href="eventbased_asynchronous.html">Event-based Asynchronous </a>
+<a class="sbpage" href="extension_object.html">Extension Object </a>
+<a class="sbpage" href="facade.html">Facade</a>
+<a class="sbpage" href="factory_method.html">Factory Method </a>
+<a class="sbpage" href="fluent_interface.html">Fluent Interface </a>
+<a class="sbpage" href="flyweight.html">Flyweight</a>
+<a class="sbpage" href="front_controller.html">Front Controller </a>
+<a class="sbpage" href="guarded_suspension.html">Guarded Suspension </a>
+<a class="sbpage" href="interpreter.html">Interpreter</a>
+<a class="sbpage" href="iterator.html">Iterator</a>
+<a class="sbpage" href="join.html">Join</a>
+<a class="sbpage" href="lazy_initialization.html">Lazy Initialization</a>
+<a class="sbpage" href="lock.html">Lock</a>
+<a class="sbpage" href="marker.html">Marker</a>
+<a class="sbpage" href="mediator.html">Mediator</a>
+<a class="sbpage" href="memento.html">Memento</a>
+<a class="sbpage" href="messaging.html">Messaging</a>
+<a class="sbpage" href="module.html">Module</a>
+<a class="sbpage" href="monitor_object.html">Monitor Object </a>
+<a class="sbpage" href="multiton.html">Multiton</a>
+<a class="sbpage" href="mvc.html">MVC</a>
+<a class="sbpage" href="null_object.html">Null Object </a>
+<a class="sbpage" href="object_pool.html">Object Pool </a>
+<a class="sbpage" href="observer.html">Observer</a>
+<a class="sbpage" href="prototype.html">Prototype</a>
+<a class="sbpage" href="proxy.html">Proxy</a>
+<a class="sbpage" href="raii.html">RAII</a>
+<a class="sbpage" href="reactor.html">Reactor</a>
+<a class="sbpage" href="readwrite_lock.html">Read-write Lock </a>
+<a class="sbpage" href="scheduler.html">Scheduler </a>
+<a class="sbpage" href="scweo.html">Safe Concurrency With Exclusive Ownership </a>
+<a class="sbpage" href="servant.html">Servant</a>
+<a class="sbpage" href="service_handler.html">Service Handler </a>
+<a class="sbpage" href="service_locator.html">Service Locator </a>
+<a class="sbpage" href="singleton.html">Singleton</a>
+<a class="sbpage" href="state.html">State</a>
+<a class="sbpage" href="strategy.html">Strategy</a>
+<a class="sbpage" href="thread_pool.html">Thread Pool </a>
+<a class="sbpage" href="threadspecific_storage.html">Thread-specific Storage </a>
+<a class="sbpage" href="twin.html">Twin</a>
+<a class="sbpage" href="visitor.html">Visitor</a>
+
+</div>
+<div id="content">
+<h2 id="reactor-suunnittelumalli-pythonissa">Reactor-suunnittelumalli Pythonissa</h2>
+<h3 id="mika-on-reactor-malli">Mikä on Reactor-malli?</h3>
+<p><strong>Reactor</strong> on tapahtumapohjainen suunnittelumalli, jossa yksi säie tai prosessi hallitsee useita tapahtumia (esim. verkkoyhteyksiä) käyttämällä <strong>tapahtumasilmukkaa</strong> (event loop) ja <strong>tapahtumien käsittelijöitä</strong> (event handlers). Se on <strong>ei-estävä (non-blocking)</strong> ja <strong>asynkroninen</strong> tapa käsitellä syötteitä, kuten I/O-pyyntöjä.</p>
+<blockquote>
+<p><strong>Tavoite:</strong><br />
+Tarjota tehokas ja skaalautuva malli suurien määrien samanaikaisten I/O-tapahtumien käsittelyyn ilman säikeiden ylikuormitusta.</p>
+</blockquote>
+<h2 id="milloin-kayttaa">Milloin käyttää?</h2>
+<ul>
+<li>Verkkopalvelimissa, jotka käsittelevät tuhansia yhteyksiä samanaikaisesti</li>
+<li>Käyttöliittymissä ja pelimoottoreissa (tapahtumaohjattu logiikka)</li>
+<li>Asynkronisessa ohjelmoinnissa, kuten <code>asyncio</code> tai <code>twisted</code></li>
+<li>Kun halutaan ei-estävä, reagointiin perustuva ohjelmointimalli</li>
+</ul>
+<h2 id="rakenteen-osat">Rakenteen osat</h2>
+<table>
+<thead>
+<tr>
+<th>Osa</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Event Loop</strong></td>
+<td>Tapahtumasilmukka, joka odottaa ja välittää tapahtumia</td>
+</tr>
+<tr>
+<td><strong>Event Demultiplexer</strong></td>
+<td>Välittää saapuvat tapahtumat oikeille käsittelijöille (esim. <code>select</code>, <code>epoll</code>)</td>
+</tr>
+<tr>
+<td><strong>Handlers</strong></td>
+<td>Tapahtumien käsittelijät (esim. luku, kirjoitus, virhe)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="yksinkertainen-esimerkki-tcp-palvelin-selectors-moduulilla">Yksinkertainen esimerkki: TCP-palvelin <code>selectors</code>-moduulilla</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">selectors</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+
+<span class="n">sel</span> <span class="o">=</span> <span class="n">selectors</span><span class="o">.</span><span class="n">DefaultSelector</span><span class="p">()</span>
+
+<span class="c1"># Yhteyden hyväksyminen</span>
+<span class="k">def</span> <span class="nf">accept</span><span class="p">(</span><span class="n">sock</span><span class="p">):</span>
+    <span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Yhteys muodostettu: </span><span class="si">{</span><span class="n">addr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">sel</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">selectors</span><span class="o">.</span><span class="n">EVENT_READ</span><span class="p">,</span> <span class="n">read</span><span class="p">)</span>
+
+<span class="c1"># Viestin lukeminen</span>
+<span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">data</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vastaanotettu: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># Echo</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Yhteys suljettu.&quot;</span><span class="p">)</span>
+        <span class="n">sel</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c1"># Palvelimen asettaminen</span>
+<span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+<span class="n">sock</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="mi">12345</span><span class="p">))</span>
+<span class="n">sock</span><span class="o">.</span><span class="n">listen</span><span class="p">()</span>
+<span class="n">sock</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">sel</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">selectors</span><span class="o">.</span><span class="n">EVENT_READ</span><span class="p">,</span> <span class="n">accept</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Palvelin kuuntelee porttia 12345...&quot;</span><span class="p">)</span>
+
+<span class="c1"># Reactor-looppi</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="n">sel</span><span class="o">.</span><span class="n">select</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+        <span class="n">callback</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">callback</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">fileobj</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="testaus">Testaus</h3>
+<p>Voit testata palvelinta avaamalla uuden komentorivin ja kirjoittamalla:</p>
+<div class="codehilite"><pre><span></span><code>telnet<span class="w"> </span>localhost<span class="w"> </span><span class="m">12345</span>
+</code></pre></div>
+
+<p>Syötä viestejä ja katso, miten ne palautetaan takaisin (echo).</p>
+<h2 id="reactor-mallin-toimintakaavio">Reactor-mallin toimintakaavio</h2>
+<div class="codehilite"><pre><span></span><code><span class="w">            </span><span class="o">++</span>
+<span class="w">            </span><span class="o">|</span><span class="w">     </span><span class="nv">Event</span><span class="w"> </span><span class="k">Loop</span><span class="w">      </span><span class="o">|</span>
+<span class="w">            </span><span class="o">++</span>
+<span class="w">                     </span><span class="o">|</span>
+<span class="w">        </span><span class="o">++--+</span>
+<span class="w">        </span><span class="o">|</span><span class="w">                        </span><span class="o">|</span>
+<span class="o">++</span><span class="w">        </span><span class="o">++</span>
+<span class="o">|</span><span class="w">   </span><span class="nv">Read</span><span class="w"> </span><span class="nv">Event</span><span class="w">  </span><span class="o">|</span><span class="w">        </span><span class="o">|</span><span class="w">  </span><span class="nv">Accept</span><span class="w"> </span><span class="nv">Event</span><span class="w"> </span><span class="o">|</span>
+<span class="o">++</span><span class="w">        </span><span class="o">++</span>
+<span class="w">        </span><span class="o">|</span><span class="w">                        </span><span class="o">|</span>
+<span class="w">  </span><span class="o">+--+</span><span class="w">           </span><span class="o">+-+</span>
+<span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="nv">read</span><span class="ss">()</span><span class="w">    </span><span class="o">|</span><span class="w">           </span><span class="o">|</span><span class="w"> </span><span class="nv">accept</span><span class="ss">()</span><span class="w">    </span><span class="o">|</span>
+<span class="w">  </span><span class="o">+--+</span><span class="w">           </span><span class="o">+-+</span>
+</code></pre></div>
+
+<h2 id="esimerkki-asyncio-pythonin-moderni-reactor-tyokalu">Esimerkki: <code>asyncio</code> — Pythonin moderni Reactor-työkalu</h2>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">handle_client</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">writer</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">reader</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="n">addr</span> <span class="o">=</span> <span class="n">writer</span><span class="o">.</span><span class="n">get_extra_info</span><span class="p">(</span><span class="s1">&#39;peername&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vastaanotettu </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2"> osoitteesta </span><span class="si">{</span><span class="n">addr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">writer</span><span class="o">.</span><span class="n">drain</span><span class="p">()</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">server</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">start_server</span><span class="p">(</span><span class="n">handle_client</span><span class="p">,</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="mi">8888</span><span class="p">)</span>
+    <span class="n">addr</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">sockets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">getsockname</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Palvelin käynnissä: </span><span class="si">{</span><span class="n">addr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">server</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">server</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+
+<h3 id="reactor-selectors-vs-asyncio">Reactor <code>selectors</code> vs <code>asyncio</code></h3>
+<table>
+<thead>
+<tr>
+<th>Piirre</th>
+<th><code>selectors</code></th>
+<th><code>asyncio</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Matala taso</td>
+<td>Kyllä</td>
+<td>Ei, korkeamman tason API</td>
+</tr>
+<tr>
+<td>Reaktiivinen</td>
+<td>Kyllä</td>
+<td>Kyllä</td>
+</tr>
+<tr>
+<td>API</td>
+<td>Imperatiivinen, callback-pohjainen</td>
+<td><code>async</code> / <code>await</code> -syntaksi</td>
+</tr>
+<tr>
+<td>Helppokäyttöisyys</td>
+<td>Kohtalainen</td>
+<td>Erittäin hyvä</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hyodyt">Hyödyt</h2>
+<ul>
+<li><strong>Tehokas</strong>: Ei tarvita yhtä säiettä per yhteys</li>
+<li><strong>Skaalautuva</strong>: Sopii hyvin tuhansien yhteyksien hallintaan</li>
+<li><strong>Säikeetön</strong>: Ei tarvitse lukkoja tai säikeiden hallintaa</li>
+</ul>
+<h2 id="haitat">Haitat</h2>
+<ul>
+<li><strong>Callback-helvetti</strong> mahdollinen matalamman tason toteutuksissa</li>
+<li>Vaikeampi debugata kuin yksinkertaiset säikeistetyt mallit</li>
+<li>Soveltuu parhaiten I/O-painotteisiin sovelluksiin, ei laskentaintensiivisiin</li>
+</ul>
+<h2 id="sovelluskohteita">Sovelluskohteita</h2>
+<ul>
+<li>HTTP-, chat- ja websocket-palvelimet</li>
+<li>Pelisilmukat ja käyttöliittymät</li>
+<li>IoT-laitteiden tapahtumien hallinta</li>
+<li>Mikropalvelujen viestinvälitys</li>
+</ul>
+<h2 id="yhteenveto">Yhteenveto</h2>
+<p><strong>Reactor-suunnittelumalli</strong> tarjoaa pohjan tapahtumapohjaiselle ohjelmoinnille. Se on erittäin tehokas ratkaisu suurten määrittämättömien I/O-tapahtumien hallintaan ja on keskeinen osa moderneja asynkronisia järjestelmiä kuten <strong>Node.js</strong>, <strong>asyncio</strong>, <strong>Twisted</strong>, ja <strong>libuv</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Ominaisuus</th>
+<th>Kuvaus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Malli</td>
+<td>Tapahtumapohjainen I/O</td>
+</tr>
+<tr>
+<td>Sovellukset</td>
+<td>Palvelimet, UI\:t, reaktiiviset sovellukset</td>
+</tr>
+<tr>
+<td>Python-työkalut</td>
+<td><code>selectors</code>, <code>asyncio</code>, <code>twisted</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</body>
+</html>
